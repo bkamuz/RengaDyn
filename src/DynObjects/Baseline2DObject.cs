@@ -76,6 +76,81 @@ namespace DynRenga.DynObjects
         {
             this._i.SetBaseline(baseline._i);
         }
+        
+        /// <summary>
+        /// Установка 2D базовой линии объекта с отладочной информацией
+        /// </summary>
+        /// <param name="baseline">Новая базовая линия объекта</param>
+        /// <returns>Результат операции и отладочная информация</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
+        public Dictionary<string, object> SetBaselineWithDebug(Curve2D baseline)
+        {
+            var debugInfo = "🔧 Setting 2D baseline...\n";
+            
+            try
+            {
+                if (this._i == null)
+                {
+                    debugInfo += "❌ Baseline2DObject interface is not initialized\n";
+                    return new Dictionary<string, object>
+                    {
+                        { "Success", false },
+                        { "DebugInfo", debugInfo }
+                    };
+                }
+                
+                if (baseline == null)
+                {
+                    debugInfo += "❌ Baseline Curve2D cannot be null\n";
+                    return new Dictionary<string, object>
+                    {
+                        { "Success", false },
+                        { "DebugInfo", debugInfo }
+                    };
+                }
+                
+                if (baseline._i == null)
+                {
+                    debugInfo += "❌ Baseline Curve2D interface is not initialized\n";
+                    debugInfo += "💡 Make sure to use Curve2D.ByLineSegment() or similar method\n";
+                    return new Dictionary<string, object>
+                    {
+                        { "Success", false },
+                        { "DebugInfo", debugInfo }
+                    };
+                }
+                
+                debugInfo += $"✅ Baseline2DObject interface initialized\n";
+                debugInfo += $"✅ Baseline Curve2D interface initialized\n";
+                debugInfo += $"📐 Baseline type: {baseline.GetType().Name}\n";
+                
+                this._i.SetBaseline(baseline._i);
+                debugInfo += "✅ Baseline set successfully!\n";
+                debugInfo += "💡 The object's 2D baseline has been updated\n";
+                
+                return new Dictionary<string, object>
+                {
+                    { "Success", true },
+                    { "DebugInfo", debugInfo }
+                };
+            }
+            catch (Exception ex)
+            {
+                debugInfo += $"❌ Failed to set baseline!\n";
+                debugInfo += $"Baseline2DObject._i is null: {this._i == null}\n";
+                debugInfo += $"Baseline is null: {baseline == null}\n";
+                debugInfo += $"Baseline._i is null: {baseline?._i == null}\n";
+                debugInfo += $"Error: {ex.Message}\n";
+                debugInfo += $"Stack Trace: {ex.StackTrace}";
+                
+                return new Dictionary<string, object>
+                {
+                    { "Success", false },
+                    { "DebugInfo", debugInfo }
+                };
+            }
+        }
 
         /// <summary>
         /// Установка 2D базовой линии объекта в указанной системе координат
