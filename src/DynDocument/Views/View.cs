@@ -17,6 +17,9 @@ namespace DynRenga.DynDocument.Views
     /// </summary>
     public class View 
     {
+        /// <summary>
+        /// Внутренний COM-объект Renga.IView
+        /// </summary>
         public Renga.IView _i;
         /// <summary>
         /// Инициализация класса из интерфейса Renga.IView. Используйте нод Application.ActiveView
@@ -47,7 +50,7 @@ namespace DynRenga.DynDocument.Views
                 {"Level view",Renga.ViewType.ViewType_Level  },
                 {"Section view",Renga.ViewType.ViewType_Section  },
                 {"Facade view",Renga.ViewType.ViewType_Facade },
-                {"Drawing sheet",Renga.ViewType.ViewType_Sheet  },
+                {"Drawing sheet",Renga.ViewType.ViewType_Drawing  },
                 {"Specification",Renga.ViewType.ViewType_Specification  },
                 {"Section profile editor",Renga.ViewType.ViewType_SectionProfile },
                 {"Assembly view",Renga.ViewType.ViewType_Assembly },

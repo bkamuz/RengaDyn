@@ -1,0 +1,211 @@
+{
+  "Uuid": "12345678-1234-1234-1234-123456789abc",
+  "IsCustomNode": false,
+  "Description": "Example showing enhanced debugging for floor creation with operation handling",
+  "Name": "Enhanced Debugging Example",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynamoCoreNodes",
+      "Version": "2.12.1.8246"
+    },
+    {
+      "Name": "RengaDynMain",
+      "Version": "1.0.0.0"
+    }
+  ],
+  "Connectors": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789001",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789002",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin X coordinate",
+      "X": 100,
+      "Y": 100,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789004",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin Y coordinate",
+      "X": 100,
+      "Y": 150,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789006",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin Z coordinate",
+      "X": 100,
+      "Y": 200,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789007",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789008",
+          "Name": "Placement3D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        },
+        {
+          "Id": "12345678-1234-1234-1234-123456789009",
+          "Name": "DebugInfo",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create Placement3D with debug output",
+      "X": 300,
+      "Y": 150,
+      "Name": "Placement3D.ByOrigin",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Placement3D.ByOrigin(double,double,double)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.IntegerSlider",
+      "Id": "12345678-1234-1234-1234-123456789010",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789011",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Level ID for floor creation",
+      "X": 100,
+      "Y": 300,
+      "Name": "Integer Slider",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "100013"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789012",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789013",
+          "Name": "Floor",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        },
+        {
+          "Id": "12345678-1234-1234-1234-123456789014",
+          "Name": "DebugInfo",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create floor with enhanced debugging",
+      "X": 500,
+      "Y": 250,
+      "Name": "Model.CreateFloor",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Model.CreateFloor(int,object)"
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "12345678-1234-1234-1234-123456789015",
+      "Title": "Enhanced Debugging for Floor Creation",
+      "DescriptionText": "This example shows the enhanced debugging features for floor creation:\n\n🔧 **ENHANCED DEBUGGING FEATURES:**\n\n1. **NewEntityArgs Property Debugging:**\n   - Shows TypeId, TypeIdS, CategoryId, HostObjectId\n   - Displays Placement3D type information\n   - Validates all required parameters\n\n2. **Operation Handling:**\n   - Creates and starts an operation before object creation\n   - Applies the operation on success\n   - Rolls back the operation on failure\n   - Proper transaction management\n\n3. **Detailed Error Information:**\n   - Console output shows all parameter values\n   - Stack traces for debugging\n   - Clear error messages with context\n\n4. **Expected Debug Output:**\n   ```\n   === RENGA DYNAMO DEBUG ===\n   Method: Model.CreateObject\n   Model._i is null: False\n   Args._i is null: False\n   TypeId: [GUID]\n   TypeIdS: [GUID string]\n   CategoryId: 0\n   HostObjectId: 100013\n   Placement3D: Placement3D\n   =========================\n   ```\n\n5. **What to Look For:**\n   - Check if TypeId is set correctly (should be Floor GUID)\n   - Verify HostObjectId matches your level ID\n   - Ensure Placement3D is properly set\n   - Look for any missing required parameters\n\n✅ **This should help identify exactly what's causing the floor creation to fail!**",
+      "X": 50,
+      "Y": 50,
+      "Width": 600,
+      "Height": 600,
+      "TextblockHeight": 500,
+      "Background": "#FFDCDCDC",
+      "FontSize": 14,
+      "NodeIds": [
+        "12345678-1234-1234-1234-123456789001",
+        "12345678-1234-1234-1234-123456789003",
+        "12345678-1234-1234-1234-123456789005",
+        "12345678-1234-1234-1234-123456789007",
+        "12345678-1234-1234-1234-123456789010",
+        "12345678-1234-1234-1234-123456789012"
+      ],
+      "InitialTop": 50,
+      "InitialHeight": 600
+    }
+  ],
+  "X": 0,
+  "Y": 0,
+  "Zoom": 1
+}

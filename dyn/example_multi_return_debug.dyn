@@ -1,0 +1,213 @@
+{
+  "Uuid": "12345678-1234-1234-1234-123456789abc",
+  "IsCustomNode": false,
+  "Description": "Example of multi-return debug output in Dynamo nodes",
+  "Name": "Multi-Return Debug Example",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynamoCoreNodes",
+      "Version": "2.12.1.8246"
+    },
+    {
+      "Name": "RengaDynMain",
+      "Version": "1.0.0.0"
+    }
+  ],
+  "Connectors": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789001",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789002",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin X coordinate",
+      "X": 100,
+      "Y": 100,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789003",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789004",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin Y coordinate",
+      "X": 100,
+      "Y": 150,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789005",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789006",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin Z coordinate",
+      "X": 100,
+      "Y": 200,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789007",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789008",
+          "Name": "Placement3D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        },
+        {
+          "Id": "12345678-1234-1234-1234-123456789009",
+          "Name": "DebugInfo",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create Placement3D with debug output",
+      "X": 300,
+      "Y": 150,
+      "Name": "Placement3D.ByOrigin",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Placement3D.ByOrigin(double,double,double)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.IntegerSlider",
+      "Id": "12345678-1234-1234-1234-123456789010",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789011",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Level ID for floor creation",
+      "X": 100,
+      "Y": 300,
+      "Name": "Integer Slider",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "1"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789012",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789013",
+          "Name": "Floor",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        },
+        {
+          "Id": "12345678-1234-1234-1234-123456789014",
+          "Name": "DebugInfo",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create floor with debug output",
+      "X": 500,
+      "Y": 250,
+      "Name": "Model.CreateFloor",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Model.CreateFloor(int,object)"
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "12345678-1234-1234-1234-123456789015",
+      "Title": "Multi-Return Debug Output",
+      "DescriptionText": "This example shows the new multi-return debug output feature:\n\n1. Placement3D.ByOrigin() now returns:\n   - Placement3D: The created placement object\n   - DebugInfo: Detailed debug information\n\n2. Model.CreateFloor() now returns:\n   - Floor: The created floor object (or null if failed)\n   - DebugInfo: Detailed debug information\n\n3. Debug Info includes:\n   - ✅ Success messages with object details\n   - ❌ Error messages with full stack traces\n   - Object state information (null checks)\n   - Parameter values\n\n4. Connect the DebugInfo output to a String node or watch node to see the debug information directly in Dynamo!\n\nThis eliminates the need to check console output - all debug info is visible in the node outputs.",
+      "X": 50,
+      "Y": 50,
+      "Width": 600,
+      "Height": 400,
+      "TextblockHeight": 300,
+      "Background": "#FFDCDCDC",
+      "FontSize": 14,
+      "NodeIds": [
+        "12345678-1234-1234-1234-123456789001",
+        "12345678-1234-1234-1234-123456789003",
+        "12345678-1234-1234-1234-123456789005",
+        "12345678-1234-1234-1234-123456789007",
+        "12345678-1234-1234-1234-123456789010",
+        "12345678-1234-1234-1234-123456789012"
+      ],
+      "InitialTop": 50,
+      "InitialHeight": 400
+    }
+  ],
+  "X": 0,
+  "Y": 0,
+  "Zoom": 1
+}

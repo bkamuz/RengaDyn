@@ -1,0 +1,71 @@
+{
+  "Uuid": "12345678-1234-1234-1234-123456789012",
+  "IsCustomNode": false,
+  "Description": "Example workflow showing how to get Baseline2DObject from ModelObject and work with 2D baselines",
+  "Name": "Baseline2DObject Example",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "InputValue": 0.0,
+      "Id": "12345678-1234-1234-1234-123456789001",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789002",
+          "Name": "Double",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A number",
+      "X": 100.0,
+      "Y": 100.0
+    }
+  ],
+  "Connectors": [],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "RengaDyn",
+      "Version": "1.0.0"
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "X": 0.0,
+      "Y": 0.0,
+      "Zoom": 1.0
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -35.0,
+      "EyeY": -35.0,
+      "EyeZ": 35.0,
+      "LookX": 0.0,
+      "LookY": 0.0,
+      "LookZ": 0.0,
+      "UpX": 0.0,
+      "UpY": 0.0,
+      "UpZ": 1.0
+    },
+    "ConnectorPins": [],
+    "X": 0.0,
+    "Y": 0.0,
+    "Zoom": 1.0
+  },
+  "X": 0.0,
+  "Y": 0.0,
+  "Zoom": 1.0
+}

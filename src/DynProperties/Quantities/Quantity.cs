@@ -50,14 +50,17 @@ namespace DynRenga.DynProperties.Quantities
         /// Проверка, имеет ли расчетный параметр значение
         /// </summary>
         /// <returns></returns>
-        public bool HasValue => this._i.HasValue();
+        public bool HasValue()
+        {
+            return this._i.HasValue();
+        }
         /// <summary>
         /// Получение значения расчетного параметра как целочисленного значения (int)
         /// </summary>
         /// <returns></returns>
         public int AsCount()
         {
-            if (this._i.HasValue()) return this._i.AsCount();
+            if (this.HasValue()) return this._i.AsCount();
             else return -1;
         }
         /// <summary>
@@ -67,7 +70,7 @@ namespace DynRenga.DynProperties.Quantities
         /// <returns></returns>
         public double AsLength(Renga.LengthUnit length_unit)
         {
-            if (this._i.HasValue()) return this._i.AsLength(length_unit);
+            if (this.HasValue()) return this._i.AsLength(length_unit);
             else return -1d;
         }
         /// <summary>
@@ -77,7 +80,7 @@ namespace DynRenga.DynProperties.Quantities
         /// <returns></returns>
         public double AsArea(Renga.AreaUnit area_unit)
         {
-            if (this._i.HasValue()) return this._i.AsArea(area_unit);
+            if (this.HasValue()) return this._i.AsArea(area_unit);
             else return -1d;
         }
         /// <summary>
@@ -87,7 +90,7 @@ namespace DynRenga.DynProperties.Quantities
         /// <returns></returns>
         public double AsVolume(Renga.VolumeUnit volume_unit)
         {
-            if (this._i.HasValue()) return this._i.AsVolume(volume_unit);
+            if (this.HasValue()) return this._i.AsVolume(volume_unit);
             else return -1d;
         }
         /// <summary>
@@ -97,7 +100,7 @@ namespace DynRenga.DynProperties.Quantities
         /// <returns></returns>
         public double AsMass(Renga.MassUnit mass_unit)
         {
-            if (this._i.HasValue()) return this._i.AsMass(mass_unit);
+            if (this.HasValue()) return this._i.AsMass(mass_unit);
             else return -1d;
         }
         /// <summary>

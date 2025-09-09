@@ -29,7 +29,7 @@ namespace DynRenga.Other
                 if (internal_interface == null) status = false;
                 else status = true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("Object has not _i field");
             }

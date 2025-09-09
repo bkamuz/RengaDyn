@@ -1,0 +1,51 @@
+# Correct Floor with Baseline - Dynamo Example
+# This example shows the proper way to create a floor with a baseline
+
+# Step 1: Create a Placement3D for the floor
+origin = Point.ByCoordinates(0, 0, 0)
+x_axis = Vector.ByCoordinates(1, 0, 0)
+z_axis = Vector.ByCoordinates(0, 0, 1)
+
+placement3d = Placement3D.ByOrigin(origin, x_axis, z_axis)
+
+# Step 2: Create a proper Curve2D baseline using ByLineSegment
+# This is the correct way to create a 2D baseline curve
+baseline_curve2d = Curve2D.ByLineSegment(0, 0, 10, 5)  # From (0,0) to (10,5)
+
+# Step 3: Create the floor with baseline
+floor_result = Model.CreateFloorWithBaseline(100013, placement3d, baseline_curve2d)
+
+# Extract the results
+floor = floor_result["Floor"]
+debug_info = floor_result["DebugInfo"]
+
+# The debug info should show:
+# ✅ Floor created successfully!
+# ℹ️ Using direct Curve2D baseline
+# ✅ Baseline set successfully to floor ID: [floor_id]
+
+# Alternative: Create a more complex baseline using multiple segments
+# For complex shapes, you can create multiple Curve2D segments
+# and use them with the baseline system
+
+# Example: Create a rectangular baseline
+# Corner 1: (0, 0) to (10, 0)
+line1 = Curve2D.ByLineSegment(0, 0, 10, 0)
+# Corner 2: (10, 0) to (10, 5)  
+line2 = Curve2D.ByLineSegment(10, 0, 10, 5)
+# Corner 3: (10, 5) to (0, 5)
+line3 = Curve2D.ByLineSegment(10, 5, 0, 5)
+# Corner 4: (0, 5) to (0, 0)
+line4 = Curve2D.ByLineSegment(0, 5, 0, 0)
+
+# For now, use the first line as the baseline
+# (In a full implementation, you would combine these into a composite curve)
+floor_result2 = Model.CreateFloorWithBaseline(100013, placement3d, line1)
+
+# Extract the results
+floor2 = floor_result2["Floor"]
+debug_info2 = floor_result2["DebugInfo"]
+
+# Note: If you have a Dynamo PolyCurve, you can extract its start and end points
+# and use them to create a Curve2D.ByLineSegment
+# The debug output will help you with the exact coordinates to use

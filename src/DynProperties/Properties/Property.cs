@@ -17,6 +17,9 @@ namespace DynRenga.DynProperties.Properties
     /// </summary>
     public class Property
     {
+        /// <summary>
+        /// Внутренний COM-объект Renga.IProperty
+        /// </summary>
         public Renga.IProperty _i;
         /// <summary>
         /// Инициация класса через интерфейс Renga.IProperty (получение свойства)

@@ -79,6 +79,6 @@ namespace DynRenga.DynDocument
         /// Получение интерфейса Renga.IPlacement3D
         /// </summary>
         /// <returns></returns>
-        public Placement3D Placement => new Placement3D(this._i.Placement);
+        public DynRenga.DynGeometry.Placement3D Placement => new DynRenga.DynGeometry.Placement3D(this._i.Placement);
     }
 }

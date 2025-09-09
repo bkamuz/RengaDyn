@@ -1,0 +1,65 @@
+# Enhanced Floor with Baseline - Dynamo Example
+# This example demonstrates creating a floor with a baseline using Dynamo curves
+
+# Step 1: Create a Dynamo PolyCurve for the baseline
+# You can create any Dynamo curve here - Line, Arc, PolyCurve, etc.
+# For this example, we'll create a simple rectangular baseline
+
+# Create points for a rectangular baseline
+point1 = Point.ByCoordinates(0, 0, 0)
+point2 = Point.ByCoordinates(10, 0, 0)
+point3 = Point.ByCoordinates(10, 5, 0)
+point4 = Point.ByCoordinates(0, 5, 0)
+
+# Create lines to form a rectangle
+line1 = Line.ByStartPointEndPoint(point1, point2)
+line2 = Line.ByStartPointEndPoint(point2, point3)
+line3 = Line.ByStartPointEndPoint(point3, point4)
+line4 = Line.ByStartPointEndPoint(point4, point1)
+
+# Create a PolyCurve from the lines
+baseline_polycurve = PolyCurve.ByJoinedCurves([line1, line2, line3, line4])
+
+# Step 2: Create a Placement3D for the floor
+origin = Point.ByCoordinates(0, 0, 0)
+x_axis = Vector.ByCoordinates(1, 0, 0)
+z_axis = Vector.ByCoordinates(0, 0, 1)
+
+placement3d = Placement3D.ByOrigin(origin, x_axis, z_axis)
+
+# Step 3: Create the floor with baseline using the enhanced method
+# This will automatically convert the Dynamo PolyCurve to Curve2D
+floor_result = Model.CreateFloorWithBaseline(100013, placement3d, baseline_polycurve)
+
+# Extract the results
+floor = floor_result["Floor"]
+debug_info = floor_result["DebugInfo"]
+
+# Display the results
+# The floor should be created successfully with the baseline set
+# The debug info will show the conversion process
+
+# Alternative: You can also use Curve2D.ByDynamoPolyCurve directly
+# if you want to convert the curve first
+baseline_curve2d = Curve2D.ByDynamoPolyCurve(baseline_polycurve)
+
+# Then use it with CreateFloorWithBaseline
+floor_result2 = Model.CreateFloorWithBaseline(100013, placement3d, baseline_curve2d)
+
+# Extract the results
+floor2 = floor_result2["Floor"]
+debug_info2 = floor_result2["DebugInfo"]
+
+# The debug info will show:
+# - Whether the Dynamo curve was successfully converted
+# - Whether the baseline was set successfully
+# - Any error messages if conversion failed
+
+# Note: The conversion currently handles:
+# - Dynamo Line -> Renga LineSegment2D (approximation)
+# - Dynamo Arc -> Renga Arc (approximation) 
+# - Dynamo PolyCurve -> First segment of the polycurve
+# - Other curves -> Line approximation between start and end points
+
+# For complex curves, you might want to use Curve2D.ByLineSegment() 
+# with specific coordinates for more precise control

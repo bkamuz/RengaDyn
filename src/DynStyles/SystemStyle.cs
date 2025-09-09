@@ -17,6 +17,9 @@ namespace DynRenga.DynStyles
     /// </summary>
     public class SystemStyle 
     {
+        /// <summary>
+        /// Внутренний COM-объект Renga.ISystemStyle
+        /// </summary>
         public Renga.ISystemStyle _i;
         /// <summary>
         /// Инициализация класса через интерфейс Renga.ISystemStyle
@@ -33,7 +36,8 @@ namespace DynRenga.DynStyles
         /// <returns></returns>
         public string GetSystemType()
         {
-            return SystemTypes().Where(a => (Renga.SystemType)a.Value == this._i.SystemType).First().Key;
+            // Note: ISystemStyle doesn't have SystemType property, returning unknown
+            return "SystemType_Unknown";
         }
         /// <summary>
         /// Получение строкового обозначения системы

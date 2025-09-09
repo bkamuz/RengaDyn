@@ -16,6 +16,9 @@ namespace DynRenga.DynDocument.Project
     /// </summary>
     public class Project
     {
+        /// <summary>
+        /// Внутренний COM-объект Renga.IProject
+        /// </summary>
         public Renga.IProject _i;
         /// <summary>
         /// Получает текущий проект (интерфейс Renga.Project) от интерфейса Renga.IApplication
@@ -76,7 +79,7 @@ namespace DynRenga.DynDocument.Project
         /// <summary>
         /// Стили осветительных приборов
         /// </summary>
-        public EntityCollection LightFixtureStyles => new EntityCollection(this._i.LightFixtureStyles);
+        public EntityCollection LightFixtureStyles => new EntityCollection(this._i.LightingFixtureStyles);
         /// <summary>
         /// Стили аксессуаров электрического оборудования
         /// </summary>
@@ -161,6 +164,9 @@ namespace DynRenga.DynDocument.Project
         /// Стили номеров страниц
         /// </summary>
         public EntityCollection PageFormatStyles => new EntityCollection(this._i.PageFormatStyles);
+        /// <summary>
+        /// Чертежи проекта
+        /// </summary>
         public EntityCollection Drawings => new EntityCollection(this._i.Drawings);
     }
     

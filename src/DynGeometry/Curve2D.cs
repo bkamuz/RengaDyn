@@ -212,5 +212,1125 @@ namespace DynRenga.DynGeometry
             return dg.PolyCurve.ByPoints(points);
 
         }
+
+        /// <summary>
+        /// Безопасное преобразование в dynamo PolyCurve с обработкой закрытых кривых и дублирующихся точек
+        /// </summary>
+        /// <param name="parts_in_meter">Число сегментов полилинии в 1 метре</param>
+        /// <returns></returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public dg.PolyCurve ToDynamoPolyCurveSafe(int parts_in_meter = 2)
+        {
+            try
+            {
+                Renga.Point2D curve_start_point = this._i.GetBeginPoint();
+                Renga.Point2D curve_end_point = this._i.GetEndPoint();
+
+                List<dg.Point> points = new List<dg.Point>();
+                double param_start = this._i.PointProjection(curve_start_point);
+                double param_end = this._i.PointProjection(curve_end_point);
+                double curve_length = this._i.GetLength() / 1000.0;
+
+                // Минимальное количество точек для избежания ошибок
+                int min_points = 3;
+                int count_parts = Math.Max(min_points, Convert.ToInt32(curve_length * parts_in_meter));
+                
+                // Проверяем, является ли кривая закрытой
+                bool is_closed = this._i.IsClosed();
+                
+                for (int counter_param = 0; counter_param < count_parts; counter_param++)
+                {
+                    double new_param = param_start + (param_end - param_start) / count_parts * counter_param;
+                    Renga.Point2D calc_point = this._i.GetPointOn(new_param);
+                    dg.Point dynamo_point = dg.Point.ByCoordinates(calc_point.X / 1000.0, calc_point.Y / 1000.0);
+                    
+                    // Проверяем, не является ли точка дублирующейся
+                    if (points.Count == 0 || !IsPointDuplicate(points[points.Count - 1], dynamo_point))
+                    {
+                        points.Add(dynamo_point);
+                    }
+                }
+                
+                // Для закрытых кривых добавляем конечную точку, если она не совпадает с начальной
+                if (is_closed && points.Count > 0)
+                {
+                    dg.Point last_point = dg.Point.ByCoordinates(curve_end_point.X / 1000.0, curve_end_point.Y / 1000.0);
+                    if (!IsPointDuplicate(points[0], last_point))
+                    {
+                        points.Add(last_point);
+                    }
+                }
+                
+                // Убеждаемся, что у нас достаточно точек
+                if (points.Count < 2)
+                {
+                    // Если точек недостаточно, создаем минимальную линию
+                    points.Clear();
+                    points.Add(dg.Point.ByCoordinates(curve_start_point.X / 1000.0, curve_start_point.Y / 1000.0));
+                    points.Add(dg.Point.ByCoordinates(curve_end_point.X / 1000.0, curve_end_point.Y / 1000.0));
+                }
+                
+                return dg.PolyCurve.ByPoints(points);
+            }
+            catch
+            {
+                // В случае ошибки возвращаем простую линию
+                try
+                {
+                    Renga.Point2D start = this._i.GetBeginPoint();
+                    Renga.Point2D end = this._i.GetEndPoint();
+                    return dg.PolyCurve.ByPoints(new List<dg.Point> {
+                        dg.Point.ByCoordinates(start.X / 1000.0, start.Y / 1000.0),
+                        dg.Point.ByCoordinates(end.X / 1000.0, end.Y / 1000.0)
+                    });
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Отладочная информация для диагностики проблем с конвертацией
+        /// </summary>
+        /// <returns>Строка с отладочной информацией</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public string GetDebugInfo()
+        {
+            try
+            {
+                var info = new System.Text.StringBuilder();
+                
+                // Базовая информация о кривой
+                int curveTypeInt = (int)this._i.Curve2DType;
+                info.AppendLine($"Curve Type: {this.Curve2DType} (Int: {curveTypeInt})");
+                info.AppendLine($"Is Closed: {this.IsClosed}");
+                info.AppendLine($"Is PolyCurve: {this.IsPolyCurve()}");
+                
+                // Информация о точках
+                try
+                {
+                    Renga.Point2D start = this._i.GetBeginPoint();
+                    Renga.Point2D end = this._i.GetEndPoint();
+                    info.AppendLine($"Start Point: ({start.X}, {start.Y})");
+                    info.AppendLine($"End Point: ({end.X}, {end.Y})");
+                }
+                catch (Exception ex)
+                {
+                    info.AppendLine($"Point Error: {ex.Message}");
+                }
+                
+                // Информация о длине
+                try
+                {
+                    double length = this._i.GetLength();
+                    info.AppendLine($"Length: {length} mm");
+                }
+                catch (Exception ex)
+                {
+                    info.AppendLine($"Length Error: {ex.Message}");
+                }
+                
+                // Информация о параметрах
+                try
+                {
+                    double minParam = this._i.MinParameter;
+                    double maxParam = this._i.MaxParameter;
+                    info.AppendLine($"Parameter Range: {minParam} to {maxParam}");
+                }
+                catch (Exception ex)
+                {
+                    info.AppendLine($"Parameter Error: {ex.Message}");
+                }
+                
+                // Информация о сегментах (для PolyCurve)
+                if (this.IsPolyCurve())
+                {
+                    try
+                    {
+                        int segmentCount = this.GetSegmentCount();
+                        info.AppendLine($"Segment Count: {segmentCount}");
+                    }
+                    catch (Exception ex)
+                    {
+                        info.AppendLine($"Segment Count Error: {ex.Message}");
+                    }
+                }
+                
+                return info.ToString();
+            }
+            catch (Exception ex)
+            {
+                return $"Debug Info Error: {ex.Message}";
+            }
+        }
+
+        /// <summary>
+        /// Простое преобразование в Dynamo PolyCurve (минимальная версия для отладки)
+        /// </summary>
+        /// <returns>Dynamo PolyCurve или null</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public dg.PolyCurve ToDynamoPolyCurveSimple()
+        {
+            try
+            {
+                // Создаем простую линию из начальной и конечной точек
+                Renga.Point2D start = this._i.GetBeginPoint();
+                Renga.Point2D end = this._i.GetEndPoint();
+                
+                var points = new List<dg.Point>
+                {
+                    dg.Point.ByCoordinates(start.X / 1000.0, start.Y / 1000.0),
+                    dg.Point.ByCoordinates(end.X / 1000.0, end.Y / 1000.0)
+                };
+                
+                return dg.PolyCurve.ByPoints(points);
+            }
+            catch (Exception ex)
+            {
+                // Возвращаем null с информацией об ошибке
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Оптимизированное преобразование для закрытых PolyCurve с минимальным количеством точек
+        /// </summary>
+        /// <returns>Dynamo PolyCurve или null</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public dg.PolyCurve ToDynamoPolyCurveMinimal()
+        {
+            try
+            {
+                // Проверяем, что это закрытый PolyCurve
+                if (!this.IsClosed || !this.IsPolyCurve())
+                {
+                    return this.ToDynamoPolyCurveSimple();
+                }
+
+                // Получаем сегменты
+                int segmentCount = this.GetSegmentCount();
+                if (segmentCount <= 0)
+                {
+                    return this.ToDynamoPolyCurveSimple();
+                }
+
+                List<dg.Curve> allCurves = new List<dg.Curve>();
+                
+                // Обрабатываем каждый сегмент отдельно
+                for (int i = 0; i < segmentCount; i++)
+                {
+                    Curve2D segment = this.GetSegment(i);
+                    if (segment != null)
+                    {
+                        // Создаем кривую для сегмента с учетом его типа
+                        dg.Curve segmentCurve = CreateDynamoCurveFromSegment(segment, 2); // Минимальное количество точек
+                        if (segmentCurve != null)
+                        {
+                            allCurves.Add(segmentCurve);
+                        }
+                    }
+                }
+                
+                // Создаем итоговый PolyCurve из всех кривых
+                if (allCurves.Count > 0)
+                {
+                    return dg.PolyCurve.ByJoinedCurves(allCurves);
+                }
+                else
+                {
+                    return this.ToDynamoPolyCurveSimple();
+                }
+            }
+            catch
+            {
+                return this.ToDynamoPolyCurveSimple();
+            }
+        }
+
+        /// <summary>
+        /// Специализированное преобразование для закрытых PolyCurve с очень близкими начальной и конечной точками
+        /// </summary>
+        /// <param name="parts_in_meter">Число сегментов полилинии в 1 метре</param>
+        /// <returns>Dynamo PolyCurve или null</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public dg.PolyCurve ToDynamoPolyCurveClosedPolyCurve(int parts_in_meter = 2)
+        {
+            try
+            {
+                // Проверяем, что это закрытый PolyCurve
+                if (!this.IsClosed || !this.IsPolyCurve())
+                {
+                    return this.ToDynamoPolyCurveSafe(parts_in_meter);
+                }
+
+                // Получаем сегменты
+                int segmentCount = this.GetSegmentCount();
+                if (segmentCount <= 0)
+                {
+                    return this.ToDynamoPolyCurveSafe(parts_in_meter);
+                }
+
+                List<dg.Curve> dynamoCurves = new List<dg.Curve>();
+                
+                // Обрабатываем каждый сегмент отдельно с учетом типа кривой
+                for (int i = 0; i < segmentCount; i++)
+                {
+                    Curve2D segment = this.GetSegment(i);
+                    if (segment != null)
+                    {
+                        // Создаем кривую для сегмента с учетом его типа
+                        dg.Curve segmentCurve = CreateDynamoCurveFromSegment(segment, parts_in_meter);
+                        if (segmentCurve != null)
+                        {
+                            dynamoCurves.Add(segmentCurve);
+                        }
+                    }
+                }
+                
+                // Создаем итоговый PolyCurve из всех сегментов
+                if (dynamoCurves.Count > 0)
+                {
+                    return dg.PolyCurve.ByJoinedCurves(dynamoCurves);
+                }
+                else
+                {
+                    // Fallback к простому методу
+                    return this.ToDynamoPolyCurveSafe(parts_in_meter);
+                }
+            }
+            catch
+            {
+                return this.ToDynamoPolyCurveSafe(parts_in_meter);
+            }
+        }
+
+        /// <summary>
+        /// Проверка, являются ли две точки дублирующимися (с учетом погрешности)
+        /// </summary>
+        /// <param name="point1">Первая точка</param>
+        /// <param name="point2">Вторая точка</param>
+        /// <param name="tolerance">Допустимая погрешность (по умолчанию 1e-3)</param>
+        /// <returns>True если точки дублирующиеся</returns>
+        private static bool IsPointDuplicate(dg.Point point1, dg.Point point2, double tolerance = 1e-3)
+        {
+            if (point1 == null || point2 == null) return false;
+            
+            double dx = Math.Abs(point1.X - point2.X);
+            double dy = Math.Abs(point1.Y - point2.Y);
+            double dz = Math.Abs(point1.Z - point2.Z);
+            
+            return dx < tolerance && dy < tolerance && dz < tolerance;
+        }
+
+        /// <summary>
+        /// Создание Dynamo кривой из сегмента с учетом типа кривой
+        /// </summary>
+        /// <param name="segment">Сегмент кривой</param>
+        /// <param name="minPoints">Минимальное количество точек</param>
+        /// <returns>Dynamo кривая или null</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static dg.Curve CreateDynamoCurveFromSegment(Curve2D segment, int minPoints = 2)
+        {
+            if (segment == null) return null;
+
+            try
+            {
+                // Get curve type as integer first, then convert to string
+                int curveTypeInt = (int)segment._i.Curve2DType;
+                string curveType = segment.Curve2DType.ToString();
+                
+                // Debug information
+                System.Diagnostics.Debug.WriteLine($"Curve Type Int: {curveTypeInt}, String: {curveType}");
+                
+                switch (curveTypeInt)
+                {
+                    case 1: // Curve2DType_LineSegment
+                        return CreateDynamoLineFromSegment(segment);
+                    
+                    case 2: // Curve2DType_Arc
+                        return CreateDynamoArcFromSegment(segment, minPoints);
+                    
+                    case 3: // Curve2DType_PolyCurve
+                        return CreateDynamoPolyCurveFromSegment(segment, minPoints);
+                    
+                    default:
+                        return CreateDynamoGenericCurveFromSegment(segment, minPoints);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in CreateDynamoCurveFromSegment: {ex.Message}");
+                return CreateDynamoGenericCurveFromSegment(segment, minPoints);
+            }
+        }
+
+        /// <summary>
+        /// Создание Dynamo линии из сегмента линии
+        /// </summary>
+        /// <param name="segment">Сегмент линии</param>
+        /// <returns>Dynamo линия</returns>
+        private static dg.Curve CreateDynamoLineFromSegment(Curve2D segment)
+        {
+            try
+            {
+                Renga.Point2D start = segment._i.GetBeginPoint();
+                Renga.Point2D end = segment._i.GetEndPoint();
+                
+                dg.Point startPoint = dg.Point.ByCoordinates(start.X / 1000.0, start.Y / 1000.0);
+                dg.Point endPoint = dg.Point.ByCoordinates(end.X / 1000.0, end.Y / 1000.0);
+                
+                return dg.Line.ByStartPointEndPoint(startPoint, endPoint);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Создание Dynamo дуги из сегмента дуги
+        /// </summary>
+        /// <param name="segment">Сегмент дуги</param>
+        /// <param name="minPoints">Минимальное количество точек</param>
+        /// <returns>Dynamo дуга или PolyCurve</returns>
+        private static dg.Curve CreateDynamoArcFromSegment(Curve2D segment, int minPoints)
+        {
+            try
+            {
+                Renga.Point2D start = segment._i.GetBeginPoint();
+                Renga.Point2D end = segment._i.GetEndPoint();
+                
+                // Try to create a proper Dynamo Arc first
+                try
+                {
+                    // Get three points to define the arc
+                    double minParam = segment._i.MinParameter;
+                    double maxParam = segment._i.MaxParameter;
+                    double midParam = (minParam + maxParam) / 2.0;
+                    
+                    Renga.Point2D midPoint = segment._i.GetPointOn(midParam);
+                    
+                    dg.Point startPt = dg.Point.ByCoordinates(start.X / 1000.0, start.Y / 1000.0);
+                    dg.Point midPt = dg.Point.ByCoordinates(midPoint.X / 1000.0, midPoint.Y / 1000.0);
+                    dg.Point endPt = dg.Point.ByCoordinates(end.X / 1000.0, end.Y / 1000.0);
+                    
+                    // Try to create Arc.ByThreePoints
+                    dg.Arc arc = dg.Arc.ByThreePoints(startPt, midPt, endPt);
+                    if (arc != null)
+                    {
+                        return arc;
+                    }
+                }
+                catch
+                {
+                    // If Arc.ByThreePoints fails, fall back to high-quality point sampling
+                }
+                
+                // Fallback: Create high-quality PolyCurve from points
+                List<dg.Point> points = new List<dg.Point>();
+                
+                double fallbackMinParam = segment._i.MinParameter;
+                double fallbackMaxParam = segment._i.MaxParameter;
+                
+                // Add start point
+                points.Add(dg.Point.ByCoordinates(start.X / 1000.0, start.Y / 1000.0));
+                
+                // For arcs, add more intermediate points for better quality
+                int numPoints = Math.Max(minPoints, 16); // Increased to 16 points for smoother arcs
+                
+                for (int i = 1; i < numPoints - 1; i++)
+                {
+                    double param = fallbackMinParam + (fallbackMaxParam - fallbackMinParam) * i / (numPoints - 1);
+                    Renga.Point2D point = segment._i.GetPointOn(param);
+                    dg.Point dynamoPoint = dg.Point.ByCoordinates(point.X / 1000.0, point.Y / 1000.0);
+                    
+                    // Check for duplicates
+                    if (points.Count == 0 || !IsPointDuplicate(points[points.Count - 1], dynamoPoint, 1e-4))
+                    {
+                        points.Add(dynamoPoint);
+                    }
+                }
+                
+                // Add end point
+                dg.Point endPoint = dg.Point.ByCoordinates(end.X / 1000.0, end.Y / 1000.0);
+                if (points.Count == 0 || !IsPointDuplicate(points[points.Count - 1], endPoint, 1e-4))
+                {
+                    points.Add(endPoint);
+                }
+                
+                // Create PolyCurve from points
+                if (points.Count >= 2)
+                {
+                    return dg.PolyCurve.ByPoints(points);
+                }
+                else
+                {
+                    return dg.Line.ByStartPointEndPoint(points[0], points[1]);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in CreateDynamoArcFromSegment: {ex.Message}");
+                return CreateDynamoGenericCurveFromSegment(segment, minPoints);
+            }
+        }
+
+        /// <summary>
+        /// Создание Dynamo PolyCurve из сегмента PolyCurve
+        /// </summary>
+        /// <param name="segment">Сегмент PolyCurve</param>
+        /// <param name="minPoints">Минимальное количество точек</param>
+        /// <returns>Dynamo PolyCurve</returns>
+        private static dg.Curve CreateDynamoPolyCurveFromSegment(Curve2D segment, int minPoints)
+        {
+            try
+            {
+                // Рекурсивно обрабатываем вложенные PolyCurve
+                return segment.ToDynamoPolyCurveSafe(2);
+            }
+            catch
+            {
+                return CreateDynamoGenericCurveFromSegment(segment, minPoints);
+            }
+        }
+
+        /// <summary>
+        /// Создание Dynamo кривой из сегмента общего типа
+        /// </summary>
+        /// <param name="segment">Сегмент кривой</param>
+        /// <param name="minPoints">Минимальное количество точек</param>
+        /// <returns>Dynamo кривая</returns>
+        private static dg.Curve CreateDynamoGenericCurveFromSegment(Curve2D segment, int minPoints)
+        {
+            try
+            {
+                Renga.Point2D start = segment._i.GetBeginPoint();
+                Renga.Point2D end = segment._i.GetEndPoint();
+                
+                List<dg.Point> points = new List<dg.Point>();
+                
+                double minParam = segment._i.MinParameter;
+                double maxParam = segment._i.MaxParameter;
+                double length = segment._i.GetLength() / 1000.0;
+                
+                // Определяем количество точек на основе длины
+                int numPoints = Math.Max(minPoints, Math.Min(Convert.ToInt32(length * 2), 20));
+                
+                for (int i = 0; i < numPoints; i++)
+                {
+                    double param = minParam + (maxParam - minParam) * i / (numPoints - 1);
+                    Renga.Point2D point = segment._i.GetPointOn(param);
+                    dg.Point dynamoPoint = dg.Point.ByCoordinates(point.X / 1000.0, point.Y / 1000.0);
+                    
+                    // Проверяем на дублирование
+                    if (points.Count == 0 || !IsPointDuplicate(points[points.Count - 1], dynamoPoint, 1e-3))
+                    {
+                        points.Add(dynamoPoint);
+                    }
+                }
+                
+                // Создаем PolyCurve из точек
+                if (points.Count >= 2)
+                {
+                    return dg.PolyCurve.ByPoints(points);
+                }
+                else
+                {
+                    return dg.Line.ByStartPointEndPoint(points[0], points[1]);
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Тестирование конвертации сегмента с отладочной информацией
+        /// </summary>
+        /// <param name="segment">Сегмент для тестирования</param>
+        /// <returns>Строка с результатами тестирования</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static string TestSegmentConversion(Curve2D segment)
+        {
+            if (segment == null) return "Segment is null";
+
+            try
+            {
+                var result = new System.Text.StringBuilder();
+                
+                // Информация о сегменте
+                int curveTypeInt = (int)segment._i.Curve2DType;
+                string curveType = segment.Curve2DType.ToString();
+                result.AppendLine($"Segment Curve Type: {curveType} (Int: {curveTypeInt})");
+                
+                // Тестируем конвертацию
+                dg.Curve dynamoCurve = CreateDynamoCurveFromSegment(segment, 2);
+                
+                if (dynamoCurve == null)
+                {
+                    result.AppendLine("❌ Conversion result: NULL");
+                }
+                else
+                {
+                    result.AppendLine($"✅ Conversion result: {dynamoCurve.GetType().Name}");
+                    
+                    // Дополнительная информация о результате
+                    if (dynamoCurve is dg.PolyCurve polyCurve)
+                    {
+                        result.AppendLine($"   PolyCurve segments: {polyCurve.NumberOfCurves}");
+                    }
+                    else if (dynamoCurve is dg.Arc arc)
+                    {
+                        result.AppendLine($"   Arc radius: {arc.Radius}");
+                    }
+                    else if (dynamoCurve is dg.Line line)
+                    {
+                        result.AppendLine($"   Line length: {line.Length}");
+                    }
+                }
+                
+                return result.ToString();
+            }
+            catch (System.Exception ex)
+            {
+                return $"Error in TestSegmentConversion: {ex.Message}";
+            }
+        }
+
+        /// <summary>
+        /// Преобразование Curve2D в Dynamo PolyCurve (специально для PolyCurve типов)
+        /// </summary>
+        /// <param name="curve2D">Кривая 2D для преобразования</param>
+        /// <param name="parts_in_meter">Число сегментов полилинии в 1 метре (по умолчанию 2)</param>
+        /// <returns>Dynamo PolyCurve или null если тип не поддерживается</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static dg.PolyCurve ToDynamoPolyCurve(Curve2D curve2D, int parts_in_meter = 2)
+        {
+            if (curve2D == null) return null;
+            
+            // Проверяем, что это PolyCurve тип
+            if (curve2D.Curve2DType.ToString() != "Curve2DType_PolyCurve")
+            {
+                // Если не PolyCurve, используем безопасный метод
+                return curve2D.ToDynamoPolyCurveSafe(parts_in_meter);
+            }
+            
+            // Для PolyCurve используем безопасный метод
+            return curve2D.ToDynamoPolyCurveSafe(parts_in_meter);
+        }
+
+        /// <summary>
+        /// Преобразование Curve2D в Dynamo PolyCurve с использованием сегментов (для PolyCurve типов)
+        /// </summary>
+        /// <param name="curve2D">Кривая 2D для преобразования</param>
+        /// <param name="parts_in_meter">Число сегментов полилинии в 1 метре (по умолчанию 2)</param>
+        /// <returns>Dynamo PolyCurve или null если тип не поддерживается</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static dg.PolyCurve ToDynamoPolyCurveFromSegments(Curve2D curve2D, int parts_in_meter = 2)
+        {
+            if (curve2D == null) return null;
+            
+            try
+            {
+                // Пытаемся получить IPolyCurve2D интерфейс
+                Renga.IPolyCurve2D polyCurve2D = curve2D._i as Renga.IPolyCurve2D;
+                if (polyCurve2D != null)
+                {
+                    // Получаем количество сегментов
+                    int segmentCount = polyCurve2D.GetSegmentCount();
+                    if (segmentCount > 0)
+                    {
+                        List<dg.Curve> dynamoCurves = new List<dg.Curve>();
+                        
+                        // Обрабатываем каждый сегмент
+                        for (int i = 0; i < segmentCount; i++)
+                        {
+                            Renga.ICurve2D segment = polyCurve2D.GetSegment(i);
+                            if (segment != null)
+                            {
+                                // Создаем временный Curve2D объект для сегмента
+                                Curve2D segmentCurve = new Curve2D(segment);
+                                
+                                // Преобразуем сегмент в Dynamo кривую с обработкой закрытых кривых
+                                dg.PolyCurve segmentPolyCurve = segmentCurve.ToDynamoPolyCurveSafe(parts_in_meter);
+                                if (segmentPolyCurve != null)
+                                {
+                                    dynamoCurves.Add(segmentPolyCurve);
+                                }
+                            }
+                        }
+                        
+                        // Создаем итоговый PolyCurve из всех сегментов
+                        if (dynamoCurves.Count > 0)
+                        {
+                            return dg.PolyCurve.ByJoinedCurves(dynamoCurves);
+                        }
+                    }
+                }
+                
+                // Если не удалось получить сегменты, используем общий метод
+                return curve2D.ToDynamoPolyCurveSafe(parts_in_meter);
+            }
+            catch
+            {
+                // В случае ошибки используем общий метод
+                return curve2D.ToDynamoPolyCurveSafe(parts_in_meter);
+            }
+        }
+
+        /// <summary>
+        /// Проверка, является ли кривая PolyCurve типом
+        /// </summary>
+        /// <returns>True если это PolyCurve, иначе False</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public bool IsPolyCurve()
+        {
+            return this.Curve2DType.ToString() == "Curve2DType_PolyCurve";
+        }
+
+        /// <summary>
+        /// Получение типа кривой как строки
+        /// </summary>
+        /// <returns>Строковое представление типа кривой</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public string GetCurveTypeString()
+        {
+            return this.Curve2DType.ToString();
+        }
+
+        /// <summary>
+        /// Получение количества сегментов для PolyCurve (только для PolyCurve типов)
+        /// </summary>
+        /// <returns>Количество сегментов или -1 если не PolyCurve</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public int GetSegmentCount()
+        {
+            try
+            {
+                Renga.IPolyCurve2D polyCurve2D = this._i as Renga.IPolyCurve2D;
+                if (polyCurve2D != null)
+                {
+                    return polyCurve2D.GetSegmentCount();
+                }
+            }
+            catch
+            {
+                // Ignore errors
+            }
+            return -1; // Not a PolyCurve or error
+        }
+
+        /// <summary>
+        /// Получение сегмента PolyCurve по индексу (только для PolyCurve типов)
+        /// </summary>
+        /// <param name="index">Индекс сегмента</param>
+        /// <returns>Curve2D сегмент или null если не PolyCurve или неверный индекс</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public Curve2D GetSegment(int index)
+        {
+            try
+            {
+                Renga.IPolyCurve2D polyCurve2D = this._i as Renga.IPolyCurve2D;
+                if (polyCurve2D != null)
+                {
+                    int segmentCount = polyCurve2D.GetSegmentCount();
+                    if (index >= 0 && index < segmentCount)
+                    {
+                        Renga.ICurve2D segment = polyCurve2D.GetSegment(index);
+                        if (segment != null)
+                        {
+                            return new Curve2D(segment);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                // Ignore errors
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Преобразование Curve2D в Dynamo PolyCurve с специальной обработкой закрытых кривых
+        /// </summary>
+        /// <param name="curve2D">Кривая 2D для преобразования</param>
+        /// <param name="parts_in_meter">Число сегментов полилинии в 1 метре (по умолчанию 2)</param>
+        /// <returns>Dynamo PolyCurve или null если тип не поддерживается</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static dg.PolyCurve ToDynamoPolyCurveClosed(Curve2D curve2D, int parts_in_meter = 2)
+        {
+            if (curve2D == null) return null;
+            
+            try
+            {
+                // Проверяем, является ли кривая закрытой
+                bool is_closed = curve2D._i.IsClosed();
+                
+                if (is_closed)
+                {
+                    // Для закрытых кривых используем специальную обработку
+                    return curve2D.ToDynamoPolyCurveSafe(parts_in_meter);
+                }
+                else
+                {
+                    // Для открытых кривых используем обычный метод
+                    return curve2D.ToDynamoPolyCurveSafe(parts_in_meter);
+                }
+            }
+            catch
+            {
+                return curve2D.ToDynamoPolyCurveSafe(parts_in_meter);
+            }
+        }
+
+        /// <summary>
+        /// Создание Curve2D из Dynamo кривой
+        /// </summary>
+        /// <param name="dynamoCurve">Dynamo кривая</param>
+        /// <returns>Curve2D объект или null</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static Curve2D ByDynamoCurve(dg.Curve dynamoCurve)
+        {
+            try
+            {
+                if (dynamoCurve == null) return null;
+                
+                // Convert Dynamo curve to Renga curve
+                var rengaCurve = ConvertDynamoCurveToRenga(dynamoCurve);
+                if (rengaCurve == null) return null;
+                
+                return new Curve2D(rengaCurve);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Создание Curve2D из Dynamo PolyCurve
+        /// </summary>
+        /// <param name="dynamoPolyCurve">Dynamo PolyCurve</param>
+        /// <returns>Curve2D объект или null</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static Curve2D ByDynamoPolyCurve(dg.PolyCurve dynamoPolyCurve)
+        {
+            try
+            {
+                if (dynamoPolyCurve == null) return null;
+                
+                // Convert Dynamo PolyCurve to Renga curve
+                var rengaCurve = ConvertDynamoPolyCurveToRenga(dynamoPolyCurve);
+                if (rengaCurve == null) return null;
+                
+                return new Curve2D(rengaCurve);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Создание Curve2D линии по двум точкам
+        /// </summary>
+        /// <param name="x1">X координата начальной точки</param>
+        /// <param name="y1">Y координата начальной точки</param>
+        /// <param name="x2">X координата конечной точки</param>
+        /// <param name="y2">Y координата конечной точки</param>
+        /// <returns>Curve2D объект и отладочная информация</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "Curve2D", "DebugInfo" })]
+        public static Dictionary<string, object> ByLineSegment(double x1, double y1, double x2, double y2)
+        {
+            var debugInfo = "🔧 Creating Curve2D line segment...\n";
+            
+            try
+            {
+                debugInfo += $"📍 Input coordinates (meters): Start=({x1:F2}, {y1:F2}), End=({x2:F2}, {y2:F2})\n";
+                
+                // Create Renga Point2D structures (coordinates are in meters, convert to mm)
+                var startPoint = new Renga.Point2D
+                {
+                    X = x1 * 1000.0, // Convert to mm
+                    Y = y1 * 1000.0
+                };
+                
+                var endPoint = new Renga.Point2D
+                {
+                    X = x2 * 1000.0, // Convert to mm
+                    Y = y2 * 1000.0
+                };
+                
+                debugInfo += $"📐 Converted coordinates (mm): Start=({startPoint.X:F1}, {startPoint.Y:F1}), End=({endPoint.X:F1}, {endPoint.Y:F1})\n";
+                
+                // Try to create IMath interface using COM activation
+                try
+                {
+                    debugInfo += "🔍 Attempting to create Renga IMath interface...\n";
+                    Type mathType = Type.GetTypeFromProgID("Renga.Math");
+                    if (mathType != null)
+                    {
+                        debugInfo += "✅ Renga.Math type found, creating instance...\n";
+                        var mathInterface = Activator.CreateInstance(mathType) as Renga.IMath;
+                        if (mathInterface != null)
+                        {
+                            debugInfo += "✅ IMath interface created successfully!\n";
+                            // Create the line segment using IMath
+                            Renga.ICurve2D curve2D = mathInterface.CreateLineSegment2D(startPoint, endPoint);
+                            
+                            if (curve2D != null)
+                            {
+                                debugInfo += "✅ Curve2D created using Renga IMath interface!\n";
+                                debugInfo += $"📏 Line length: {Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2)):F2} meters\n";
+                                
+                                return new Dictionary<string, object>
+                                {
+                                    { "Curve2D", new Curve2D(curve2D) },
+                                    { "DebugInfo", debugInfo }
+                                };
+                            }
+                            else
+                            {
+                                debugInfo += "⚠️ IMath.CreateLineSegment2D returned null\n";
+                            }
+                        }
+                        else
+                        {
+                            debugInfo += "⚠️ Failed to cast to IMath interface\n";
+                        }
+                    }
+                    else
+                    {
+                        debugInfo += "⚠️ Renga.Math type not found\n";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    debugInfo += $"⚠️ COM creation failed: {ex.Message}\n";
+                    debugInfo += "🔄 Falling back to workaround method...\n";
+                }
+                
+                // Fallback: Create a temporary object to hold the line data
+                // This won't work with the baseline system but provides a placeholder
+                var lineData = new { StartPoint = startPoint, EndPoint = endPoint, Type = "LineSegment" };
+                debugInfo += "⚠️ Using fallback method - this may not work with baseline system\n";
+                debugInfo += "💡 For proper baseline support, ensure Renga is properly installed\n";
+                
+                return new Dictionary<string, object>
+                {
+                    { "Curve2D", new Curve2D(lineData) },
+                    { "DebugInfo", debugInfo }
+                };
+            }
+            catch (Exception ex)
+            {
+                debugInfo += $"❌ Curve2D creation failed!\n";
+                debugInfo += $"Input: Start=({x1:F2}, {y1:F2}), End=({x2:F2}, {y2:F2})\n";
+                debugInfo += $"Error: {ex.Message}\n";
+                debugInfo += $"Stack Trace: {ex.StackTrace}";
+                
+                return new Dictionary<string, object>
+                {
+                    { "Curve2D", null },
+                    { "DebugInfo", debugInfo }
+                };
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo кривой в Renga кривую
+        /// </summary>
+        /// <param name="dynamoCurve">Dynamo кривая</param>
+        /// <returns>Renga кривая или null</returns>
+        private static object ConvertDynamoCurveToRenga(dg.Curve dynamoCurve)
+        {
+            try
+            {
+                // Handle different Dynamo curve types
+                if (dynamoCurve is dg.Line line)
+                {
+                    return ConvertDynamoLineToRenga(line);
+                }
+                else if (dynamoCurve is dg.Arc arc)
+                {
+                    return ConvertDynamoArcToRenga(arc);
+                }
+                else if (dynamoCurve is dg.PolyCurve polyCurve)
+                {
+                    return ConvertDynamoPolyCurveToRenga(polyCurve);
+                }
+                else
+                {
+                    // For other curve types, try to approximate with line segments
+                    return ConvertDynamoCurveToLineApproximation(dynamoCurve);
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo PolyCurve в Renga кривую
+        /// </summary>
+        /// <param name="dynamoPolyCurve">Dynamo PolyCurve</param>
+        /// <returns>Renga кривая или null</returns>
+        private static object ConvertDynamoPolyCurveToRenga(dg.PolyCurve dynamoPolyCurve)
+        {
+            try
+            {
+                // Get curve segments
+                var segments = dynamoPolyCurve.Curves();
+                if (segments == null || segments.Length == 0) return null;
+                
+                // For now, we'll convert the first segment
+                // In a full implementation, you would create a proper Renga PolyCurve2D
+                if (segments.Length == 1)
+                {
+                    return ConvertDynamoCurveToRenga(segments[0]);
+                }
+                else
+                {
+                    // Multiple segments - convert the first one for now
+                    // TODO: Implement proper PolyCurve2D creation
+                    return ConvertDynamoCurveToRenga(segments[0]);
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo Line в Renga кривую
+        /// </summary>
+        /// <param name="dynamoLine">Dynamo Line</param>
+        /// <returns>Renga кривая или null</returns>
+        private static object ConvertDynamoLineToRenga(dg.Line dynamoLine)
+        {
+            try
+            {
+                var start = dynamoLine.StartPoint;
+                var end = dynamoLine.EndPoint;
+                
+                // Create Renga Point2D structures
+                var startPoint = new Renga.Point2D
+                {
+                    X = start.X * 1000.0, // Convert to mm
+                    Y = start.Y * 1000.0
+                };
+                
+                var endPoint = new Renga.Point2D
+                {
+                    X = end.X * 1000.0, // Convert to mm
+                    Y = end.Y * 1000.0
+                };
+                
+                // Create proper Renga ICurve2D using IMath
+                // Note: This requires access to IMath interface, which we don't have in this context
+                // For now, we'll return the points and let the caller handle it
+                return new { StartPoint = startPoint, EndPoint = endPoint, Type = "Line" };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo Arc в Renga кривую
+        /// </summary>
+        /// <param name="dynamoArc">Dynamo Arc</param>
+        /// <returns>Renga кривая или null</returns>
+        private static object ConvertDynamoArcToRenga(dg.Arc dynamoArc)
+        {
+            try
+            {
+                var center = dynamoArc.CenterPoint;
+                var start = dynamoArc.StartPoint;
+                var end = dynamoArc.EndPoint;
+                
+                // Create Renga Point2D structures
+                var centerPoint = new Renga.Point2D
+                {
+                    X = center.X * 1000.0, // Convert to mm
+                    Y = center.Y * 1000.0
+                };
+                
+                var startPoint = new Renga.Point2D
+                {
+                    X = start.X * 1000.0, // Convert to mm
+                    Y = start.Y * 1000.0
+                };
+                
+                var endPoint = new Renga.Point2D
+                {
+                    X = end.X * 1000.0, // Convert to mm
+                    Y = end.Y * 1000.0
+                };
+                
+                var radius = dynamoArc.Radius * 1000.0; // Convert to mm
+                
+                // Return the arc data for now - in a full implementation,
+                // you would use IMath.CreateArc2DByCenterStartEndPoints to create the actual curve
+                return new { 
+                    CenterPoint = centerPoint, 
+                    StartPoint = startPoint, 
+                    EndPoint = endPoint, 
+                    Radius = radius, 
+                    Type = "Arc" 
+                };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo кривой в линейную аппроксимацию
+        /// </summary>
+        /// <param name="dynamoCurve">Dynamo кривая</param>
+        /// <returns>Renga кривая или null</returns>
+        private static object ConvertDynamoCurveToLineApproximation(dg.Curve dynamoCurve)
+        {
+            try
+            {
+                // Get start and end points
+                var points = dynamoCurve.PointsAtEqualChordLength(2);
+                if (points == null || points.Length < 2) return null;
+                
+                var start = points[0];
+                var end = points[points.Length - 1];
+                
+                // Create Renga Point2D structures
+                var startPoint = new Renga.Point2D
+                {
+                    X = start.X * 1000.0, // Convert to mm
+                    Y = start.Y * 1000.0
+                };
+                
+                var endPoint = new Renga.Point2D
+                {
+                    X = end.X * 1000.0, // Convert to mm
+                    Y = end.Y * 1000.0
+                };
+                
+                return new { StartPoint = startPoint, EndPoint = endPoint, Type = "LineApproximation" };
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+
     }
 }

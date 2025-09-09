@@ -17,11 +17,14 @@ namespace DynRenga.DynDocument
 	/// </summary>
 	public class ScreenshotService
 	{
+		/// <summary>
+		/// Внутренний COM-объект Renga.IScreenshotService
+		/// </summary>
 		public Renga.IScreenshotService _i;
 		/// <summary>
 		/// Получение менеджера для текущей позиции камеры модели
 		/// </summary>
-		/// <param name="View"></param>
+		/// <param name="Application">Приложение Renga</param>
 		public ScreenshotService(Application Application)
 		{
 			Renga.IView _IView = Application._i.ActiveView;
@@ -60,7 +63,6 @@ namespace DynRenga.DynDocument
 			Renga.IView3DParams view_params = _i as Renga.IView3DParams;
 			var uutt = _i.Type.ToString();
 			Renga.IScreenshotService iii = _i as Renga.IScreenshotService;
-			int wait = 0;
 		}
 		/// <summary>
 		/// Создает скриншот (картинку) рабочего пространства Renga в файл

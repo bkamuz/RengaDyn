@@ -29,7 +29,7 @@ namespace DynRenga.DynProperties.Parameters
         /// Проверка, есть ли какое-либо значение у параметра
         /// </summary>
         /// <returns></returns>
-        public bool HasValue => this._i.HasValue();
+        public bool HasValue => this._i.HasValue;
         //getting data
         /// <summary>
         /// Получает булево значение параметра
@@ -37,7 +37,7 @@ namespace DynRenga.DynProperties.Parameters
         /// <returns></returns>
         public bool GetBoolValue()
         {
-            if (this._i.HasValue()) return this._i.GetBoolValue();
+            if (this._i.HasValue) return this._i.GetBoolValue();
             else return false;
         }
         /// <summary>
@@ -46,7 +46,7 @@ namespace DynRenga.DynProperties.Parameters
         /// <returns></returns>
         public int GetIntValue()
         {
-            if (this._i.HasValue()) return this._i.GetIntValue();
+            if (this._i.HasValue) return this._i.GetIntValue();
             else return -1;
         }
         /// <summary>
@@ -55,7 +55,7 @@ namespace DynRenga.DynProperties.Parameters
         /// <returns></returns>
         public double GetDoubleValue()
         {
-            if (this._i.HasValue()) return this._i.GetDoubleValue();
+            if (this._i.HasValue) return this._i.GetDoubleValue();
             else return -1d;
         }
         /// <summary>
@@ -64,7 +64,7 @@ namespace DynRenga.DynProperties.Parameters
         /// <returns></returns>
         public string GetStringValue()
         {
-            if (this._i.HasValue()) return this._i.GetStringValue();
+            if (this._i.HasValue) return this._i.GetStringValue();
             else return null;
         }
         //setting data

@@ -1,0 +1,251 @@
+{
+  "Uuid": "12345678-1234-1234-1234-123456789abc",
+  "IsCustomNode": false,
+  "Description": "Example of debugging floor creation with improved error handling",
+  "Name": "Floor Creation Debugging",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynamoCoreNodes",
+      "Version": "2.12.1.8246"
+    },
+    {
+      "Name": "RengaDynMain",
+      "Version": "1.0.0.0"
+    }
+  ],
+  "Connectors": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789001",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789002",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin X coordinate",
+      "X": 100,
+      "Y": 100,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789003",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789004",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin Y coordinate",
+      "X": 100,
+      "Y": 150,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789005",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789006",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin Z coordinate",
+      "X": 100,
+      "Y": 200,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789007",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789008",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create Placement3D by origin coordinates",
+      "X": 300,
+      "Y": 150,
+      "Name": "Placement3D.ByOrigin",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Placement3D.ByOrigin(double,double,double)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.IntegerSlider",
+      "Id": "12345678-1234-1234-1234-123456789009",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789010",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Level ID for floor creation",
+      "X": 100,
+      "Y": 300,
+      "Name": "Integer Slider",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "1"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789011",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789012",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Check if model is valid",
+      "X": 500,
+      "Y": 100,
+      "Name": "Model.IsValid",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Model.IsValid()"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789013",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789014",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Get available levels",
+      "X": 500,
+      "Y": 150,
+      "Name": "Model.GetAvailableLevels",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Model.GetAvailableLevels()"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789015",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789016",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create floor with error handling",
+      "X": 500,
+      "Y": 250,
+      "Name": "Model.CreateFloor",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Model.CreateFloor(int,object)"
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "12345678-1234-1234-1234-123456789017",
+      "Title": "Floor Creation Debugging Workflow",
+      "DescriptionText": "This example shows how to debug floor creation issues with improved error handling:\n\n1. Check if Model.IsValid() returns true\n2. Use Model.GetAvailableLevels() to see valid level IDs\n3. Create Placement3D using Placement3D.ByOrigin()\n4. Use Model.CreateFloor() with proper level ID and placement\n\nIf CreateFloor fails, you'll now get detailed error messages explaining what went wrong.",
+      "X": 50,
+      "Y": 50,
+      "Width": 500,
+      "Height": 400,
+      "TextblockHeight": 300,
+      "Background": "#FFDCDCDC",
+      "FontSize": 14,
+      "NodeIds": [
+        "12345678-1234-1234-1234-123456789001",
+        "12345678-1234-1234-1234-123456789003",
+        "12345678-1234-1234-1234-123456789005",
+        "12345678-1234-1234-1234-123456789007",
+        "12345678-1234-1234-1234-123456789009",
+        "12345678-1234-1234-1234-123456789011",
+        "12345678-1234-1234-1234-123456789013",
+        "12345678-1234-1234-1234-123456789015"
+      ],
+      "InitialTop": 50,
+      "InitialHeight": 400
+    }
+  ],
+  "X": 0,
+  "Y": 0,
+  "Zoom": 1
+}

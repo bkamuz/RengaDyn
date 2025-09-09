@@ -52,7 +52,7 @@ namespace DynRenga.DynProperties.Parameters
         /// <returns>Словарь со значениями</returns>
         [dr.MultiReturn(new[] { "ParameterType_Undefined", "ParameterType_Bool", "ParameterType_Int" ,
             "ParameterType_Double","ParameterType_String","ParameterType_Length","ParameterType_Angle",
-            "ParameterType_IntEnumeration","ParameterType_IntID" })]
+            "ParameterType_IntID" })]
         public static Dictionary<string, object> ParameterTypes()
         {
             return new Dictionary<string, object>
@@ -64,7 +64,6 @@ namespace DynRenga.DynProperties.Parameters
                     {"ParameterType_String",Renga.ParameterType.ParameterType_String },
                     {"ParameterType_Length",Renga.ParameterType.ParameterType_Length },
                     {"ParameterType_Angle",Renga.ParameterType.ParameterType_Angle },
-                    {"ParameterType_IntEnumeration",Renga.ParameterType.ParameterType_IntEnumeration },
                     {"ParameterType_IntID",Renga.ParameterType.ParameterType_IntID }
 
                 };

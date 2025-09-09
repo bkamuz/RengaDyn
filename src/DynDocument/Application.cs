@@ -19,6 +19,9 @@ namespace DynRenga.DynDocument
     /// </summary>
     public class Application
     {
+        /// <summary>
+        /// Внутренний COM-объект Renga.IApplication
+        /// </summary>
         public Renga.IApplication _i;
         /// <summary>
         /// Получает первый запущенный процесс Renga в системе и фиксирует интерфейс Renga.IApplication
@@ -39,9 +42,23 @@ namespace DynRenga.DynDocument
             }
         }
         /// <summary>
+        /// Проверяет, подключено ли приложение Renga
+        /// </summary>
+        /// <returns>True если Renga запущена и подключена</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public bool IsConnected => this._i != null;
+        /// <summary>
         /// Получение текущего активного вида в виде интерфейса Renga.IView
         /// </summary>
-        public View ActiveView => new View(this._i.ActiveView);
+        public View ActiveView 
+        { 
+            get 
+            { 
+                if (this._i == null) 
+                    throw new InvalidOperationException("Renga application is not running. Please start Renga first.");
+                return new View(this._i.ActiveView); 
+            } 
+        }
         /// <summary>
         /// Получает запущенный процесс Renga или создает его если такого нет, 
         /// и открывает проект по файловому пути к нему

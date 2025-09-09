@@ -1,0 +1,421 @@
+{
+  "Uuid": "12345678-1234-1234-1234-123456789abc",
+  "IsCustomNode": false,
+  "Description": "Example showing how to create a floor and set a baseline to it",
+  "Name": "Floor with Baseline Example",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynamoCoreNodes",
+      "Version": "2.12.1.8246"
+    },
+    {
+      "Name": "RengaDynMain",
+      "Version": "1.0.0.0"
+    }
+  ],
+  "Connectors": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789001",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789002",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Floor origin X",
+      "X": 100,
+      "Y": 100,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789003",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789004",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Floor origin Y",
+      "X": 100,
+      "Y": 150,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789005",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789006",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Floor origin Z",
+      "X": 100,
+      "Y": 200,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789007",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789008",
+          "Name": "Placement3D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        },
+        {
+          "Id": "12345678-1234-1234-1234-123456789009",
+          "Name": "DebugInfo",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create Placement3D for floor",
+      "X": 300,
+      "Y": 150,
+      "Name": "Placement3D.ByOrigin",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Placement3D.ByOrigin(double,double,double)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.IntegerSlider",
+      "Id": "12345678-1234-1234-1234-123456789010",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789011",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Level ID for floor",
+      "X": 100,
+      "Y": 300,
+      "Name": "Integer Slider",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "100013"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789012",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789013",
+          "Name": "Floor",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        },
+        {
+          "Id": "12345678-1234-1234-1234-123456789014",
+          "Name": "DebugInfo",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create floor object",
+      "X": 500,
+      "Y": 250,
+      "Name": "Model.CreateFloor",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Model.CreateFloor(int,object)"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789015",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789016",
+          "Name": "Baseline2DObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Get baseline object from floor",
+      "X": 700,
+      "Y": 200,
+      "Name": "Baseline2DObject.ByModelObject",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Baseline2DObject.ByModelObject(ModelObject)"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789017",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789018",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Baseline start X",
+      "X": 100,
+      "Y": 400,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789019",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789020",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Baseline start Y",
+      "X": 100,
+      "Y": 450,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789021",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789022",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Baseline end X",
+      "X": 100,
+      "Y": 500,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "5.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789023",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789024",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Baseline end Y",
+      "X": 100,
+      "Y": 550,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789025",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789026",
+          "Name": "Curve2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create baseline curve",
+      "X": 300,
+      "Y": 450,
+      "Name": "Curve2D.ByLineSegment",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Curve2D.ByLineSegment(double,double,double,double)"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789027",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789028",
+          "Name": "Success",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Set baseline to floor",
+      "X": 900,
+      "Y": 350,
+      "Name": "Baseline2DObject.SetBaseline",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Baseline2DObject.SetBaseline(Curve2D)"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789029",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789030",
+          "Name": "Baseline",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Get current baseline",
+      "X": 700,
+      "Y": 400,
+      "Name": "Baseline2DObject.GetBaseline",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Baseline2DObject.GetBaseline()"
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "12345678-1234-1234-1234-123456789031",
+      "Title": "Floor with Baseline - Complete Workflow",
+      "DescriptionText": "This example demonstrates the complete workflow for creating a floor and setting a baseline to it:\n\n🏗️ **STEP-BY-STEP WORKFLOW:**\n\n### **Step 1: Create Floor**\n1. **Placement3D.ByOrigin()** - Create 3D placement for floor\n2. **Model.CreateFloor()** - Create floor object with level ID and placement\n3. **Get Floor ID** - Floor is created with unique ID\n\n### **Step 2: Get Baseline Object**\n4. **Baseline2DObject.ByModelObject()** - Get baseline interface from floor\n   - Returns `null` if floor doesn't support baselines\n   - Returns `Baseline2DObject` if supported\n\n### **Step 3: Create Baseline Curve**\n5. **Curve2D.ByLineSegment()** - Create 2D baseline curve\n   - Start point: (0, 0)\n   - End point: (5, 0) - 5 meter line\n   - Can be any 2D curve (line, arc, polyline, etc.)\n\n### **Step 4: Set Baseline**\n6. **Baseline2DObject.SetBaseline()** - Set baseline to floor\n   - Sets the baseline in floor's own coordinate system\n   - Floor will use this curve for its shape\n\n### **Step 5: Verify Baseline**\n7. **Baseline2DObject.GetBaseline()** - Get current baseline\n   - Verify the baseline was set correctly\n   - Can be used for further operations\n\n🔧 **KEY CONCEPTS:**\n\n- **Not all objects support baselines** - Check if `Baseline2DObject.ByModelObject()` returns `null`\n- **Baseline is in object's coordinate system** - Use `SetBaselineInCS()` for different CS\n- **Baseline defines object shape** - Floor will follow the baseline curve\n- **Curve2D is required** - Must create proper 2D curve for baseline\n\n✅ **Expected Results:**\n- Floor created successfully with ID\n- Baseline2DObject obtained from floor\n- Baseline curve set to floor\n- Floor shape follows the baseline curve\n\n⚠️ **Note:** Some objects (like roofs with dependent objects) cannot have their baselines edited.",
+      "X": 50,
+      "Y": 50,
+      "Width": 700,
+      "Height": 700,
+      "TextblockHeight": 600,
+      "Background": "#FFDCDCDC",
+      "FontSize": 14,
+      "NodeIds": [
+        "12345678-1234-1234-1234-123456789001",
+        "12345678-1234-1234-1234-123456789003",
+        "12345678-1234-1234-1234-123456789005",
+        "12345678-1234-1234-1234-123456789007",
+        "12345678-1234-1234-1234-123456789010",
+        "12345678-1234-1234-1234-123456789012",
+        "12345678-1234-1234-1234-123456789015",
+        "12345678-1234-1234-1234-123456789017",
+        "12345678-1234-1234-1234-123456789019",
+        "12345678-1234-1234-1234-123456789021",
+        "12345678-1234-1234-1234-123456789023",
+        "12345678-1234-1234-1234-123456789025",
+        "12345678-1234-1234-1234-123456789027",
+        "12345678-1234-1234-1234-123456789029"
+      ],
+      "InitialTop": 50,
+      "InitialHeight": 700
+    }
+  ],
+  "X": 0,
+  "Y": 0,
+  "Zoom": 1
+}

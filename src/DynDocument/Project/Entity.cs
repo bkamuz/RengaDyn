@@ -18,11 +18,15 @@ namespace DynRenga.DynDocument.Project
     /// </summary>
     public class Entity
     {
+        /// <summary>
+        /// Внутренний COM-объект Renga.IEntity
+        /// </summary>
         public Renga.IEntity _i;
         /// <summary>
         /// Инициация класса из com-объекта Entity
         /// </summary>
-        /// <param name="Entity_object"></param>
+        /// <param name="Entity_object">COM-объект Entity</param>
+        /// <param name="some_value">Дополнительный параметр (по умолчанию 0)</param>
         internal Entity(object Entity_object, int some_value = 0)
         {
             this._i = Entity_object as Renga.IEntity;
@@ -84,7 +88,7 @@ namespace DynRenga.DynDocument.Project
                 {"MaterialLayer", Renga.EntityTypes.MaterialLayer },
                 {"Project", Renga.EntityTypes.Project },
                 {"Schedule", Renga.EntityTypes.Schedule },
-                {"Sheet", Renga.EntityTypes.Sheet },
+                {"Drawing", Renga.EntityTypes.Drawing },
                 {"Site", Renga.EntityTypes.Site },
                 {"Table", Renga.EntityTypes.Table }
             };

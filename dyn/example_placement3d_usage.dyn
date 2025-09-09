@@ -1,0 +1,147 @@
+{
+  "Uuid": "12345678-1234-1234-1234-123456789abc",
+  "IsCustomNode": false,
+  "Description": "Example of creating Renga Placement3D objects in Dynamo",
+  "Name": "Placement3D Creation Examples",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynamoCoreNodes",
+      "Version": "2.12.1.8246"
+    },
+    {
+      "Name": "RengaDynMain",
+      "Version": "1.0.0.0"
+    }
+  ],
+  "Connectors": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789001",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789002",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin X coordinate",
+      "X": 100,
+      "Y": 100,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789003",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789004",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin Y coordinate",
+      "X": 100,
+      "Y": 150,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
+      "NodeType": "Dynamo.Nodes.DoubleInput",
+      "Id": "12345678-1234-1234-1234-123456789005",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789006",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Origin Z coordinate",
+      "X": 100,
+      "Y": 200,
+      "Name": "Number",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "Value": "0.0"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
+      "NodeType": "Dynamo.Nodes.Function",
+      "Id": "12345678-1234-1234-1234-123456789007",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "12345678-1234-1234-1234-123456789008",
+          "Name": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Create Placement3D by origin coordinates",
+      "X": 300,
+      "Y": 150,
+      "Name": "Placement3D.ByOrigin",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false,
+      "ShowGeometry": true,
+      "Excluded": false,
+      "FunctionSignature": "Placement3D.ByOrigin(double,double,double)"
+    }
+  ],
+  "Annotations": [
+    {
+      "Id": "12345678-1234-1234-1234-123456789009",
+      "Title": "Placement3D Creation Examples",
+      "DescriptionText": "This example shows how to create Renga Placement3D objects in Dynamo using the new helper methods.",
+      "X": 50,
+      "Y": 50,
+      "Width": 400,
+      "Height": 300,
+      "TextblockHeight": 200,
+      "Background": "#FFDCDCDC",
+      "FontSize": 14,
+      "NodeIds": [
+        "12345678-1234-1234-1234-123456789001",
+        "12345678-1234-1234-1234-123456789003",
+        "12345678-1234-1234-1234-123456789005",
+        "12345678-1234-1234-1234-123456789007"
+      ],
+      "InitialTop": 50,
+      "InitialHeight": 300
+    }
+  ],
+  "X": 0,
+  "Y": 0,
+  "Zoom": 1
+}

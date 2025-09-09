@@ -46,6 +46,113 @@ namespace DynRenga.DynObjects
         /// </summary>
         /// <returns></returns>
         public Guid UniqueId => this._i.UniqueId;
+        
+        /// <summary>
+        /// Получение ID уровня, к которому принадлежит объект
+        /// </summary>
+        /// <returns>ID уровня или -1 если объект не принадлежит уровню</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public int GetLevelId()
+        {
+            try
+            {
+                // Try to get ILevelObject interface
+                var levelObject = this._i as Renga.ILevelObject;
+                if (levelObject != null)
+                {
+                    return levelObject.LevelId;
+                }
+                
+                // If direct casting fails, try GetInterfaceByName
+                var levelInterface = this._i.GetInterfaceByName("ILevelObject");
+                if (levelInterface != null)
+                {
+                    var levelObj = levelInterface as Renga.ILevelObject;
+                    if (levelObj != null)
+                    {
+                        return levelObj.LevelId;
+                    }
+                }
+                
+                return -1; // Object doesn't belong to a level
+            }
+            catch
+            {
+                return -1; // Error occurred, return -1
+            }
+        }
+        
+        /// <summary>
+        /// Проверка, принадлежит ли объект какому-либо уровню
+        /// </summary>
+        /// <returns>True если объект принадлежит уровню, False если нет</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public bool BelongsToLevel()
+        {
+            return GetLevelId() != -1;
+        }
+        
+        /// <summary>
+        /// Получение дополнительной информации об уровне объекта
+        /// </summary>
+        /// <returns>Словарь с информацией об уровне</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "LevelId", "ElevationAboveLevel", "PlacementElevation", "VerticalOffset" })]
+        public Dictionary<string, object> GetLevelInfo()
+        {
+            try
+            {
+                // Try to get ILevelObject interface
+                var levelObject = this._i as Renga.ILevelObject;
+                if (levelObject != null)
+                {
+                    return new Dictionary<string, object>
+                    {
+                        { "LevelId", levelObject.LevelId },
+                        { "ElevationAboveLevel", levelObject.ElevationAboveLevel },
+                        { "PlacementElevation", levelObject.PlacementElevation },
+                        { "VerticalOffset", levelObject.VerticalOffset }
+                    };
+                }
+                
+                // If direct casting fails, try GetInterfaceByName
+                var levelInterface = this._i.GetInterfaceByName("ILevelObject");
+                if (levelInterface != null)
+                {
+                    var levelObj = levelInterface as Renga.ILevelObject;
+                    if (levelObj != null)
+                    {
+                        return new Dictionary<string, object>
+                        {
+                            { "LevelId", levelObj.LevelId },
+                            { "ElevationAboveLevel", levelObj.ElevationAboveLevel },
+                            { "PlacementElevation", levelObj.PlacementElevation },
+                            { "VerticalOffset", levelObj.VerticalOffset }
+                        };
+                    }
+                }
+                
+                // Object doesn't belong to a level
+                return new Dictionary<string, object>
+                {
+                    { "LevelId", -1 },
+                    { "ElevationAboveLevel", 0.0 },
+                    { "PlacementElevation", 0.0 },
+                    { "VerticalOffset", 0.0 }
+                };
+            }
+            catch
+            {
+                // Error occurred
+                return new Dictionary<string, object>
+                {
+                    { "LevelId", -1 },
+                    { "ElevationAboveLevel", 0.0 },
+                    { "PlacementElevation", 0.0 },
+                    { "VerticalOffset", 0.0 }
+                };
+            }
+        }
         /// <summary>
         /// Приведение объекта модели к интерфейсу Renga.IObjectWithMaterial для получения материала, если таковой вообще назначен.
         /// Если не назначен - будет возвращено "-1"
@@ -93,6 +200,76 @@ namespace DynRenga.DynObjects
                 { "Parameters_IParameterContainer", new DynProperties.Parameters.ParameterContainer (this._i.GetParameters())}
             };
 
+        }
+        /// <summary>
+        /// Получение интерфейса IBaseline2DObject для объектов с 2D базовой линией
+        /// Возвращает null если объект не поддерживает данный интерфейс
+        /// </summary>
+        /// <returns>Baseline2DObject или null</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public Baseline2DObject GetBaseline2DObject()
+        {
+            try
+            {
+                // First try direct casting
+                Renga.IBaseline2DObject baseline2DObject = this._i as Renga.IBaseline2DObject;
+                if (baseline2DObject != null) return new Baseline2DObject(baseline2DObject);
+                
+                // If direct casting fails, try GetInterfaceByName
+                object interfaceObj = this._i.GetInterfaceByName("IBaseline2DObject");
+                if (interfaceObj != null)
+                {
+                    return new Baseline2DObject(interfaceObj);
+                }
+                
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Отладочный метод для проверки доступных интерфейсов объекта
+        /// </summary>
+        /// <returns>Список доступных интерфейсов</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public List<string> GetAvailableInterfaces()
+        {
+            List<string> interfaces = new List<string>();
+            
+            // Test common interfaces
+            string[] interfaceNames = {
+                "IBaseline2DObject",
+                "IObjectWithMaterial", 
+                "IObjectWithLayeredMaterial",
+                "IObjectWithMark",
+                "IObjectWithLink",
+                "ITextObject"
+            };
+            
+            foreach (string interfaceName in interfaceNames)
+            {
+                try
+                {
+                    object interfaceObj = this._i.GetInterfaceByName(interfaceName);
+                    if (interfaceObj != null)
+                    {
+                        interfaces.Add(interfaceName + " ✓");
+                    }
+                    else
+                    {
+                        interfaces.Add(interfaceName + " ✗");
+                    }
+                }
+                catch
+                {
+                    interfaces.Add(interfaceName + " ✗");
+                }
+            }
+            
+            return interfaces;
         }
 
     }

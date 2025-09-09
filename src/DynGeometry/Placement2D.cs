@@ -90,5 +90,14 @@ namespace DynRenga.DynGeometry
         /// <returns></returns>
         public Placement2D GetCopy => new Placement2D( this._i.GetCopy());
 
+        /// <summary>
+        /// Преобразование IPlacement2D в Placement2D struct для передачи в COM методы
+        /// </summary>
+        /// <returns></returns>
+        public Renga.Placement2D ToRengaPlacement2D()
+        {
+            return this._i.Placement;
+        }
+
     }
 }

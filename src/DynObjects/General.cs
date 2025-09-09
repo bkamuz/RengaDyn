@@ -67,11 +67,11 @@ namespace DynRenga.DynObjects
         /// Типы объектов (перечисление)
         /// </summary>
         /// <returns>Словарь с типами объектов</returns>
-        [dr.MultiReturn(new[] { "AssemblyInstance", "Axis", "Beam", "Column", "Dimension", "Door", "Duct", "DuctAccessory", "DuctFitting",
+        [dr.MultiReturn(new[] { "AssemblyInstance", "Axis", "Beam", "Column", "Door", "Duct", "DuctAccessory", "DuctFitting",
             "ElectricDistributionBoard", "Element", "Elevation", "Equipment", "Floor", "Hatch", "IfcObject", "IsolatedFoundation",
             "Level", "LightFixture", "Line3D", "LineElectricalCircuit", "MechanicalEquipment", "Opening", "Pipe", "PipeAccessory",
             "PipeFitting", "Plate", "PlumbingFixture", "Railing", "Ramp", "Rebar", "Roof", "Room", "Route", "RoutePoint", "Section",
-            "Stair", "TextShape", "Undefined", "Wall", "WallFoundation", "Window", "WiringAccessory" })]
+            "Stair", "Undefined", "Wall", "WallFoundation", "Window", "WiringAccessory" })]
         public static Dictionary<string, Guid> ObjectTypes()
         {
             return new Dictionary<string, Guid>
@@ -80,7 +80,6 @@ namespace DynRenga.DynObjects
                 { "Axis",   Renga.ObjectTypes.Axis},
                 { "Beam",   Renga.ObjectTypes.Beam},
                 { "Column", Renga.ObjectTypes.Column},
-                { "Dimension",  Renga.ObjectTypes.Dimension},
                 { "Door",   Renga.ObjectTypes.Door},
                 { "Duct",   Renga.ObjectTypes.Duct},
                 { "DuctAccessory",  Renga.ObjectTypes.DuctAccessory},
@@ -94,7 +93,7 @@ namespace DynRenga.DynObjects
                 { "IfcObject",  Renga.ObjectTypes.IfcObject},
                 { "IsolatedFoundation", Renga.ObjectTypes.IsolatedFoundation},
                 { "Level",  Renga.ObjectTypes.Level},
-                { "LightFixture",   Renga.ObjectTypes.LightFixture},
+                { "LightingFixture",   Renga.ObjectTypes.LightingFixture},
                 { "Line3D", Renga.ObjectTypes.Line3D},
                 { "LineElectricalCircuit",  Renga.ObjectTypes.LineElectricalCircuit},
                 { "MechanicalEquipment", Renga.ObjectTypes.MechanicalEquipment},
@@ -113,7 +112,6 @@ namespace DynRenga.DynObjects
                 { "RoutePoint", Renga.ObjectTypes.RoutePoint},
                 { "Section", Renga.ObjectTypes.Section},
                 { "Stair",  Renga.ObjectTypes.Stair},
-                { "TextShape",  Renga.ObjectTypes.TextShape},
                 { "Undefined",  Renga.ObjectTypes.Undefined},
                 { "Wall",   Renga.ObjectTypes.Wall},
                 { "WallFoundation", Renga.ObjectTypes.WallFoundation},
@@ -134,7 +132,6 @@ namespace DynRenga.DynObjects
                 { "Axis",   Renga.ObjectTypes.Axis},
                 { "Beam",   Renga.ObjectTypes.Beam},
                 { "Column", Renga.ObjectTypes.Column},
-                { "Dimension",  Renga.ObjectTypes.Dimension},
                 { "Door",   Renga.ObjectTypes.Door},
                 { "Duct",   Renga.ObjectTypes.Duct},
                 { "DuctAccessory",  Renga.ObjectTypes.DuctAccessory},
@@ -148,7 +145,7 @@ namespace DynRenga.DynObjects
                 { "IfcObject",  Renga.ObjectTypes.IfcObject},
                 { "IsolatedFoundation", Renga.ObjectTypes.IsolatedFoundation},
                 { "Level",  Renga.ObjectTypes.Level},
-                { "LightFixture",   Renga.ObjectTypes.LightFixture},
+                { "LightingFixture",   Renga.ObjectTypes.LightingFixture},
                 { "Line3D", Renga.ObjectTypes.Line3D},
                 { "LineElectricalCircuit",  Renga.ObjectTypes.LineElectricalCircuit},
                 { "MechanicalEquipment", Renga.ObjectTypes.MechanicalEquipment},
@@ -167,7 +164,6 @@ namespace DynRenga.DynObjects
                 { "RoutePoint", Renga.ObjectTypes.RoutePoint},
                 { "Section", Renga.ObjectTypes.Section},
                 { "Stair",  Renga.ObjectTypes.Stair},
-                { "TextShape",  Renga.ObjectTypes.TextShape},
                 { "Undefined",  Renga.ObjectTypes.Undefined},
                 { "Wall",   Renga.ObjectTypes.Wall},
                 { "WallFoundation", Renga.ObjectTypes.WallFoundation},

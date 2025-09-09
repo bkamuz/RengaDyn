@@ -1,7 +1,10 @@
 ---
-description: Corerct build
+description: Renga Specific notes
 globs:
 alwaysApply: true
 ---
 
-& "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" RengaDynMain.csproj /p:Configuration=Debug /p:Platform=x64 /verbosity:normal
+& "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" "src\RengaDynMain.csproj" /p:Configuration=Debug /p:Platform=x64 /verbosity:minimal
+
+Use context7
+<https://context7.com/jackdainzh/rengabim-sdk>
