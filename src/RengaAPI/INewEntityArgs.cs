@@ -347,6 +347,135 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
+        /// Gets all properties of the new entity args in one call
+        /// </summary>
+        /// <returns>Dictionary containing all properties</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "TypeId", "TypeIdS", "CategoryId", "HostObjectId", "Placement3D", "DebugInfo" })]
+        public Dictionary<string, object> GetAllProperties()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            try
+            {
+                var properties = new Dictionary<string, object>();
+                properties["TypeId"] = this.TypeId;
+                properties["TypeIdS"] = this.TypeIdS;
+                properties["CategoryId"] = this.CategoryId;
+                properties["HostObjectId"] = this.HostObjectId;
+                properties["Placement3D"] = this.Placement3D;
+                
+                var debugInfo = $"--- INewEntityArgs Debug Info ---\n";
+                debugInfo += $"Type ID: {this.TypeId}\n";
+                debugInfo += $"Type ID String: {this.TypeIdS}\n";
+                debugInfo += $"Category ID: {this.CategoryId}\n";
+                debugInfo += $"Host Object ID: {this.HostObjectId}\n";
+                debugInfo += $"Placement3D: {this.Placement3D}\n";
+                debugInfo += $"Interface Status: ✅ Initialized\n";
+                properties["DebugInfo"] = debugInfo;
+                
+                return properties;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to get all properties: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Sets multiple properties at once to reduce node count
+        /// </summary>
+        /// <param name="typeId">Entity type ID (optional)</param>
+        /// <param name="typeIdS">Entity type ID as string (optional)</param>
+        /// <param name="categoryId">Category ID (optional)</param>
+        /// <param name="hostObjectId">Host object ID (optional)</param>
+        /// <param name="placement3D">3D placement (optional)</param>
+        /// <returns>Updated INewEntityArgs instance</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public INewEntityArgs SetProperties(Guid? typeId = null, string typeIdS = null, int? categoryId = null, int? hostObjectId = null, Renga.Placement3D? placement3D = null)
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            try
+            {
+                if (typeId.HasValue)
+                    this.TypeId = typeId.Value;
+                
+                if (!string.IsNullOrEmpty(typeIdS))
+                    this.TypeIdS = typeIdS;
+                
+                if (categoryId.HasValue)
+                    this.CategoryId = categoryId.Value;
+                
+                if (hostObjectId.HasValue)
+                    this.HostObjectId = hostObjectId.Value;
+                
+                if (placement3D.HasValue)
+                    this.Placement3D = placement3D.Value;
+                
+                return this;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to set properties: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Sets the entity type ID and returns the updated instance for chaining
+        /// </summary>
+        /// <param name="typeId">The GUID of the entity type to set</param>
+        /// <returns>Updated INewEntityArgs instance for method chaining</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public INewEntityArgs SetTypeId(Guid typeId)
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            try
+            {
+                this.TypeId = typeId;
+                return this;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to set type ID: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Sets the entity type ID by name and returns the updated instance for chaining
+        /// </summary>
+        /// <param name="typeIdName">The name of the style type (e.g., "BeamStyle", "ColumnStyle")</param>
+        /// <returns>Updated INewEntityArgs instance for method chaining</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public INewEntityArgs SetTypeIdByName(string typeIdName)
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            if (string.IsNullOrEmpty(typeIdName))
+                throw new ArgumentException("Type ID name cannot be null or empty.", nameof(typeIdName));
+            
+            try
+            {
+                // Use the StyleTypes class to get the GUID by name
+                var typeId = DynRenga.RengaAPI.StyleTypes.StyleTypes.GetStyleTypeByName(typeIdName);
+                if (typeId == DynRenga.RengaAPI.StyleTypes.StyleTypes.Undefined)
+                    throw new ArgumentException($"Unknown style type name: {typeIdName}", nameof(typeIdName));
+                
+                this.TypeId = typeId;
+                return this;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to set type ID by name '{typeIdName}': {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
         /// Creates a copy of the current new entity arguments
         /// </summary>
         /// <returns>New INewEntityArgs instance with the same values</returns>

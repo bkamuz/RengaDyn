@@ -191,6 +191,8 @@
     <Compile Include="RengaAPI\IEntity.cs" />
     <Compile Include="RengaAPI\IEntityCollection.cs" />
     <Compile Include="RengaAPI\INewEntityArgs.cs" />
+    <Compile Include="RengaAPI\IProject.cs" />
+    <Compile Include="RengaAPI\StyleTypes\StyleTypes.cs" />
     <Compile Include="Converters\Renga\2DGeometry\Curve2DConverter.cs" />
   </ItemGroup>
   <ItemGroup>

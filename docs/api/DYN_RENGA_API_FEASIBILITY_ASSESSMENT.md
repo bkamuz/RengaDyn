@@ -83,6 +83,7 @@ RengaAPI/
 ├── IEntity.cs ✅ (Completed)
 ├── IEntityCollection.cs ✅ (Completed)
 ├── INewEntityArgs.cs ✅ (Completed)
+├── IProject.cs ✅ (Completed)
 ├── IUI.cs
 ├── IPropertyContainer.cs
 ├── IParameterContainer.cs

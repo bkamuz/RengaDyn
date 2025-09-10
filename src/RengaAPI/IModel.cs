@@ -142,14 +142,15 @@ namespace DynRenga.RengaAPI
         /// </summary>
         /// <returns>INewEntityArgs object for creating new entities</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public object CreateNewEntityArgs()
+        public INewEntityArgs CreateNewEntityArgs()
         {
             if (this._i == null) 
                 throw new InvalidOperationException("Model interface is not initialized. Please check that Renga is running and a project is loaded.");
             
             try
             {
-                return this._i.CreateNewEntityArgs();
+                var rengaNewEntityArgs = this._i.CreateNewEntityArgs();
+                return new INewEntityArgs(rengaNewEntityArgs);
             }
             catch (Exception ex)
             {
