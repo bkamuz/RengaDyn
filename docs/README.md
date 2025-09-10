@@ -21,6 +21,7 @@ Step-by-step workflow documentation:
 ### `/troubleshooting/`
 Troubleshooting guides and common issues:
 - **TROUBLESHOOTING_BASELINE2D.md** - Comprehensive Baseline2DObject troubleshooting
+- **COM_ERROR_E_FAIL_BASELINE.md** - ⚡ **NEW** - COM E_FAIL error when setting baselines
 - **BASELINE2D_USAGE.md** - Best practices for using Baseline2D objects
 - **NULL_OUTPUT_TROUBLESHOOTING.md** - Debugging null output issues
 - **CURVE_CONVERSION_TROUBLESHOOTING.md** - Common curve conversion problems and solutions
@@ -44,8 +45,9 @@ Development notes and version history:
 2. [PolyCurve Conversion Workflow](workflows/polycurve-conversion-workflow.md)
 
 ### Most Common Issues
-1. [Baseline2D Troubleshooting](troubleshooting/TROUBLESHOOTING_BASELINE2D.md)
-2. [Null Output Issues](troubleshooting/NULL_OUTPUT_TROUBLESHOOTING.md)
+1. [⚡ COM E_FAIL Error when Setting Baselines](troubleshooting/COM_ERROR_E_FAIL_BASELINE.md)
+2. [Baseline2D Troubleshooting](troubleshooting/TROUBLESHOOTING_BASELINE2D.md)
+3. [Null Output Issues](troubleshooting/NULL_OUTPUT_TROUBLESHOOTING.md)
 
 ## Contributing
 
