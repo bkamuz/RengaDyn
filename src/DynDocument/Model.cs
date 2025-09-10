@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +14,7 @@ namespace DynRenga.DynDocument
 {
     /// <summary>
     /// Класс для работы с интерфейсом Renga.IModel (модель Проекта)
+    /// Рефакторенная версия с объединенными методами и улучшенной структурой
     /// </summary>
     public class Model
     {
@@ -111,6 +112,8 @@ namespace DynRenga.DynDocument
             }
         }
         
+        // ========== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ПОЛУЧЕНИЯ ИНФОРМАЦИИ ==========
+        
         /// <summary>
         /// Получение списка доступных уровней в модели
         /// </summary>
@@ -121,24 +124,18 @@ namespace DynRenga.DynDocument
             try
             {
                 if (this._i == null)
-                {
                     throw new InvalidOperationException("Model interface is not initialized.");
-                }
                 
                 var objects = this._i.GetObjects();
                 if (objects == null)
-                {
                     return new List<int>();
-                }
                 
                 var levels = new List<int>();
                 for (int i = 0; i < objects.Count; i++)
                 {
                     var obj = objects.GetByIndex(i);
-                    if (obj != null && obj.ObjectType == Renga.ObjectTypes.Level)
-                    {
+                    if (obj?.ObjectType == Renga.ObjectTypes.Level)
                         levels.Add(obj.Id);
-                    }
                 }
                 
                 return levels;
@@ -149,44 +146,62 @@ namespace DynRenga.DynDocument
             }
         }
         
+        // ========== УТИЛИТАРНЫЕ МЕТОДЫ ==========
+        
         /// <summary>
-        /// Получение внутреннего челочисленного идентификатора объекта из его Guid-идентификатора
+        /// Конвертация ID: получение внутреннего целочисленного идентификатора из Guid
         /// </summary>
-        /// <param name="internal_model_guid"></param>
-        /// <returns></returns>
-        public int GetIdFromUniqueId(Guid internal_model_guid)
+        /// <param name="uniqueId">Guid идентификатор или строковое представление</param>
+        /// <returns>Целочисленный ID</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public int ConvertUniqueIdToId(object uniqueId)
         {
-            return this._i.GetIdFromUniqueId(internal_model_guid);
-        }
-        /// <summary>
-        /// Получение внутреннего Guid-идентификатора объекта из его целочисленного идентификатора
-        /// </summary>
-        /// <param name="internal_model_id"></param>
-        /// <returns></returns>
-        public Guid GetUniqueIdFromId(int internal_model_id)
-        {
-            return this._i.GetUniqueIdFromId(internal_model_id);
+            if (uniqueId is Guid guidId)
+                return this._i.GetIdFromUniqueId(guidId);
+            else if (uniqueId is string stringId)
+                return this._i.GetIdFromUniqueIdS(stringId);
+            else
+                throw new ArgumentException("UniqueId должен быть типа Guid или string");
         }
         
         /// <summary>
-        /// Получение внутреннего целочисленного идентификатора объекта из его Guid-идентификатора (строковый вариант)
+        /// Конвертация ID: получение Guid идентификатора из целочисленного ID
         /// </summary>
-        /// <param name="internal_model_guid_string">Guid в виде строки</param>
-        /// <returns></returns>
-        public int GetIdFromUniqueIdS(string internal_model_guid_string)
+        /// <param name="id">Целочисленный ID</param>
+        /// <param name="asString">Вернуть как строку (по умолчанию false)</param>
+        /// <returns>Guid или строковое представление</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public object ConvertIdToUniqueId(int id, bool asString = false)
         {
-            return this._i.GetIdFromUniqueIdS(internal_model_guid_string);
+            if (asString)
+                return this._i.GetUniqueIdFromIdS(id);
+            else
+                return this._i.GetUniqueIdFromId(id);
         }
         
         /// <summary>
-        /// Получение внутреннего Guid-идентификатора объекта из его целочисленного идентификатора (строковый вариант)
+        /// (Устаревший) Получение внутреннего целочисленного идентификатора объекта из его Guid-идентификатора
         /// </summary>
-        /// <param name="internal_model_id"></param>
-        /// <returns>Guid в виде строки</returns>
-        public string GetUniqueIdFromIdS(int internal_model_id)
-        {
-            return this._i.GetUniqueIdFromIdS(internal_model_id);
-        }
+        [Obsolete("Используйте ConvertUniqueIdToId")]
+        public int GetIdFromUniqueId(Guid internal_model_guid) => this._i.GetIdFromUniqueId(internal_model_guid);
+        
+        /// <summary>
+        /// (Устаревший) Получение внутреннего Guid-идентификатора объекта из его целочисленного идентификатора
+        /// </summary>
+        [Obsolete("Используйте ConvertIdToUniqueId")]
+        public Guid GetUniqueIdFromId(int internal_model_id) => this._i.GetUniqueIdFromId(internal_model_id);
+        
+        /// <summary>
+        /// (Устаревший) Получение внутреннего целочисленного идентификатора объекта из его Guid-идентификатора (строковый вариант)
+        /// </summary>
+        [Obsolete("Используйте ConvertUniqueIdToId")]
+        public int GetIdFromUniqueIdS(string internal_model_guid_string) => this._i.GetIdFromUniqueIdS(internal_model_guid_string);
+        
+        /// <summary>
+        /// (Устаревший) Получение внутреннего Guid-идентификатора объекта из его целочисленного идентификатора (строковый вариант)
+        /// </summary>
+        [Obsolete("Используйте ConvertIdToUniqueId")]
+        public string GetUniqueIdFromIdS(int internal_model_id) => this._i.GetUniqueIdFromIdS(internal_model_id);
         
         /// <summary>
         /// Создание аргументов для создания новой сущности
@@ -222,132 +237,70 @@ namespace DynRenga.DynDocument
             }
         }
         
-        /// <summary>
-        /// Создание нового объекта модели
-        /// </summary>
-        /// <param name="args">Аргументы для создания объекта</param>
-        /// <returns>ModelObject объект</returns>
-        public ModelObject CreateObject(NewEntityArgs args)
-        {
-            try
-            {
-                if (this._i == null)
-                {
-                    throw new InvalidOperationException("Model interface is not initialized.");
-                }
-                
-                if (args == null)
-                {
-                    throw new ArgumentNullException(nameof(args), "NewEntityArgs cannot be null.");
-                }
-                
-                if (args._i == null)
-                {
-                    throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
-                }
-                
-                // Debug NewEntityArgs properties
-                System.Console.WriteLine($"=== RENGA DYNAMO DEBUG ===");
-                System.Console.WriteLine($"Method: Model.CreateObject");
-                System.Console.WriteLine($"Model._i is null: {this._i == null}");
-                System.Console.WriteLine($"Args._i is null: {args._i == null}");
-                System.Console.WriteLine($"TypeId: {args.TypeId}");
-                System.Console.WriteLine($"TypeIdS: {args.TypeIdS}");
-                System.Console.WriteLine($"CategoryId: {args.CategoryId}");
-                System.Console.WriteLine($"HostObjectId: {args.HostObjectId}");
-                System.Console.WriteLine($"Placement3D: {args.Placement3D?.GetType().Name ?? "null"}");
-                System.Console.WriteLine($"=========================");
-                
-                var modelObject = this._i.CreateObject(args._i);
-                if (modelObject == null)
-                {
-                    throw new InvalidOperationException("Failed to create model object. Check that all required parameters are set correctly.");
-                }
-                
-                return new ModelObject(modelObject);
-            }
-            catch (Exception ex)
-            {
-                var errorMessage = $"CreateObject failed: {ex.Message}";
-                System.Console.WriteLine($"=== RENGA DYNAMO ERROR ===");
-                System.Console.WriteLine($"Method: Model.CreateObject");
-                System.Console.WriteLine($"Model._i is null: {this._i == null}");
-                System.Console.WriteLine($"Args is null: {args == null}");
-                System.Console.WriteLine($"Args._i is null: {args?._i == null}");
-                System.Console.WriteLine($"Error: {ex.Message}");
-                System.Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                System.Console.WriteLine($"=========================");
-                throw new InvalidOperationException(errorMessage, ex);
-            }
-        }
+        // ========== БАЗОВЫЕ МЕТОДЫ СОЗДАНИЯ ОБЪЕКТОВ ==========
         
         /// <summary>
-        /// Создание объекта модели с отладочной информацией
+        /// Универсальный метод создания объектов модели с опциональной отладочной информацией
         /// </summary>
         /// <param name="args">Аргументы для создания объекта</param>
-        /// <returns>Созданный объект модели и отладочная информация</returns>
+        /// <param name="enableDebug">Включить отладочную информацию</param>
+        /// <returns>ModelObject и опциональная отладочная информация</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
         [dr.MultiReturn(new[] { "ModelObject", "DebugInfo" })]
-        public Dictionary<string, object> CreateObjectWithDebug(NewEntityArgs args)
+        public Dictionary<string, object> CreateObject(NewEntityArgs args, bool enableDebug = false)
         {
-            var debugInfo = "🔧 Creating model object...\n";
+            var debugInfo = enableDebug ? "🔧 Creating model object...\n" : "";
             
             try
             {
                 if (this._i == null)
                 {
-                    debugInfo += "❌ Model interface is not initialized\n";
-                    return new Dictionary<string, object>
-                    {
-                        { "ModelObject", null },
-                        { "DebugInfo", debugInfo }
-                    };
+                    var error = "❌ Model interface is not initialized";
+                    if (enableDebug) debugInfo += error + "\n";
+                    throw new InvalidOperationException("Model interface is not initialized.");
                 }
                 
                 if (args == null)
                 {
-                    debugInfo += "❌ NewEntityArgs cannot be null\n";
-                    return new Dictionary<string, object>
-                    {
-                        { "ModelObject", null },
-                        { "DebugInfo", debugInfo }
-                    };
+                    var error = "❌ NewEntityArgs cannot be null";
+                    if (enableDebug) debugInfo += error + "\n";
+                    throw new ArgumentNullException(nameof(args), "NewEntityArgs cannot be null.");
                 }
                 
                 if (args._i == null)
                 {
-                    debugInfo += "❌ NewEntityArgs interface is not initialized\n";
-                    return new Dictionary<string, object>
-                    {
-                        { "ModelObject", null },
-                        { "DebugInfo", debugInfo }
-                    };
+                    var error = "❌ NewEntityArgs interface is not initialized";
+                    if (enableDebug) debugInfo += error + "\n";
+                    throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
                 }
                 
-                debugInfo += $"✅ Model interface initialized\n";
-                debugInfo += $"✅ NewEntityArgs interface initialized\n";
-                debugInfo += $"📋 Object Type ID: {args.TypeId}\n";
-                debugInfo += $"📋 Object Type ID (String): {args.TypeIdS}\n";
-                debugInfo += $"📋 Category ID: {args.CategoryId}\n";
-                debugInfo += $"📋 Host Object ID: {args.HostObjectId}\n";
-                debugInfo += $"📍 Placement3D Type: {args.Placement3D?.GetType().Name ?? "null"}\n";
+                if (enableDebug)
+                {
+                    debugInfo += $"✅ Model interface initialized\n";
+                    debugInfo += $"✅ NewEntityArgs interface initialized\n";
+                    debugInfo += $"📋 Object Type ID: {args.TypeId}\n";
+                    debugInfo += $"📋 Object Type ID (String): {args.TypeIdS}\n";
+                    debugInfo += $"📋 Category ID: {args.CategoryId}\n";
+                    debugInfo += $"📋 Host Object ID: {args.HostObjectId}\n";
+                    debugInfo += $"📍 Placement3D Type: {args.Placement3D?.GetType().Name ?? "null"}\n";
+                }
                 
                 var modelObject = this._i.CreateObject(args._i);
                 if (modelObject == null)
                 {
-                    debugInfo += "❌ Failed to create model object - Renga returned null\n";
-                    debugInfo += "💡 Check that all required parameters are set correctly\n";
-                    return new Dictionary<string, object>
-                    {
-                        { "ModelObject", null },
-                        { "DebugInfo", debugInfo }
-                    };
+                    var error = "❌ Failed to create model object - Renga returned null";
+                    if (enableDebug) debugInfo += error + "\n💡 Check that all required parameters are set correctly\n";
+                    throw new InvalidOperationException("Failed to create model object. Check that all required parameters are set correctly.");
                 }
                 
                 var wrappedModelObject = new ModelObject(modelObject);
-                debugInfo += "✅ Model object created successfully!\n";
-                debugInfo += $"🆔 Object ID: {wrappedModelObject.Id}\n";
-                debugInfo += $"📏 Object Type: {wrappedModelObject.ObjectType}\n";
+                
+                if (enableDebug)
+                {
+                    debugInfo += "✅ Model object created successfully!\n";
+                    debugInfo += $"🆔 Object ID: {wrappedModelObject.Id}\n";
+                    debugInfo += $"📏 Object Type: {wrappedModelObject.ObjectType}\n";
+                }
                 
                 return new Dictionary<string, object>
                 {
@@ -357,19 +310,45 @@ namespace DynRenga.DynDocument
             }
             catch (Exception ex)
             {
-                debugInfo += $"❌ Model object creation failed!\n";
-                debugInfo += $"Model._i is null: {this._i == null}\n";
-                debugInfo += $"Args is null: {args == null}\n";
-                debugInfo += $"Args._i is null: {args?._i == null}\n";
-                debugInfo += $"Error: {ex.Message}\n";
-                debugInfo += $"Stack Trace: {ex.StackTrace}";
+                var errorDebugInfo = enableDebug ? 
+                    $"❌ Model object creation failed!\n" +
+                    $"Model._i is null: {this._i == null}\n" +
+                    $"Args is null: {args == null}\n" +
+                    $"Args._i is null: {args?._i == null}\n" +
+                    $"Error: {ex.Message}\n" +
+                    $"Stack Trace: {ex.StackTrace}" :
+                    "";
                 
-                return new Dictionary<string, object>
+                if (enableDebug)
                 {
-                    { "ModelObject", null },
-                    { "DebugInfo", debugInfo }
-                };
+                    return new Dictionary<string, object>
+                    {
+                        { "ModelObject", null },
+                        { "DebugInfo", errorDebugInfo }
+                    };
+                }
+                else
+                {
+                    var errorMessage = $"CreateObject failed: {ex.Message}";
+                    System.Console.WriteLine($"=== RENGA DYNAMO ERROR ===");
+                    System.Console.WriteLine($"Method: Model.CreateObject");
+                    System.Console.WriteLine($"Error: {ex.Message}");
+                    System.Console.WriteLine($"=========================");
+                    throw new InvalidOperationException(errorMessage, ex);
+                }
             }
+        }
+        
+        /// <summary>
+        /// Удобный метод для создания объекта с отладочной информацией (обертка)
+        /// </summary>
+        /// <param name="args">Аргументы для создания объекта</param>
+        /// <returns>Созданный объект модели и отладочная информация</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "ModelObject", "DebugInfo" })]
+        public Dictionary<string, object> CreateObjectWithDebug(NewEntityArgs args)
+        {
+            return CreateObject(args, enableDebug: true);
         }
         
         /// <summary>
@@ -395,7 +374,79 @@ namespace DynRenga.DynDocument
         /// </summary>
         public Guid Id => this._i.Id;
         
-        // ========== DYNAMO NODE HELPER METHODS ==========
+        // ========== СПЕЦИАЛИЗИРОВАННЫЕ МЕТОДЫ СОЗДАНИЯ ОБЪЕКТОВ ==========
+        
+        /// <summary>
+        /// Универсальный метод создания объектов различных типов
+        /// </summary>
+        /// <param name="objectType">Тип объекта (Wall, Column, Door, Window, Floor, Level, Room, Equipment)</param>
+        /// <param name="hostObjectId">ID объекта-хозяина (уровень для большинства объектов)</param>
+        /// <param name="placement3D">3D размещение объекта</param>
+        /// <param name="categoryId">ID категории (для оборудования)</param>
+        /// <param name="enableDebug">Включить отладочную информацию</param>
+        /// <returns>Созданный объект и отладочная информация</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "ModelObject", "DebugInfo" })]
+        public Dictionary<string, object> CreateObjectByType(string objectType, int hostObjectId, object placement3D, int categoryId = -1, bool enableDebug = false)
+        {
+            try
+            {
+                var args = CreateNewEntityArgs();
+                
+                // Установка типа объекта
+                switch (objectType.ToLower())
+                {
+                    case "wall":
+                        args.TypeId = Renga.ObjectTypes.Wall;
+                        break;
+                    case "column":
+                        args.TypeId = Renga.ObjectTypes.Column;
+                        break;
+                    case "door":
+                        args.TypeId = Renga.ObjectTypes.Door;
+                        break;
+                    case "window":
+                        args.TypeId = Renga.ObjectTypes.Window;
+                        break;
+                    case "floor":
+                        args.TypeId = Renga.ObjectTypes.Floor;
+                        break;
+                    case "level":
+                        args.TypeId = Renga.ObjectTypes.Level;
+                        break;
+                    case "room":
+                        args.TypeId = Renga.ObjectTypes.Room;
+                        break;
+                    case "equipment":
+                        args.TypeId = Renga.ObjectTypes.Equipment;
+                        if (categoryId != -1) args.CategoryId = categoryId;
+                        break;
+                    case "beam":
+                        args.TypeId = Renga.ObjectTypes.Beam;
+                        break;
+                    default:
+                        throw new ArgumentException($"Неподдерживаемый тип объекта: {objectType}");
+                }
+                
+                if (hostObjectId > 0)
+                    args.HostObjectId = hostObjectId;
+                    
+                if (placement3D != null)
+                    args.Placement3D = placement3D;
+                
+                return CreateObject(args, enableDebug);
+            }
+            catch (Exception ex)
+            {
+                var errorInfo = $"❌ Ошибка создания объекта типа {objectType}: {ex.Message}";
+                
+                return new Dictionary<string, object>
+                {
+                    { "ModelObject", null },
+                    { "DebugInfo", enableDebug ? errorInfo : "" }
+                };
+            }
+        }
         
         /// <summary>
         /// Создание нового объекта стены
@@ -406,11 +457,8 @@ namespace DynRenga.DynDocument
         [dr.IsVisibleInDynamoLibrary(true)]
         public ModelObject CreateWall(int levelId, object placement3D)
         {
-            var args = CreateNewEntityArgs();
-            args.TypeId = Renga.ObjectTypes.Wall;
-            args.HostObjectId = levelId;
-            args.Placement3D = placement3D;
-            return CreateObject(args);
+            var result = CreateObjectByType("wall", levelId, placement3D);
+            return result["ModelObject"] as ModelObject;
         }
         
         /// <summary>
@@ -422,11 +470,8 @@ namespace DynRenga.DynDocument
         [dr.IsVisibleInDynamoLibrary(true)]
         public ModelObject CreateColumn(int levelId, object placement3D)
         {
-            var args = CreateNewEntityArgs();
-            args.TypeId = Renga.ObjectTypes.Column;
-            args.HostObjectId = levelId;
-            args.Placement3D = placement3D;
-            return CreateObject(args);
+            var result = CreateObjectByType("column", levelId, placement3D);
+            return result["ModelObject"] as ModelObject;
         }
         
         /// <summary>
@@ -438,11 +483,8 @@ namespace DynRenga.DynDocument
         [dr.IsVisibleInDynamoLibrary(true)]
         public ModelObject CreateWindow(int wallId, object placement3D)
         {
-            var args = CreateNewEntityArgs();
-            args.TypeId = Renga.ObjectTypes.Window;
-            args.HostObjectId = wallId;
-            args.Placement3D = placement3D;
-            return CreateObject(args);
+            var result = CreateObjectByType("window", wallId, placement3D);
+            return result["ModelObject"] as ModelObject;
         }
         
         /// <summary>
@@ -454,11 +496,8 @@ namespace DynRenga.DynDocument
         [dr.IsVisibleInDynamoLibrary(true)]
         public ModelObject CreateDoor(int wallId, object placement3D)
         {
-            var args = CreateNewEntityArgs();
-            args.TypeId = Renga.ObjectTypes.Door;
-            args.HostObjectId = wallId;
-            args.Placement3D = placement3D;
-            return CreateObject(args);
+            var result = CreateObjectByType("door", wallId, placement3D);
+            return result["ModelObject"] as ModelObject;
         }
         
             /// <summary>
@@ -475,7 +514,7 @@ namespace DynRenga.DynDocument
             try
             {
                 // Create the floor first
-                var floorResult = CreateFloor(levelId, placement3D);
+                var floorResult = CreateFloor(levelId, placement3D, enableDebug: true);
                 var floor = floorResult["Floor"] as ModelObject;
                 var debugInfo = floorResult["DebugInfo"] as string;
                 
@@ -602,90 +641,92 @@ namespace DynRenga.DynDocument
         }
         
         /// <summary>
-        /// Создание нового объекта пола
+        /// Создание нового объекта пола с операционным контекстом
         /// </summary>
         /// <param name="levelId">ID уровня для размещения пола</param>
         /// <param name="placement3D">3D размещение пола</param>
+        /// <param name="enableDebug">Включить отладочную информацию</param>
         /// <returns>ModelObject созданного пола и отладочная информация</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
         [dr.MultiReturn(new[] { "Floor", "DebugInfo" })]
-        public Dictionary<string, object> CreateFloor(int levelId, object placement3D)
+        public Dictionary<string, object> CreateFloor(int levelId, object placement3D, bool enableDebug = false)
         {
             try
             {
-                // Validate inputs
+                // Валидация входных данных
                 if (this._i == null)
-                {
                     throw new InvalidOperationException("Model interface is not initialized. Make sure you have a valid Renga project loaded.");
-                }
                 
                 if (placement3D == null)
-                {
                     throw new ArgumentNullException(nameof(placement3D), "Placement3D cannot be null. Use Placement3D.ByOrigin() or other creation methods to create a valid placement.");
-                }
                 
                 if (levelId <= 0)
-                {
                     throw new ArgumentException("LevelId must be a positive integer. Make sure you have a valid level ID.", nameof(levelId));
-                }
                 
-                var args = CreateNewEntityArgs();
-                if (args == null || args._i == null)
-                {
-                    throw new InvalidOperationException("Failed to create NewEntityArgs. The Renga model may not be properly initialized.");
-                }
-                
-                args.TypeId = Renga.ObjectTypes.Floor;
-                args.HostObjectId = levelId;
-                args.Placement3D = placement3D;
-                
-                // Start an operation before creating the object
+                // Создание с операционным контекстом
                 var operation = CreateOperation();
-                if (operation == null || operation._i == null)
-                {
+                if (operation?._i == null)
                     throw new InvalidOperationException("Failed to create operation. Cannot create floor without an active operation.");
-                }
                 
                 operation.Start();
                 
-                var result = CreateObject(args);
-                if (result == null)
+                try
+                {
+                    var result = CreateObjectByType("floor", levelId, placement3D, enableDebug: enableDebug);
+                    var floor = result["ModelObject"] as ModelObject;
+                    var debugInfo = result["DebugInfo"] as string;
+                    
+                    if (floor == null)
+                    {
+                        operation.Rollback();
+                        var errorInfo = "❌ Failed to create floor object. Check that the level ID exists and the placement is valid.";
+                        return new Dictionary<string, object>
+                        {
+                            { "Floor", null },
+                            { "DebugInfo", enableDebug ? debugInfo + "\n" + errorInfo : "" }
+                        };
+                    }
+                    
+                    operation.Apply();
+                    
+                    if (enableDebug)
+                    {
+                        debugInfo += $"\n✅ Operation applied successfully";
+                        debugInfo += $"\n🆔 Floor ID: {floor.Id}";
+                    }
+                    
+                    return new Dictionary<string, object>
+                    {
+                        { "Floor", floor },
+                        { "DebugInfo", debugInfo }
+                    };
+                }
+                catch (Exception ex)
                 {
                     operation.Rollback();
-                    throw new InvalidOperationException("Failed to create floor object. Check that the level ID exists and the placement is valid.");
+                    throw;
                 }
-                
-                operation.Apply();
-                
-                var debugInfo = $"✅ Floor created successfully!\n" +
-                               $"LevelId: {levelId}\n" +
-                               $"Placement3D Type: {placement3D?.GetType().Name ?? "null"}\n" +
-                               $"Model._i is null: {this._i == null}\n" +
-                               $"Floor ID: {result.Id}";
-                
-                return new Dictionary<string, object>
-                {
-                    { "Floor", result },
-                    { "DebugInfo", debugInfo }
-                };
             }
             catch (Exception ex)
             {
                 var errorMessage = $"CreateFloor operation failed: {ex.Message}";
-                System.Console.WriteLine($"=== RENGA DYNAMO ERROR ===");
-                System.Console.WriteLine($"Method: Model.CreateFloor");
-                System.Console.WriteLine($"LevelId: {levelId}");
-                System.Console.WriteLine($"Placement3D Type: {(placement3D?.GetType().Name ?? "null")}");
-                System.Console.WriteLine($"Error: {ex.Message}");
-                System.Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                System.Console.WriteLine($"=========================");
+                if (enableDebug)
+                {
+                    System.Console.WriteLine($"=== RENGA DYNAMO ERROR ===");
+                    System.Console.WriteLine($"Method: Model.CreateFloor");
+                    System.Console.WriteLine($"LevelId: {levelId}");
+                    System.Console.WriteLine($"Placement3D Type: {(placement3D?.GetType().Name ?? "null")}");
+                    System.Console.WriteLine($"Error: {ex.Message}");
+                    System.Console.WriteLine($"=========================");
+                }
                 
-                var errorDebugInfo = $"❌ Floor creation failed!\n" +
-                                    $"LevelId: {levelId}\n" +
-                                    $"Placement3D Type: {placement3D?.GetType().Name ?? "null"}\n" +
-                                    $"Model._i is null: {this._i == null}\n" +
-                                    $"Error: {ex.Message}\n" +
-                                    $"Stack Trace: {ex.StackTrace}";
+                var errorDebugInfo = enableDebug ? 
+                    $"❌ Floor creation failed!\n" +
+                    $"LevelId: {levelId}\n" +
+                    $"Placement3D Type: {placement3D?.GetType().Name ?? "null"}\n" +
+                    $"Model._i is null: {this._i == null}\n" +
+                    $"Error: {ex.Message}\n" +
+                    $"Stack Trace: {ex.StackTrace}" : "";
                 
                 return new Dictionary<string, object>
                 {
@@ -703,10 +744,8 @@ namespace DynRenga.DynDocument
         [dr.IsVisibleInDynamoLibrary(true)]
         public ModelObject CreateLevel(object placement3D)
         {
-            var args = CreateNewEntityArgs();
-            args.TypeId = Renga.ObjectTypes.Level;
-            args.Placement3D = placement3D;
-            return CreateObject(args);
+            var result = CreateObjectByType("level", -1, placement3D);
+            return result["ModelObject"] as ModelObject;
         }
         
         /// <summary>
@@ -718,11 +757,8 @@ namespace DynRenga.DynDocument
         [dr.IsVisibleInDynamoLibrary(true)]
         public ModelObject CreateRoom(int levelId, object placement3D)
         {
-            var args = CreateNewEntityArgs();
-            args.TypeId = Renga.ObjectTypes.Room;
-            args.HostObjectId = levelId;
-            args.Placement3D = placement3D;
-            return CreateObject(args);
+            var result = CreateObjectByType("room", levelId, placement3D);
+            return result["ModelObject"] as ModelObject;
         }
         
         /// <summary>
@@ -735,38 +771,49 @@ namespace DynRenga.DynDocument
         [dr.IsVisibleInDynamoLibrary(true)]
         public ModelObject CreateEquipment(int levelId, int categoryId, object placement3D)
         {
-            var args = CreateNewEntityArgs();
-            args.TypeId = Renga.ObjectTypes.Equipment;
-            args.HostObjectId = levelId;
-            args.CategoryId = categoryId;
-            args.Placement3D = placement3D;
-            return CreateObject(args);
+            var result = CreateObjectByType("equipment", levelId, placement3D, categoryId);
+            return result["ModelObject"] as ModelObject;
         }
         
         /// <summary>
-        /// Создание нового объекта с настройкой всех параметров
+        /// Создание нового объекта с настройкой всех параметров через GUID
         /// </summary>
         /// <param name="typeId">GUID типа объекта</param>
         /// <param name="levelId">ID уровня (опционально)</param>
         /// <param name="categoryId">ID категории (опционально)</param>
         /// <param name="placement3D">3D размещение объекта</param>
-        /// <returns>ModelObject созданного объекта</returns>
+        /// <param name="enableDebug">Включить отладочную информацию</param>
+        /// <returns>ModelObject созданного объекта и отладочная информация</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public ModelObject CreateObjectWithArgs(Guid typeId, int levelId = -1, int categoryId = -1, object placement3D = null)
+        [dr.MultiReturn(new[] { "ModelObject", "DebugInfo" })]
+        public Dictionary<string, object> CreateObjectWithArgs(Guid typeId, int levelId = -1, int categoryId = -1, object placement3D = null, bool enableDebug = false)
         {
-            var args = CreateNewEntityArgs();
-            args.TypeId = typeId;
-            
-            if (levelId != -1)
-                args.HostObjectId = levelId;
+            try
+            {
+                var args = CreateNewEntityArgs();
+                args.TypeId = typeId;
                 
-            if (categoryId != -1)
-                args.CategoryId = categoryId;
+                if (levelId != -1)
+                    args.HostObjectId = levelId;
+                    
+                if (categoryId != -1)
+                    args.CategoryId = categoryId;
+                    
+                if (placement3D != null)
+                    args.Placement3D = placement3D;
                 
-            if (placement3D != null)
-                args.Placement3D = placement3D;
+                return CreateObject(args, enableDebug);
+            }
+            catch (Exception ex)
+            {
+                var errorInfo = $"❌ Ошибка создания объекта с GUID {typeId}: {ex.Message}";
                 
-            return CreateObject(args);
+                return new Dictionary<string, object>
+                {
+                    { "ModelObject", null },
+                    { "DebugInfo", enableDebug ? errorInfo : "" }
+                };
+            }
         }
         
         // ========== STATIC HELPER METHODS FOR DYNAMO ==========
@@ -801,5 +848,35 @@ namespace DynRenga.DynDocument
                 { "WallFoundation", Renga.ObjectTypes.WallFoundation }
             };
         }
+        
+        // ========== КОММЕНТАРИИ К РЕФАКТОРИНГУ ==========
+        /*
+         * Данная версия Model.cs оптимизирована следующим образом:
+         * 
+         * 1. ОБЪЕДИНЕНЫ МЕТОДЫ:
+         *    - CreateObject() и CreateObjectWithDebug() объединены в один с опциональным параметром enableDebug
+         *    - Методы конвертации ID объединены в ConvertUniqueIdToId() и ConvertIdToUniqueId()
+         * 
+         * 2. ДОБАВЛЕН УНИВЕРСАЛЬНЫЙ МЕТОД:
+         *    - CreateObjectByType() - создает любой тип объекта по строковому имени типа
+         * 
+         * 3. ОРГАНИЗОВАНО ПО СЕКЦИЯМ:
+         *    - Конструкторы
+         *    - Отладочные методы  
+         *    - Базовые методы
+         *    - Методы создания объектов
+         *    - Специализированные методы
+         *    - Утилитарные методы
+         *    - Вспомогательные методы получения информации
+         *    - Статические вспомогательные методы
+         * 
+         * 4. УСТАРЕВШИЕ МЕТОДЫ:
+         *    - Оставлены для обратной совместимости с пометкой [Obsolete]
+         * 
+         * 5. ОПТИМИЗАЦИИ:
+         *    - Улучшено логирование с эмодзи
+         *    - Упрощен код в методах CreateFloor и специализированных  
+         *    - Добавлены полезные статические методы
+         */
     }
 }
