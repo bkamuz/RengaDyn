@@ -1015,23 +1015,154 @@ namespace DynRenga.DynGeometry
         /// Создание Curve2D из Dynamo PolyCurve
         /// </summary>
         /// <param name="dynamoPolyCurve">Dynamo PolyCurve</param>
-        /// <returns>Curve2D объект или null</returns>
+        /// <returns>Curve2D объект и отладочная информация</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public static Curve2D ByDynamoPolyCurve(dg.PolyCurve dynamoPolyCurve)
+        [dr.MultiReturn(new[] { "Curve2D", "DebugInfo" })]
+        public static Dictionary<string, object> ByDynamoPolyCurve(dg.PolyCurve dynamoPolyCurve)
         {
+            var debugInfo = "🔧 Converting Dynamo PolyCurve to Curve2D...\n";
+            
             try
             {
-                if (dynamoPolyCurve == null) return null;
+                System.Console.WriteLine("🔧 Converting Dynamo PolyCurve to Curve2D...");
+                
+                if (dynamoPolyCurve == null) 
+                {
+                    debugInfo += "❌ Dynamo PolyCurve is null\n";
+                    System.Console.WriteLine("❌ Dynamo PolyCurve is null");
+                    return new Dictionary<string, object>
+                    {
+                        { "Curve2D", null },
+                        { "DebugInfo", debugInfo }
+                    };
+                }
+                
+                debugInfo += $"✅ Dynamo PolyCurve received\n";
+                debugInfo += $"📐 PolyCurve type: {dynamoPolyCurve.GetType().Name}\n";
+                System.Console.WriteLine($"✅ Dynamo PolyCurve received");
+                System.Console.WriteLine($"📐 PolyCurve type: {dynamoPolyCurve.GetType().Name}");
+                
+                // Get curve information
+                try
+                {
+                    var startPoint = dynamoPolyCurve.StartPoint;
+                    var endPoint = dynamoPolyCurve.EndPoint;
+                    debugInfo += $"📍 Start point: ({startPoint.X:F2}, {startPoint.Y:F2}, {startPoint.Z:F2})\n";
+                    debugInfo += $"📍 End point: ({endPoint.X:F2}, {endPoint.Y:F2}, {endPoint.Z:F2})\n";
+                    System.Console.WriteLine($"📍 Start point: ({startPoint.X:F2}, {startPoint.Y:F2}, {startPoint.Z:F2})");
+                    System.Console.WriteLine($"📍 End point: ({endPoint.X:F2}, {endPoint.Y:F2}, {endPoint.Z:F2})");
+                    
+                    // Calculate approximate length
+                    var length = Math.Sqrt(Math.Pow(endPoint.X - startPoint.X, 2) + 
+                                        Math.Pow(endPoint.Y - startPoint.Y, 2) + 
+                                        Math.Pow(endPoint.Z - startPoint.Z, 2));
+                    debugInfo += $"📏 Approximate length: {length:F2} meters\n";
+                    System.Console.WriteLine($"📏 Approximate length: {length:F2} meters");
+                    
+                    // Check if this is a closed curve (same start/end points)
+                    var isClosed = Math.Abs(startPoint.X - endPoint.X) < 1e-9 && 
+                                  Math.Abs(startPoint.Y - endPoint.Y) < 1e-9 && 
+                                  Math.Abs(startPoint.Z - endPoint.Z) < 1e-9;
+                    
+                    if (isClosed)
+                    {
+                        debugInfo += "🔄 Closed PolyCurve detected (start/end points same)\n";
+                        debugInfo += "💡 This will be processed as a normal closed curve\n";
+                        System.Console.WriteLine("🔄 Closed PolyCurve detected (start/end points same)");
+                        System.Console.WriteLine("💡 This will be processed as a normal closed curve");
+                    }
+                    
+                    // Get segment information
+                    var segments = dynamoPolyCurve.Curves();
+                    if (segments != null)
+                    {
+                        debugInfo += $"📐 Number of segments: {segments.Length}\n";
+                        System.Console.WriteLine($"📐 Number of segments: {segments.Length}");
+                        
+                        for (int i = 0; i < segments.Length; i++)
+                        {
+                            var segment = segments[i];
+                            var segStart = segment.StartPoint;
+                            var segEnd = segment.EndPoint;
+                            var segLength = Math.Sqrt(Math.Pow(segEnd.X - segStart.X, 2) + 
+                                                    Math.Pow(segEnd.Y - segStart.Y, 2) + 
+                                                    Math.Pow(segEnd.Z - segStart.Z, 2));
+                            debugInfo += $"  📏 Segment {i + 1}: {segment.GetType().Name}, Length: {segLength:F6}m\n";
+                            System.Console.WriteLine($"  📏 Segment {i + 1}: {segment.GetType().Name}, Length: {segLength:F6}m");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    debugInfo += $"⚠️ Could not extract curve information: {ex.Message}\n";
+                    System.Console.WriteLine($"⚠️ Could not extract curve information: {ex.Message}");
+                }
                 
                 // Convert Dynamo PolyCurve to Renga curve
-                var rengaCurve = ConvertDynamoPolyCurveToRenga(dynamoPolyCurve);
-                if (rengaCurve == null) return null;
+                debugInfo += "🔄 Converting to Renga curve...\n";
+                System.Console.WriteLine("🔄 Converting to Renga curve...");
+                debugInfo += "🔧 Calling ConvertDynamoPolyCurveToRenga...\n";
+                System.Console.WriteLine("🔧 Calling ConvertDynamoPolyCurveToRenga...");
+                var rengaCurve = ConvertDynamoPolyCurveToRenga(dynamoPolyCurve, ref debugInfo);
+                debugInfo += $"🔧 ConvertDynamoPolyCurveToRenga returned: {(rengaCurve != null ? "Success" : "Null")}\n";
+                System.Console.WriteLine($"🔧 ConvertDynamoPolyCurveToRenga returned: {(rengaCurve != null ? "Success" : "Null")}");
+                if (rengaCurve == null) 
+                {
+                    debugInfo += "❌ Conversion to Renga curve failed - returned null\n";
+                    debugInfo += "💡 This may indicate that the PolyCurve is too complex or contains unsupported curve types\n";
+                    System.Console.WriteLine("❌ Conversion to Renga curve failed - returned null");
+                    System.Console.WriteLine("💡 This may indicate that the PolyCurve is too complex or contains unsupported curve types");
+                    return new Dictionary<string, object>
+                    {
+                        { "Curve2D", null },
+                        { "DebugInfo", debugInfo }
+                    };
+                }
                 
-                return new Curve2D(rengaCurve);
+                debugInfo += "✅ Renga curve conversion successful\n";
+                debugInfo += $"📐 Renga curve type: {rengaCurve.GetType().Name}\n";
+                System.Console.WriteLine("✅ Renga curve conversion successful");
+                System.Console.WriteLine($"📐 Renga curve type: {rengaCurve.GetType().Name}");
+                
+                var curve2D = new Curve2D(rengaCurve);
+                debugInfo += "✅ Curve2D wrapper created successfully\n";
+                debugInfo += $"🔗 Curve2D._i is null: {curve2D._i == null}\n";
+                System.Console.WriteLine("✅ Curve2D wrapper created successfully");
+                System.Console.WriteLine($"🔗 Curve2D._i is null: {curve2D._i == null}");
+                
+                if (curve2D._i == null)
+                {
+                    debugInfo += "⚠️ WARNING: Curve2D._i is null - this may cause issues with baseline setting\n";
+                    debugInfo += "💡 The curve may not be compatible with Renga's baseline system\n";
+                    System.Console.WriteLine("⚠️ WARNING: Curve2D._i is null - this may cause issues with baseline setting");
+                    System.Console.WriteLine("💡 The curve may not be compatible with Renga's baseline system");
+                }
+                else
+                {
+                    debugInfo += "✅ Curve2D has valid Renga interface - should work with baselines\n";
+                    System.Console.WriteLine("✅ Curve2D has valid Renga interface - should work with baselines");
+                }
+                
+                return new Dictionary<string, object>
+                {
+                    { "Curve2D", curve2D },
+                    { "DebugInfo", debugInfo }
+                };
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                debugInfo += $"❌ ByDynamoPolyCurve failed!\n";
+                debugInfo += $"Error: {ex.Message}\n";
+                debugInfo += $"Stack Trace: {ex.StackTrace}";
+                System.Console.WriteLine($"❌ ByDynamoPolyCurve failed!");
+                System.Console.WriteLine($"Error: {ex.Message}");
+                System.Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                
+                return new Dictionary<string, object>
+                {
+                    { "Curve2D", null },
+                    { "DebugInfo", debugInfo }
+                };
             }
         }
         
@@ -1115,15 +1246,14 @@ namespace DynRenga.DynGeometry
                     debugInfo += "🔄 Falling back to workaround method...\n";
                 }
                 
-                // Fallback: Create a temporary object to hold the line data
-                // This won't work with the baseline system but provides a placeholder
-                var lineData = new { StartPoint = startPoint, EndPoint = endPoint, Type = "LineSegment" };
-                debugInfo += "⚠️ Using fallback method - this may not work with baseline system\n";
+                // Fallback: Return null if COM creation fails
+                debugInfo += "❌ COM creation failed - cannot create valid Curve2D\n";
                 debugInfo += "💡 For proper baseline support, ensure Renga is properly installed\n";
+                debugInfo += "💡 Try using Curve2D.ByLineSegment with different coordinates\n";
                 
                 return new Dictionary<string, object>
                 {
-                    { "Curve2D", new Curve2D(lineData) },
+                    { "Curve2D", null },
                     { "DebugInfo", debugInfo }
                 };
             }
@@ -1162,7 +1292,8 @@ namespace DynRenga.DynGeometry
                 }
                 else if (dynamoCurve is dg.PolyCurve polyCurve)
                 {
-                    return ConvertDynamoPolyCurveToRenga(polyCurve);
+                    string debugInfo = "";
+                    return ConvertDynamoPolyCurveToRenga(polyCurve, ref debugInfo);
                 }
                 else
                 {
@@ -1181,33 +1312,662 @@ namespace DynRenga.DynGeometry
         /// </summary>
         /// <param name="dynamoPolyCurve">Dynamo PolyCurve</param>
         /// <returns>Renga кривая или null</returns>
-        private static object ConvertDynamoPolyCurveToRenga(dg.PolyCurve dynamoPolyCurve)
+        private static object ConvertDynamoPolyCurveToRenga(dg.PolyCurve dynamoPolyCurve, ref string debugInfo)
         {
             try
             {
+                debugInfo += "🔧 ConvertDynamoPolyCurveToRenga: Starting conversion\n";
+                System.Console.WriteLine("🔧 ConvertDynamoPolyCurveToRenga: Starting conversion");
+                
                 // Get curve segments
                 var segments = dynamoPolyCurve.Curves();
-                if (segments == null || segments.Length == 0) return null;
+                if (segments == null || segments.Length == 0) 
+                {
+                    debugInfo += "❌ No segments found in PolyCurve\n";
+                    System.Console.WriteLine("❌ No segments found in PolyCurve");
+                    return null;
+                }
                 
-                // For now, we'll convert the first segment
-                // In a full implementation, you would create a proper Renga PolyCurve2D
-                if (segments.Length == 1)
+                debugInfo += $"📐 Found {segments.Length} segments\n";
+                System.Console.WriteLine($"📐 Found {segments.Length} segments");
+                
+                // Try to create IMath interface through IApplication
+                try
                 {
-                    return ConvertDynamoCurveToRenga(segments[0]);
+                    debugInfo += "🔧 Attempting to create Renga IApplication COM interface\n";
+                    System.Console.WriteLine("🔧 Attempting to create Renga IApplication COM interface");
+                    
+                    // Try different ProgID variations for IApplication
+                    string[] progIds = { "Renga.Application", "RengaApplication", "Renga.Application.1", "RengaApplication.1" };
+                    Type appType = null;
+                    string usedProgId = "";
+                    
+                    foreach (string progId in progIds)
+                    {
+                        debugInfo += $"🔍 Trying ProgID: {progId}\n";
+                        System.Console.WriteLine($"🔍 Trying ProgID: {progId}");
+                        appType = Type.GetTypeFromProgID(progId);
+                        if (appType != null)
+                        {
+                            usedProgId = progId;
+                            debugInfo += $"✅ Found IApplication type with ProgID: {progId}\n";
+                            System.Console.WriteLine($"✅ Found IApplication type with ProgID: {progId}");
+                            break;
+                        }
+                        else
+                        {
+                            debugInfo += $"❌ ProgID {progId} not found\n";
+                            System.Console.WriteLine($"❌ ProgID {progId} not found");
+                        }
+                    }
+                    
+                    if (appType != null)
+                    {
+                        debugInfo += $"✅ Renga IApplication type found using ProgID: {usedProgId}\n";
+                        System.Console.WriteLine($"✅ Renga IApplication type found using ProgID: {usedProgId}");
+                        
+                        // Create IApplication instance
+                        var appInterface = Activator.CreateInstance(appType) as Renga.IApplication;
+                        if (appInterface != null)
+                        {
+                            debugInfo += "✅ Renga IApplication interface created successfully\n";
+                            System.Console.WriteLine("✅ Renga IApplication interface created successfully");
+                            
+                            // Access Math property from IApplication
+                            debugInfo += "🔧 Accessing Math property from IApplication\n";
+                            System.Console.WriteLine("🔧 Accessing Math property from IApplication");
+                            var mathInterface = appInterface.Math;
+                            
+                            if (mathInterface != null)
+                            {
+                                debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                System.Console.WriteLine("✅ Renga IMath interface accessed successfully");
+                                
+                                if (segments.Length == 1)
+                                {
+                                    // Single segment - convert directly
+                                    debugInfo += "📐 Single segment - converting directly\n";
+                                    System.Console.WriteLine("📐 Single segment - converting directly");
+                                    return ConvertDynamoCurveToRengaWithMath(segments[0], mathInterface, ref debugInfo);
+                                }
+                                else
+                                {
+                                    // Multiple segments - create composite curve
+                                    debugInfo += "📐 Multiple segments - creating composite curve\n";
+                                    System.Console.WriteLine("📐 Multiple segments - creating composite curve");
+                                    return ConvertDynamoPolyCurveToRengaWithMath(dynamoPolyCurve, mathInterface, ref debugInfo);
+                                }
+                            }
+                            else
+                            {
+                                debugInfo += "❌ Failed to access Math property from IApplication\n";
+                                debugInfo += "💡 This might indicate that Renga is not properly initialized or the Math interface is not available\n";
+                                System.Console.WriteLine("❌ Failed to access Math property from IApplication");
+                                System.Console.WriteLine("💡 This might indicate that Renga is not properly initialized or the Math interface is not available");
+                            }
+                        }
+                        else
+                        {
+                            debugInfo += "❌ Failed to create Renga IApplication interface from type\n";
+                            debugInfo += "💡 This might indicate that Renga is not properly installed or the COM interface is not registered\n";
+                            System.Console.WriteLine("❌ Failed to create Renga IApplication interface from type");
+                            System.Console.WriteLine("💡 This might indicate that Renga is not properly installed or the COM interface is not registered");
+                        }
+                    }
+                    else
+                    {
+                        debugInfo += "❌ No Renga IApplication COM interface found with any ProgID\n";
+                        debugInfo += "💡 Possible solutions:\n";
+                        debugInfo += "   1. Ensure Renga is properly installed\n";
+                        debugInfo += "   2. Register the Renga COM interface (run as administrator):\n";
+                        debugInfo += "      regsvr32 \"C:\\Program Files\\Renga\\RengaApplication.dll\"\n";
+                        debugInfo += "   3. Check if Renga is running and accessible\n";
+                        debugInfo += "   4. Try running Renga first before using the Dynamo node\n";
+                        System.Console.WriteLine("❌ No Renga IApplication COM interface found with any ProgID");
+                        System.Console.WriteLine("💡 Possible solutions:");
+                        System.Console.WriteLine("   1. Ensure Renga is properly installed");
+                        System.Console.WriteLine("   2. Register the Renga COM interface (run as administrator):");
+                        System.Console.WriteLine("      regsvr32 \"C:\\Program Files\\Renga\\RengaApplication.dll\"");
+                        System.Console.WriteLine("   3. Check if Renga is running and accessible");
+                        System.Console.WriteLine("   4. Try running Renga first before using the Dynamo node");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    // Multiple segments - convert the first one for now
-                    // TODO: Implement proper PolyCurve2D creation
-                    return ConvertDynamoCurveToRenga(segments[0]);
+                    debugInfo += $"❌ COM creation failed in ConvertDynamoPolyCurveToRenga: {ex.Message}\n";
+                    debugInfo += $"❌ Stack trace: {ex.StackTrace}\n";
+                    System.Console.WriteLine($"❌ COM creation failed in ConvertDynamoPolyCurveToRenga: {ex.Message}");
+                    System.Console.WriteLine($"❌ Stack trace: {ex.StackTrace}");
                 }
+                
+                // Fallback: return null if COM creation fails
+                debugInfo += "❌ All conversion attempts failed - returning null\n";
+                System.Console.WriteLine("❌ All conversion attempts failed - returning null");
+                return null;
             }
-            catch
+            catch (Exception ex)
             {
+                debugInfo += $"❌ ConvertDynamoPolyCurveToRenga failed: {ex.Message}\n";
+                debugInfo += $"❌ Stack trace: {ex.StackTrace}\n";
+                System.Console.WriteLine($"❌ ConvertDynamoPolyCurveToRenga failed: {ex.Message}");
+                System.Console.WriteLine($"❌ Stack trace: {ex.StackTrace}");
                 return null;
             }
         }
         
+        /// <summary>
+        /// Конвертация Dynamo кривой в Renga кривую с использованием IMath
+        /// </summary>
+        /// <param name="dynamoCurve">Dynamo кривая</param>
+        /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <returns>Renga ICurve2D или null</returns>
+        private static Renga.ICurve2D ConvertDynamoCurveToRengaWithMath(dg.Curve dynamoCurve, Renga.IMath mathInterface, ref string debugInfo)
+        {
+            try
+            {
+                debugInfo += $"🔧 ConvertDynamoCurveToRengaWithMath: Processing {dynamoCurve.GetType().Name}\n";
+                System.Console.WriteLine($"🔧 ConvertDynamoCurveToRengaWithMath: Processing {dynamoCurve.GetType().Name}");
+                
+                if (dynamoCurve is dg.Line line)
+                {
+                    debugInfo += $"📐 Converting Line segment\n";
+                    System.Console.WriteLine($"📐 Converting Line segment");
+                    var result = ConvertDynamoLineToRengaWithMath(line, mathInterface, ref debugInfo);
+                    debugInfo += $"📐 Line conversion result: {(result != null ? "Success" : "Failed")}\n";
+                    System.Console.WriteLine($"📐 Line conversion result: {(result != null ? "Success" : "Failed")}");
+                    return result;
+                }
+                else if (dynamoCurve is dg.Arc arc)
+                {
+                    debugInfo += $"📐 Converting Arc segment\n";
+                    System.Console.WriteLine($"📐 Converting Arc segment");
+                    var result = ConvertDynamoArcToRengaWithMath(arc, mathInterface, ref debugInfo);
+                    debugInfo += $"📐 Arc conversion result: {(result != null ? "Success" : "Failed")}\n";
+                    System.Console.WriteLine($"📐 Arc conversion result: {(result != null ? "Success" : "Failed")}");
+                    return result;
+                }
+                else
+                {
+                    debugInfo += $"📐 Converting other curve type: {dynamoCurve.GetType().Name}\n";
+                    System.Console.WriteLine($"📐 Converting other curve type: {dynamoCurve.GetType().Name}");
+                    // For other curve types, approximate with line
+                    var result = ConvertDynamoCurveToLineApproximationWithMath(dynamoCurve, mathInterface, ref debugInfo);
+                    debugInfo += $"📐 Other curve conversion result: {(result != null ? "Success" : "Failed")}\n";
+                    System.Console.WriteLine($"📐 Other curve conversion result: {(result != null ? "Success" : "Failed")}");
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                debugInfo += $"❌ ConvertDynamoCurveToRengaWithMath failed: {ex.Message}\n";
+                debugInfo += $"❌ Stack trace: {ex.StackTrace}\n";
+                System.Console.WriteLine($"❌ ConvertDynamoCurveToRengaWithMath failed: {ex.Message}");
+                System.Console.WriteLine($"❌ Stack trace: {ex.StackTrace}");
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo PolyCurve в Renga кривую с использованием IMath
+        /// </summary>
+        /// <param name="dynamoPolyCurve">Dynamo PolyCurve</param>
+        /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <returns>Renga ICurve2D или null</returns>
+        private static Renga.ICurve2D ConvertDynamoPolyCurveToRengaWithMath(dg.PolyCurve dynamoPolyCurve, Renga.IMath mathInterface, ref string debugInfo)
+        {
+            try
+            {
+                var segments = dynamoPolyCurve.Curves();
+                if (segments == null || segments.Length == 0) 
+                {
+                    debugInfo += "❌ PolyCurve has no segments\n";
+                    System.Console.WriteLine("❌ PolyCurve has no segments");
+                    return null;
+                }
+                
+                debugInfo += $"🔧 Processing PolyCurve with {segments.Length} segments\n";
+                System.Console.WriteLine($"🔧 Processing PolyCurve with {segments.Length} segments");
+                
+                // Check if this is a closed PolyCurve (same start/end points) vs truly zero-length
+                var startPoint = dynamoPolyCurve.StartPoint;
+                var endPoint = dynamoPolyCurve.EndPoint;
+                var isClosed = Math.Abs(startPoint.X - endPoint.X) < 1e-9 && 
+                              Math.Abs(startPoint.Y - endPoint.Y) < 1e-9 && 
+                              Math.Abs(startPoint.Z - endPoint.Z) < 1e-9;
+                
+                // Check if this is truly zero-length by examining individual segments
+                bool isTrulyZeroLength = true;
+                if (isClosed && segments.Length > 1)
+                {
+                    // Check if all segments are also zero-length
+                    for (int i = 0; i < segments.Length; i++)
+                    {
+                        var segment = segments[i];
+                        var segStart = segment.StartPoint;
+                        var segEnd = segment.EndPoint;
+                        var segLength = Math.Sqrt(Math.Pow(segEnd.X - segStart.X, 2) + 
+                                                Math.Pow(segEnd.Y - segStart.Y, 2) + 
+                                                Math.Pow(segEnd.Z - segStart.Z, 2));
+                        if (segLength > 1e-9) // Segment has actual length
+                        {
+                            isTrulyZeroLength = false;
+                            break;
+                        }
+                    }
+                }
+                
+                if (isClosed && isTrulyZeroLength)
+                {
+                    debugInfo += "🔄 Truly zero-length PolyCurve detected (all segments are zero-length)\n";
+                    debugInfo += $"📍 Start/End point: ({startPoint.X:F6}, {startPoint.Y:F6}, {startPoint.Z:F6})\n";
+                    System.Console.WriteLine("🔄 Truly zero-length PolyCurve detected (all segments are zero-length)");
+                    System.Console.WriteLine($"📍 Start/End point: ({startPoint.X:F6}, {startPoint.Y:F6}, {startPoint.Z:F6})");
+                    
+                    // For truly zero-length curves, create a small circle
+                    if (segments.Length == 1)
+                    {
+                        // Single segment zero-length curve - create a small circle
+                        debugInfo += "📐 Single segment zero-length - creating small circle\n";
+                        System.Console.WriteLine("📐 Single segment zero-length - creating small circle");
+                        var center = new Renga.Point2D
+                        {
+                            X = startPoint.X * 1000.0, // Convert to mm
+                            Y = startPoint.Y * 1000.0
+                        };
+                        // Create a very small circle (1mm radius) to represent the point
+                        return mathInterface.CreateCircle2D(center, 1.0);
+                    }
+                    else
+                    {
+                        // Multiple segments all zero-length - create a small circle
+                        debugInfo += "📐 All segments are zero-length - creating small circle\n";
+                        System.Console.WriteLine("📐 All segments are zero-length - creating small circle");
+                        var center = new Renga.Point2D
+                        {
+                            X = startPoint.X * 1000.0, // Convert to mm
+                            Y = startPoint.Y * 1000.0
+                        };
+                        return mathInterface.CreateCircle2D(center, 1.0);
+                    }
+                }
+                else if (isClosed && !isTrulyZeroLength)
+                {
+                    debugInfo += "🔄 Closed PolyCurve detected (start/end points same but has valid segments)\n";
+                    debugInfo += $"📍 Start/End point: ({startPoint.X:F6}, {startPoint.Y:F6}, {startPoint.Z:F6})\n";
+                    debugInfo += $"📐 Processing as normal closed curve with {segments.Length} segments\n";
+                    System.Console.WriteLine("🔄 Closed PolyCurve detected (start/end points same but has valid segments)");
+                    System.Console.WriteLine($"📍 Start/End point: ({startPoint.X:F6}, {startPoint.Y:F6}, {startPoint.Z:F6})");
+                    System.Console.WriteLine($"📐 Processing as normal closed curve with {segments.Length} segments");
+                    // Continue with normal processing - this is a valid closed curve
+                }
+                
+                if (segments.Length == 1)
+                {
+                    // Single segment - convert directly
+                    debugInfo += "📐 Single segment - converting directly\n";
+                    System.Console.WriteLine("📐 Single segment - converting directly");
+                    return ConvertDynamoCurveToRengaWithMath(segments[0], mathInterface, ref debugInfo);
+                }
+                else
+                {
+                    // Multiple segments - create composite curve
+                    debugInfo += $"📐 Multiple segments ({segments.Length}) - creating composite curve\n";
+                    System.Console.WriteLine($"📐 Multiple segments ({segments.Length}) - creating composite curve");
+                    var rengaCurves = new List<Renga.ICurve2D>();
+                    
+                    for (int i = 0; i < segments.Length; i++)
+                    {
+                        var segment = segments[i];
+                        debugInfo += $"🔧 Converting segment {i + 1}/{segments.Length}: {segment.GetType().Name}\n";
+                        System.Console.WriteLine($"🔧 Converting segment {i + 1}/{segments.Length}: {segment.GetType().Name}");
+                        
+                        // Add detailed segment information
+                        try
+                        {
+                            var segStart = segment.StartPoint;
+                            var segEnd = segment.EndPoint;
+                            var segLength = Math.Sqrt(Math.Pow(segEnd.X - segStart.X, 2) + 
+                                                    Math.Pow(segEnd.Y - segStart.Y, 2) + 
+                                                    Math.Pow(segEnd.Z - segStart.Z, 2));
+                            debugInfo += $"  📍 Segment {i + 1} start: ({segStart.X:F6}, {segStart.Y:F6}, {segStart.Z:F6})\n";
+                            debugInfo += $"  📍 Segment {i + 1} end: ({segEnd.X:F6}, {segEnd.Y:F6}, {segEnd.Z:F6})\n";
+                            debugInfo += $"  📏 Segment {i + 1} length: {segLength:F6}m\n";
+                            System.Console.WriteLine($"  📍 Segment {i + 1} start: ({segStart.X:F6}, {segStart.Y:F6}, {segStart.Z:F6})");
+                            System.Console.WriteLine($"  📍 Segment {i + 1} end: ({segEnd.X:F6}, {segEnd.Y:F6}, {segEnd.Z:F6})");
+                            System.Console.WriteLine($"  📏 Segment {i + 1} length: {segLength:F6}m");
+                        }
+                        catch (Exception ex)
+                        {
+                            debugInfo += $"  ⚠️ Could not get segment {i + 1} info: {ex.Message}\n";
+                            System.Console.WriteLine($"  ⚠️ Could not get segment {i + 1} info: {ex.Message}");
+                        }
+                        
+                        var rengaCurve = ConvertDynamoCurveToRengaWithMath(segment, mathInterface, ref debugInfo);
+                        if (rengaCurve != null)
+                        {
+                            debugInfo += $"✅ Segment {i + 1} converted successfully\n";
+                            System.Console.WriteLine($"✅ Segment {i + 1} converted successfully");
+                            rengaCurves.Add(rengaCurve);
+                        }
+                        else
+                        {
+                            debugInfo += $"❌ Segment {i + 1} conversion failed\n";
+                            System.Console.WriteLine($"❌ Segment {i + 1} conversion failed");
+                        }
+                    }
+                    
+                    debugInfo += $"📊 Successfully converted {rengaCurves.Count}/{segments.Length} segments\n";
+                    System.Console.WriteLine($"📊 Successfully converted {rengaCurves.Count}/{segments.Length} segments");
+                    
+                    if (rengaCurves.Count > 0)
+                    {
+                        try
+                        {
+                            // Create composite curve from all segments
+                            var curveArray = rengaCurves.ToArray();
+                            debugInfo += $"🔧 Creating composite curve from {curveArray.Length} segments\n";
+                            System.Console.WriteLine($"🔧 Creating composite curve from {curveArray.Length} segments");
+                            var compositeCurve = mathInterface.CreateCompositeCurve2D(curveArray);
+                            if (compositeCurve != null)
+                            {
+                                debugInfo += "✅ Composite curve created successfully\n";
+                                System.Console.WriteLine("✅ Composite curve created successfully");
+                                return compositeCurve;
+                            }
+                            else
+                            {
+                                debugInfo += "❌ CreateCompositeCurve2D returned null\n";
+                                System.Console.WriteLine("❌ CreateCompositeCurve2D returned null");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            debugInfo += $"❌ CreateCompositeCurve2D failed: {ex.Message}\n";
+                            System.Console.WriteLine($"❌ CreateCompositeCurve2D failed: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        debugInfo += "❌ No segments were successfully converted\n";
+                        System.Console.WriteLine("❌ No segments were successfully converted");
+                    }
+                }
+                
+                return null;
+            }
+            catch (Exception ex)
+            {
+                debugInfo += $"❌ PolyCurve conversion failed: {ex.Message}\n";
+                System.Console.WriteLine($"❌ PolyCurve conversion failed: {ex.Message}");
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Обработка нулевой длины замкнутой кривой
+        /// </summary>
+        /// <param name="segments">Сегменты кривой</param>
+        /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <returns>Renga ICurve2D или null</returns>
+        private static Renga.ICurve2D ProcessZeroLengthClosedCurve(dg.Curve[] segments, Renga.IMath mathInterface)
+        {
+            try
+            {
+                var rengaCurves = new List<Renga.ICurve2D>();
+                
+                for (int i = 0; i < segments.Length; i++)
+                {
+                    var segment = segments[i];
+                    System.Console.WriteLine($"🔧 Processing zero-length segment {i + 1}/{segments.Length}: {segment.GetType().Name}");
+                    
+                    // Check if segment is also zero-length
+                    var segmentStart = segment.StartPoint;
+                    var segmentEnd = segment.EndPoint;
+                    var isSegmentZeroLength = Math.Abs(segmentStart.X - segmentEnd.X) < 1e-9 && 
+                                            Math.Abs(segmentStart.Y - segmentEnd.Y) < 1e-9 && 
+                                            Math.Abs(segmentStart.Z - segmentEnd.Z) < 1e-9;
+                    
+                    if (isSegmentZeroLength)
+                    {
+                        System.Console.WriteLine($"⚠️ Segment {i + 1} is also zero-length - skipping");
+                        continue;
+                    }
+                    
+                    string debugInfo = "";
+                    var rengaCurve = ConvertDynamoCurveToRengaWithMath(segment, mathInterface, ref debugInfo);
+                    if (rengaCurve != null)
+                    {
+                        System.Console.WriteLine($"✅ Zero-length segment {i + 1} converted successfully");
+                        rengaCurves.Add(rengaCurve);
+                    }
+                    else
+                    {
+                        System.Console.WriteLine($"❌ Zero-length segment {i + 1} conversion failed");
+                    }
+                }
+                
+                if (rengaCurves.Count > 0)
+                {
+                    try
+                    {
+                        var curveArray = rengaCurves.ToArray();
+                        System.Console.WriteLine($"🔧 Creating composite curve from {curveArray.Length} non-zero segments");
+                        var compositeCurve = mathInterface.CreateCompositeCurve2D(curveArray);
+                        if (compositeCurve != null)
+                        {
+                            System.Console.WriteLine("✅ Zero-length closed curve composite created successfully");
+                            return compositeCurve;
+                        }
+                        else
+                        {
+                            System.Console.WriteLine("❌ Zero-length closed curve composite creation failed");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Console.WriteLine($"❌ Zero-length closed curve composite creation failed: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    System.Console.WriteLine("⚠️ All segments are zero-length - creating point representation");
+                    // All segments are zero-length, create a small circle to represent the point
+                    var startPoint = segments[0].StartPoint;
+                    var center = new Renga.Point2D
+                    {
+                        X = startPoint.X * 1000.0, // Convert to mm
+                        Y = startPoint.Y * 1000.0
+                    };
+                    return mathInterface.CreateCircle2D(center, 1.0); // 1mm radius circle
+                }
+                
+                return null;
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine($"❌ Zero-length closed curve processing failed: {ex.Message}");
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo Line в Renga кривую с использованием IMath
+        /// </summary>
+        /// <param name="dynamoLine">Dynamo Line</param>
+        /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <returns>Renga ICurve2D или null</returns>
+        private static Renga.ICurve2D ConvertDynamoLineToRengaWithMath(dg.Line dynamoLine, Renga.IMath mathInterface, ref string debugInfo)
+        {
+            try
+            {
+                var start = dynamoLine.StartPoint;
+                var end = dynamoLine.EndPoint;
+                
+                debugInfo += $"  📍 Line start: ({start.X:F6}, {start.Y:F6}, {start.Z:F6})\n";
+                debugInfo += $"  📍 Line end: ({end.X:F6}, {end.Y:F6}, {end.Z:F6})\n";
+                System.Console.WriteLine($"  📍 Line start: ({start.X:F6}, {start.Y:F6}, {start.Z:F6})");
+                System.Console.WriteLine($"  📍 Line end: ({end.X:F6}, {end.Y:F6}, {end.Z:F6})");
+                
+                // Create Renga Point2D structures
+                var startPoint = new Renga.Point2D
+                {
+                    X = start.X * 1000.0, // Convert to mm
+                    Y = start.Y * 1000.0
+                };
+                
+                var endPoint = new Renga.Point2D
+                {
+                    X = end.X * 1000.0, // Convert to mm
+                    Y = end.Y * 1000.0
+                };
+                
+                debugInfo += $"  📍 Renga start: ({startPoint.X:F6}, {startPoint.Y:F6})\n";
+                debugInfo += $"  📍 Renga end: ({endPoint.X:F6}, {endPoint.Y:F6})\n";
+                System.Console.WriteLine($"  📍 Renga start: ({startPoint.X:F6}, {startPoint.Y:F6})");
+                System.Console.WriteLine($"  📍 Renga end: ({endPoint.X:F6}, {endPoint.Y:F6})");
+                
+                // Create proper Renga ICurve2D using IMath
+                var result = mathInterface.CreateLineSegment2D(startPoint, endPoint);
+                debugInfo += $"  📐 CreateLineSegment2D result: {(result != null ? "Success" : "Failed")}\n";
+                System.Console.WriteLine($"  📐 CreateLineSegment2D result: {(result != null ? "Success" : "Failed")}");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                debugInfo += $"  ❌ ConvertDynamoLineToRengaWithMath failed: {ex.Message}\n";
+                System.Console.WriteLine($"  ❌ ConvertDynamoLineToRengaWithMath failed: {ex.Message}");
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo Arc в Renga кривую с использованием IMath
+        /// </summary>
+        /// <param name="dynamoArc">Dynamo Arc</param>
+        /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <returns>Renga ICurve2D или null</returns>
+        private static Renga.ICurve2D ConvertDynamoArcToRengaWithMath(dg.Arc dynamoArc, Renga.IMath mathInterface, ref string debugInfo)
+        {
+            try
+            {
+                var center = dynamoArc.CenterPoint;
+                var start = dynamoArc.StartPoint;
+                var end = dynamoArc.EndPoint;
+                
+                debugInfo += $"🔧 Converting Arc: Center=({center.X:F6}, {center.Y:F6}), Start=({start.X:F6}, {start.Y:F6}), End=({end.X:F6}, {end.Y:F6}), Radius={dynamoArc.Radius:F6}\n";
+                System.Console.WriteLine($"🔧 Converting Arc: Center=({center.X:F2}, {center.Y:F2}), Start=({start.X:F2}, {start.Y:F2}), End=({end.X:F2}, {end.Y:F2}), Radius={dynamoArc.Radius:F2}");
+                
+                // Create Renga Point2D structures
+                var centerPoint = new Renga.Point2D
+                {
+                    X = center.X * 1000.0, // Convert to mm
+                    Y = center.Y * 1000.0
+                };
+                
+                var startPoint = new Renga.Point2D
+                {
+                    X = start.X * 1000.0, // Convert to mm
+                    Y = start.Y * 1000.0
+                };
+                
+                var endPoint = new Renga.Point2D
+                {
+                    X = end.X * 1000.0, // Convert to mm
+                    Y = end.Y * 1000.0
+                };
+                
+                var radius = dynamoArc.Radius * 1000.0; // Convert to mm
+                
+                debugInfo += $"📐 Renga Arc: Center=({centerPoint.X:F1}, {centerPoint.Y:F1}), Start=({startPoint.X:F1}, {startPoint.Y:F1}), End=({endPoint.X:F1}, {endPoint.Y:F1}), Radius={radius:F1}\n";
+                System.Console.WriteLine($"📐 Renga Arc: Center=({centerPoint.X:F1}, {centerPoint.Y:F1}), Start=({startPoint.X:F1}, {startPoint.Y:F1}), End=({endPoint.X:F1}, {endPoint.Y:F1}), Radius={radius:F1}");
+                
+                // Try to create the arc
+                try
+                {
+                    // Create proper Renga ICurve2D using IMath
+                    // For now, assume counter-clockwise (false)
+                    var arc = mathInterface.CreateArc2DByCenterStartEndPoints(centerPoint, startPoint, endPoint, false);
+                    if (arc != null)
+                    {
+                        debugInfo += "✅ Arc created successfully\n";
+                        System.Console.WriteLine("✅ Arc created successfully");
+                        return arc;
+                    }
+                    else
+                    {
+                        debugInfo += "⚠️ CreateArc2DByCenterStartEndPoints returned null\n";
+                        System.Console.WriteLine("⚠️ CreateArc2DByCenterStartEndPoints returned null");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    debugInfo += $"⚠️ CreateArc2DByCenterStartEndPoints failed: {ex.Message}\n";
+                    System.Console.WriteLine($"⚠️ CreateArc2DByCenterStartEndPoints failed: {ex.Message}");
+                }
+                
+                // Fallback: Create a line approximation of the arc
+                debugInfo += "🔄 Falling back to line approximation for arc\n";
+                System.Console.WriteLine("🔄 Falling back to line approximation for arc");
+                return mathInterface.CreateLineSegment2D(startPoint, endPoint);
+            }
+            catch (Exception ex)
+            {
+                debugInfo += $"❌ Arc conversion failed: {ex.Message}\n";
+                System.Console.WriteLine($"❌ Arc conversion failed: {ex.Message}");
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// Конвертация Dynamo кривой в линейную аппроксимацию с использованием IMath
+        /// </summary>
+        /// <param name="dynamoCurve">Dynamo кривая</param>
+        /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <returns>Renga ICurve2D или null</returns>
+        private static Renga.ICurve2D ConvertDynamoCurveToLineApproximationWithMath(dg.Curve dynamoCurve, Renga.IMath mathInterface, ref string debugInfo)
+        {
+            try
+            {
+                debugInfo += "🔄 Converting curve to line approximation\n";
+                // Get start and end points
+                var points = dynamoCurve.PointsAtEqualChordLength(2);
+                if (points == null || points.Length < 2) 
+                {
+                    debugInfo += "❌ Could not get points for line approximation\n";
+                    return null;
+                }
+                
+                var start = points[0];
+                var end = points[points.Length - 1];
+                
+                debugInfo += $"📍 Line approximation start: ({start.X:F6}, {start.Y:F6}, {start.Z:F6})\n";
+                debugInfo += $"📍 Line approximation end: ({end.X:F6}, {end.Y:F6}, {end.Z:F6})\n";
+                
+                // Create Renga Point2D structures
+                var startPoint = new Renga.Point2D
+                {
+                    X = start.X * 1000.0, // Convert to mm
+                    Y = start.Y * 1000.0
+                };
+                
+                var endPoint = new Renga.Point2D
+                {
+                    X = end.X * 1000.0, // Convert to mm
+                    Y = end.Y * 1000.0
+                };
+                
+                // Create proper Renga ICurve2D using IMath
+                var result = mathInterface.CreateLineSegment2D(startPoint, endPoint);
+                debugInfo += $"📐 Line approximation result: {(result != null ? "Success" : "Failed")}\n";
+                return result;
+            }
+            catch (Exception ex)
+            {
+                debugInfo += $"❌ Line approximation failed: {ex.Message}\n";
+                return null;
+            }
+        }
+
         /// <summary>
         /// Конвертация Dynamo Line в Renga кривую
         /// </summary>

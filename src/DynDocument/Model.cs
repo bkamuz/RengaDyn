@@ -559,8 +559,34 @@ namespace DynRenga.DynDocument
                             
                             if (curve2D != null)
                             {
-                                baselineObject.SetBaseline(curve2D);
-                                debugInfo += $"\n✅ Baseline set successfully to floor ID: {floor.Id}";
+                                debugInfo += $"\n🔧 Attempting to set baseline on floor ID: {floor.Id}";
+                                debugInfo += $"\n📐 Curve2D type: {curve2D.GetType().Name}";
+                                debugInfo += $"\n📐 Curve2D._i is null: {curve2D._i == null}";
+                                debugInfo += $"\n📐 Baseline2DObject._i is null: {baselineObject._i == null}";
+                                
+                                try
+                                {
+                                    baselineObject.SetBaseline(curve2D);
+                                    debugInfo += $"\n✅ Baseline set successfully to floor ID: {floor.Id}";
+                                }
+                                catch (System.Runtime.InteropServices.COMException comEx)
+                                {
+                                    debugInfo += $"\n❌ COM Error when setting baseline: {comEx.Message}";
+                                    debugInfo += $"\n❌ Error Code: 0x{comEx.ErrorCode:X8}";
+                                    if (comEx.ErrorCode == unchecked((int)0x80010105))
+                                    {
+                                        debugInfo += $"\n💡 RPC_E_SERVERFAULT - Possible causes:";
+                                        debugInfo += $"\n   • Floor object doesn't support baseline modification";
+                                        debugInfo += $"\n   • Floor has dependent objects (like Roof)";
+                                        debugInfo += $"\n   • Baseline curve is invalid for floor objects";
+                                        debugInfo += $"\n   • Floor is not in correct state for baseline modification";
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    debugInfo += $"\n❌ Unexpected error when setting baseline: {ex.Message}";
+                                    debugInfo += $"\n❌ Exception type: {ex.GetType().Name}";
+                                }
                             }
                         }
                         else

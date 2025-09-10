@@ -74,7 +74,23 @@ namespace DynRenga.DynObjects
         [dr.IsVisibleInDynamoLibrary(true)]
         public void SetBaseline(Curve2D baseline)
         {
-            this._i.SetBaseline(baseline._i);
+            try
+            {
+                this._i.SetBaseline(baseline._i);
+            }
+            catch (System.Runtime.InteropServices.COMException comEx)
+            {
+                // Handle specific COM errors
+                if (comEx.ErrorCode == unchecked((int)0x80010105)) // RPC_E_SERVERFAULT
+                {
+                    throw new InvalidOperationException($"RPC_E_SERVERFAULT when setting baseline. This may indicate:\n" +
+                        "1. The object doesn't support baseline modification\n" +
+                        "2. The object has dependent objects (like Roof)\n" +
+                        "3. The baseline curve is invalid for this object type\n" +
+                        "4. The object is not in the correct state for baseline modification", comEx);
+                }
+                throw;
+            }
         }
         
         /// <summary>

@@ -8,3 +8,5 @@ to build project use
 
 Allways Use context7 if you working with renga api
 <https://context7.com/jackdainzh/rengabim-sdk>
+
+Do not output debug info to the console log. Output it to the second output (DebugInfo) of the node.
