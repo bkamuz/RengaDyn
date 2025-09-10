@@ -140,8 +140,10 @@ namespace DynRenga.RengaAPI
         /// Limitations: It is impossible to edit the baseline of an object with dependent objects (e.g., Roof)
         /// </summary>
         /// <param name="baseline">New baseline of the object</param>
+        /// <returns>Dictionary with Success status and DebugInfo</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public void SetBaseline(Curve2D baseline)
+        [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
+        public Dictionary<string, object> SetBaseline(Curve2D baseline)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("IBaseline2DObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -149,14 +151,90 @@ namespace DynRenga.RengaAPI
             if (baseline == null)
                 throw new ArgumentNullException(nameof(baseline), "Baseline cannot be null");
             
-            try
-            {
-                this._i.SetBaseline(baseline._i);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to set baseline: {ex.Message}", ex);
-            }
+            var debugInfo = "🔧 IBaseline2DObject.SetBaseline Debug Info:\n";
+            debugInfo += $"✅ Interface initialized: {IsInitialized()}\n";
+            debugInfo += $"✅ Baseline parameter: {baseline != null}\n";
+            
+             try
+             {
+                 // Check if baseline can be set
+                 var canSet = CanSetBaseline();
+                 debugInfo += $"✅ Can set baseline: {canSet}\n";
+                 
+                 if (!canSet)
+                 {
+                     debugInfo += "⚠️ Warning: Baseline may not be editable (object has dependent objects)\n";
+                 }
+                 
+                 // Get current baseline for comparison
+                 try
+                 {
+                     var currentBaseline = this._i.GetBaseline();
+                     debugInfo += $"✅ Current baseline exists: {currentBaseline != null}\n";
+                 }
+                 catch (Exception getEx)
+                 {
+                     debugInfo += $"⚠️ Could not get current baseline: {getEx.Message}\n";
+                 }
+                 
+                 // Validate baseline parameter
+                 try
+                 {
+                     var baselineValid = IsBaselineValid(baseline);
+                     debugInfo += $"✅ Baseline parameter valid: {baselineValid}\n";
+                 }
+                 catch (Exception validEx)
+                 {
+                     debugInfo += $"⚠️ Could not validate baseline: {validEx.Message}\n";
+                 }
+                 
+                 debugInfo += "🚀 Attempting to set baseline...\n";
+                 
+                 this._i.SetBaseline(baseline._i);
+                 
+                 debugInfo += "✅ Baseline set successfully!\n";
+                 
+                 // Verify the baseline was set
+                 try
+                 {
+                     var newBaseline = this._i.GetBaseline();
+                     debugInfo += $"✅ Verification: New baseline exists: {newBaseline != null}\n";
+                 }
+                 catch (Exception verifyEx)
+                 {
+                     debugInfo += $"⚠️ Could not verify baseline was set: {verifyEx.Message}\n";
+                 }
+                 
+                 // Output debug info to console (as per workspace rules)
+                 System.Diagnostics.Debug.WriteLine(debugInfo);
+                 
+                 return new Dictionary<string, object>
+                 {
+                     ["Success"] = true,
+                     ["DebugInfo"] = debugInfo
+                 };
+             }
+             catch (Exception ex)
+             {
+                 debugInfo += $"❌ Error during baseline setting: {ex.Message}\n";
+                 debugInfo += $"🔍 Error Type: {ex.GetType().Name}\n";
+                 debugInfo += $"📋 Stack Trace: {ex.StackTrace}\n\n";
+                 debugInfo += "💡 Troubleshooting Tips:\n";
+                 debugInfo += "1. Check if object has dependent objects (e.g., Roof) - baseline cannot be edited\n";
+                 debugInfo += "2. Verify the baseline curve is valid and properly constructed\n";
+                 debugInfo += "3. Ensure the object supports IBaseline2DObject interface\n";
+                 debugInfo += "4. Check if you're in an operation context\n";
+                 debugInfo += "5. Verify the baseline is in the correct coordinate system\n";
+                 
+                 // Output debug info to console (as per workspace rules)
+                 System.Diagnostics.Debug.WriteLine(debugInfo);
+                 
+                 return new Dictionary<string, object>
+                 {
+                     ["Success"] = false,
+                     ["DebugInfo"] = debugInfo
+                 };
+             }
         }
 
         /// <summary>
@@ -165,8 +243,10 @@ namespace DynRenga.RengaAPI
         /// </summary>
         /// <param name="placement2D">A coordinate system to which the 2D baseline will be transformed</param>
         /// <param name="baselineInCS">New baseline of the object in the specified coordinate system</param>
+        /// <returns>Dictionary with Success status and DebugInfo</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public void SetBaselineInCS(DynRenga.DynGeometry.Placement2D placement2D, Curve2D baselineInCS)
+        [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
+        public Dictionary<string, object> SetBaselineInCS(DynRenga.DynGeometry.Placement2D placement2D, Curve2D baselineInCS)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("IBaseline2DObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -177,14 +257,103 @@ namespace DynRenga.RengaAPI
             if (baselineInCS == null)
                 throw new ArgumentNullException(nameof(baselineInCS), "BaselineInCS cannot be null");
             
-            try
-            {
-                this._i.SetBaselineInCS(placement2D.ToRengaPlacement2D(), baselineInCS._i);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to set baseline in coordinate system: {ex.Message}", ex);
-            }
+            var debugInfo = "🔧 IBaseline2DObject.SetBaselineInCS Debug Info:\n";
+            debugInfo += $"✅ Interface initialized: {IsInitialized()}\n";
+            debugInfo += $"✅ Placement2D parameter: {placement2D != null}\n";
+            debugInfo += $"✅ BaselineInCS parameter: {baselineInCS != null}\n";
+            
+             try
+             {
+                 // Check if baseline can be set
+                 var canSet = CanSetBaseline();
+                 debugInfo += $"✅ Can set baseline: {canSet}\n";
+                 
+                 if (!canSet)
+                 {
+                     debugInfo += "⚠️ Warning: Baseline may not be editable (object has dependent objects)\n";
+                 }
+                 
+                 // Get current baseline for comparison
+                 try
+                 {
+                     var currentBaseline = this._i.GetBaseline();
+                     debugInfo += $"✅ Current baseline exists: {currentBaseline != null}\n";
+                 }
+                 catch (Exception getEx)
+                 {
+                     debugInfo += $"⚠️ Could not get current baseline: {getEx.Message}\n";
+                 }
+                 
+                 // Validate baseline parameter
+                 try
+                 {
+                     var baselineValid = IsBaselineValid(baselineInCS);
+                     debugInfo += $"✅ Baseline parameter valid: {baselineValid}\n";
+                 }
+                 catch (Exception validEx)
+                 {
+                     debugInfo += $"⚠️ Could not validate baseline: {validEx.Message}\n";
+                 }
+                 
+                 // Validate placement2D parameter
+                 try
+                 {
+                     var rengaPlacement = placement2D.ToRengaPlacement2D();
+                     debugInfo += $"✅ Placement2D conversion successful\n";
+                 }
+                 catch (Exception placementEx)
+                 {
+                     debugInfo += $"⚠️ Could not convert Placement2D: {placementEx.Message}\n";
+                 }
+                 
+                 debugInfo += "🚀 Attempting to set baseline in coordinate system...\n";
+                 
+                 this._i.SetBaselineInCS(placement2D.ToRengaPlacement2D(), baselineInCS._i);
+                 
+                 debugInfo += "✅ Baseline set in coordinate system successfully!\n";
+                 
+                 // Verify the baseline was set
+                 try
+                 {
+                     var newBaseline = this._i.GetBaseline();
+                     debugInfo += $"✅ Verification: New baseline exists: {newBaseline != null}\n";
+                 }
+                 catch (Exception verifyEx)
+                 {
+                     debugInfo += $"⚠️ Could not verify baseline was set: {verifyEx.Message}\n";
+                 }
+                 
+                 // Output debug info to console (as per workspace rules)
+                 System.Diagnostics.Debug.WriteLine(debugInfo);
+                 
+                 return new Dictionary<string, object>
+                 {
+                     ["Success"] = true,
+                     ["DebugInfo"] = debugInfo
+                 };
+             }
+             catch (Exception ex)
+             {
+                 debugInfo += $"❌ Error during baseline setting in coordinate system: {ex.Message}\n";
+                 debugInfo += $"🔍 Error Type: {ex.GetType().Name}\n";
+                 debugInfo += $"📋 Stack Trace: {ex.StackTrace}\n\n";
+                 debugInfo += "💡 Troubleshooting Tips:\n";
+                 debugInfo += "1. Check if object has dependent objects (e.g., Roof) - baseline cannot be edited\n";
+                 debugInfo += "2. Verify the baseline curve is valid and properly constructed\n";
+                 debugInfo += "3. Ensure the Placement2D coordinate system is valid\n";
+                 debugInfo += "4. Check if you're in an operation context\n";
+                 debugInfo += "5. Verify the baseline is in the correct coordinate system\n";
+                 debugInfo += "6. Ensure the object supports IBaseline2DObject interface\n";
+                 
+                 // Output debug info to console (as per workspace rules)
+                 System.Diagnostics.Debug.WriteLine(debugInfo);
+                 
+                 return new Dictionary<string, object>
+                 {
+                     ["Success"] = false,
+                     ["DebugInfo"] = debugInfo
+                 };
+             }
         }
 
         #endregion

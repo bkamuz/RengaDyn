@@ -158,6 +158,42 @@ namespace DynRenga.RengaAPI
             }
         }
 
+        /// <summary>
+        /// Gets the host object ID (level ID for level-based objects)
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public int HostObjectId
+        {
+            get
+            {
+                if (this._i == null) 
+                    throw new InvalidOperationException("ModelObject interface is not initialized.");
+                
+                try
+                {
+                    // Try to get ILevelObject interface to access LevelId
+                    var levelObject = this._i.GetInterfaceByName("ILevelObject");
+                    if (levelObject != null)
+                    {
+                        var levelInterface = levelObject as Renga.ILevelObject;
+                        if (levelInterface != null)
+                        {
+                            return levelInterface.LevelId;
+                        }
+                    }
+                    
+                    // If not a level-based object, return -1
+                    return -1;
+                }
+                catch (Exception ex)
+                {
+                    // If there's an error accessing the level interface, return -1
+                    System.Diagnostics.Debug.WriteLine($"Failed to get host object ID: {ex.Message}");
+                    return -1;
+                }
+            }
+        }
+
         #endregion
 
         #region IModelObject Methods
@@ -298,7 +334,8 @@ namespace DynRenga.RengaAPI
                     { "ObjectType", ObjectType },
                     { "ObjectTypeS", ObjectTypeS },
                     { "UniqueId", UniqueId },
-                    { "UniqueIdS", UniqueIdS }
+                    { "UniqueIdS", UniqueIdS },
+                    { "HostObjectId", HostObjectId }
                 };
             }
             catch (Exception ex)
@@ -312,7 +349,8 @@ namespace DynRenga.RengaAPI
                     { "ObjectType", Guid.Empty },
                     { "ObjectTypeS", "Error" },
                     { "UniqueId", Guid.Empty },
-                    { "UniqueIdS", "Error" }
+                    { "UniqueIdS", "Error" },
+                    { "HostObjectId", -1 }
                 };
             }
         }
@@ -346,6 +384,68 @@ namespace DynRenga.RengaAPI
                 return false;
             
             return ObjectTypeS.Equals(objectTypeString, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Gets detailed host object information including level details
+        /// </summary>
+        /// <returns>Dictionary with host object information</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public Dictionary<string, object> GetHostObjectInfo()
+        {
+            if (this._i == null) 
+                throw new InvalidOperationException("ModelObject interface is not initialized.");
+            
+            try
+            {
+                var hostObjectInfo = new Dictionary<string, object>
+                {
+                    { "HostObjectId", HostObjectId },
+                    { "HasHostObject", HostObjectId != -1 },
+                    { "IsLevelBased", false },
+                    { "LevelId", -1 },
+                    { "ElevationAboveLevel", 0.0 },
+                    { "PlacementElevation", 0.0 },
+                    { "VerticalOffset", 0.0 }
+                };
+                
+                // Try to get detailed level information
+                if (HostObjectId != -1)
+                {
+                    try
+                    {
+                        var levelObject = this._i.GetInterfaceByName("ILevelObject");
+                        if (levelObject != null)
+                        {
+                            var levelInterface = levelObject as Renga.ILevelObject;
+                            if (levelInterface != null)
+                            {
+                                hostObjectInfo["IsLevelBased"] = true;
+                                hostObjectInfo["LevelId"] = levelInterface.LevelId;
+                                hostObjectInfo["ElevationAboveLevel"] = levelInterface.ElevationAboveLevel;
+                                hostObjectInfo["PlacementElevation"] = levelInterface.PlacementElevation;
+                                hostObjectInfo["VerticalOffset"] = levelInterface.VerticalOffset;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        hostObjectInfo["LevelError"] = ex.Message;
+                    }
+                }
+                
+                return hostObjectInfo;
+            }
+            catch (Exception ex)
+            {
+                return new Dictionary<string, object>
+                {
+                    { "HostObjectId", -1 },
+                    { "HasHostObject", false },
+                    { "IsLevelBased", false },
+                    { "Error", ex.Message }
+                };
+            }
         }
 
         /// <summary>

@@ -62,6 +62,7 @@ namespace DynRenga.RengaAPI
                 
                 try
                 {
+                    // Only set TypeId - let Renga handle TypeIdS synchronization internally
                     this._i.TypeId = value;
                 }
                 catch (Exception ex)
@@ -101,6 +102,7 @@ namespace DynRenga.RengaAPI
                 
                 try
                 {
+                    // Only set TypeIdS - let Renga handle TypeId synchronization internally
                     this._i.TypeIdS = value;
                 }
                 catch (Exception ex)
@@ -331,6 +333,7 @@ namespace DynRenga.RengaAPI
                 var debugInfo = $"--- INewEntityArgs Debug Info ---\n";
                 debugInfo += $"Type ID: {this.TypeId}\n";
                 debugInfo += $"Type ID (String): {this.TypeIdS}\n";
+                debugInfo += $"Type ID Match: {(this.TypeId.ToString() == this.TypeIdS ? "✅" : "❌")}\n";
                 debugInfo += $"Category ID: {this.CategoryId}\n";
                 debugInfo += $"Host Object ID: {this.HostObjectId}\n";
                 debugInfo += $"Placement3D: Origin=({this.Placement3D.Origin.X}, {this.Placement3D.Origin.Y}, {this.Placement3D.Origin.Z})\n";
@@ -436,7 +439,8 @@ namespace DynRenga.RengaAPI
             
             try
             {
-                this.TypeId = typeId;
+                // Only set TypeId - let Renga handle TypeIdS synchronization internally
+                this._i.TypeId = typeId;
                 return this;
             }
             catch (Exception ex)
@@ -462,8 +466,8 @@ namespace DynRenga.RengaAPI
             try
             {
                 // Use the StyleTypes class to get the GUID by name
-                var typeId = DynRenga.RengaAPI.StyleTypes.StyleTypes.GetStyleTypeByName(typeIdName);
-                if (typeId == DynRenga.RengaAPI.StyleTypes.StyleTypes.Undefined)
+                var typeId = DynRenga.RengaAPI.Constants.StyleTypes.GetStyleTypeByName(typeIdName);
+                if (typeId == DynRenga.RengaAPI.Constants.StyleTypes.Undefined)
                     throw new ArgumentException($"Unknown style type name: {typeIdName}", nameof(typeIdName));
                 
                 this.TypeId = typeId;
@@ -472,6 +476,170 @@ namespace DynRenga.RengaAPI
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Failed to set type ID by name '{typeIdName}': {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Sets the host object ID and returns the updated instance for chaining
+        /// </summary>
+        /// <param name="hostObjectId">The ID of the host object (e.g., level ID for walls, wall ID for windows/doors)</param>
+        /// <returns>Updated INewEntityArgs instance for method chaining</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public INewEntityArgs SetHostObjectId(int hostObjectId)
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            try
+            {
+                this.HostObjectId = hostObjectId;
+                return this;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to set host object ID: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Forces synchronization of TypeId and TypeIdS properties
+        /// Aggressively fixes mismatches where TypeIdS has a valid GUID but TypeId is empty
+        /// </summary>
+        /// <returns>Updated INewEntityArgs instance for method chaining</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public INewEntityArgs ForceTypeIdSynchronization()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            try
+            {
+                // Get current values
+                var currentTypeId = this._i.TypeId;
+                var currentTypeIdS = this._i.TypeIdS;
+                
+                System.Diagnostics.Debug.WriteLine($"ForceTypeIdSynchronization - Before: TypeId={currentTypeId}, TypeIdS={currentTypeIdS}");
+                
+                // Aggressively fix the specific case: TypeIdS has valid GUID, TypeId is empty
+                if (currentTypeId == Guid.Empty && !string.IsNullOrEmpty(currentTypeIdS) && Guid.TryParse(currentTypeIdS, out Guid parsedGuid))
+                {
+                    // TypeIdS is valid but TypeId is empty - force sync TypeId from TypeIdS
+                    System.Diagnostics.Debug.WriteLine($"Detected TypeIdS={currentTypeIdS} but TypeId={currentTypeId} - forcing sync");
+                    
+                    // Try multiple approaches to force the sync
+                    try
+                    {
+                        this._i.TypeId = parsedGuid;
+                        System.Diagnostics.Debug.WriteLine($"Set TypeId directly: {parsedGuid}");
+                    }
+                    catch (Exception ex1)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Direct TypeId set failed: {ex1.Message}");
+                        
+                        // Try alternative approach - set TypeIdS again to trigger internal sync
+                        try
+                        {
+                            this._i.TypeIdS = currentTypeIdS;
+                            System.Diagnostics.Debug.WriteLine($"Reset TypeIdS to trigger sync: {currentTypeIdS}");
+                        }
+                        catch (Exception ex2)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"TypeIdS reset failed: {ex2.Message}");
+                        }
+                    }
+                }
+                else if (currentTypeId != Guid.Empty && currentTypeId.ToString() != currentTypeIdS)
+                {
+                    // TypeId is valid but TypeIdS doesn't match - sync TypeIdS from TypeId
+                    this._i.TypeIdS = currentTypeId.ToString();
+                    System.Diagnostics.Debug.WriteLine($"Synced TypeIdS from TypeId: {currentTypeId}");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("No synchronization needed - both properties are consistent");
+                }
+                
+                // Verify final synchronization
+                var finalTypeId = this._i.TypeId;
+                var finalTypeIdS = this._i.TypeIdS;
+                System.Diagnostics.Debug.WriteLine($"ForceTypeIdSynchronization - After: TypeId={finalTypeId}, TypeIdS={finalTypeIdS}");
+                
+                return this;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to force TypeId synchronization: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Creates a new INewEntityArgs with the same values but fresh COM object
+        /// This can help resolve synchronization issues with the original object
+        /// </summary>
+        /// <returns>New INewEntityArgs instance with synchronized properties</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public INewEntityArgs CreateFreshCopy()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            try
+            {
+                // Get current values
+                var currentTypeId = this.TypeId;
+                var currentTypeIdS = this.TypeIdS;
+                var currentCategoryId = this.CategoryId;
+                var currentHostObjectId = this.HostObjectId;
+                var currentPlacement3D = this.Placement3D;
+                
+                System.Diagnostics.Debug.WriteLine($"CreateFreshCopy - Original: TypeId={currentTypeId}, TypeIdS={currentTypeIdS}");
+                
+                // Create a new INewEntityArgs from the same source
+                var newArgs = new INewEntityArgs(this._i);
+                
+                // Set all properties fresh
+                if (currentTypeId != Guid.Empty)
+                {
+                    newArgs.TypeId = currentTypeId;
+                }
+                else if (!string.IsNullOrEmpty(currentTypeIdS) && Guid.TryParse(currentTypeIdS, out Guid parsedGuid))
+                {
+                    newArgs.TypeId = parsedGuid;
+                }
+                
+                newArgs.CategoryId = currentCategoryId;
+                newArgs.HostObjectId = currentHostObjectId;
+                newArgs.Placement3D = currentPlacement3D;
+                
+                System.Diagnostics.Debug.WriteLine($"CreateFreshCopy - New: TypeId={newArgs.TypeId}, TypeIdS={newArgs.TypeIdS}");
+                
+                return newArgs;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to create fresh copy: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Sets the category ID and returns the updated instance for chaining
+        /// </summary>
+        /// <param name="categoryId">The category ID for the entity (use 0 for default category)</param>
+        /// <returns>Updated INewEntityArgs instance for method chaining</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public INewEntityArgs SetCategoryId(int categoryId)
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            try
+            {
+                this.CategoryId = categoryId;
+                return this;
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to set category ID: {ex.Message}", ex);
             }
         }
 

@@ -137,51 +137,80 @@ namespace DynRenga.RengaAPI
 
         #region IModel Methods
 
+
         /// <summary>
-        /// Creates arguments for creating a new entity
+        /// Creates a new model object using direct COM interface manipulation
+        /// This method bypasses wrapper layers to ensure proper TypeId synchronization
         /// </summary>
-        /// <returns>INewEntityArgs object for creating new entities</returns>
+        /// <param name="typeId">The object type ID (required)</param>
+        /// <param name="hostObjectId">The host object ID (optional, -1 to skip)</param>
+        /// <param name="categoryId">The category ID (optional, -1 to skip)</param>
+        /// <returns>Dictionary with ModelObject, DebugInfo, and Success status</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public INewEntityArgs CreateNewEntityArgs()
+        [dr.MultiReturn(new[] { "ModelObject", "DebugInfo", "Success" })]
+        public Dictionary<string, object> CreateObject(Guid typeId, int hostObjectId = -1, int categoryId = -1)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("Model interface is not initialized. Please check that Renga is running and a project is loaded.");
             
+            var debugInfo = new System.Text.StringBuilder();
+            debugInfo.AppendLine("🔧 IModel.CreateObject Debug Info:");
+            
             try
             {
+                // Create INewEntityArgs directly on COM interface
                 var rengaNewEntityArgs = this._i.CreateNewEntityArgs();
-                return new INewEntityArgs(rengaNewEntityArgs);
+                debugInfo.AppendLine($"COM INewEntityArgs created: {rengaNewEntityArgs != null}");
+                
+                // Set TypeId directly on COM interface
+                rengaNewEntityArgs.TypeId = typeId;
+                debugInfo.AppendLine($"TypeId set directly on COM: {typeId}");
+                debugInfo.AppendLine($"TypeId after setting: {rengaNewEntityArgs.TypeId}");
+                debugInfo.AppendLine($"TypeIdS after setting: {rengaNewEntityArgs.TypeIdS}");
+                
+                // Set other properties if provided
+                if (hostObjectId != -1)
+                {
+                    rengaNewEntityArgs.HostObjectId = hostObjectId;
+                    debugInfo.AppendLine($"HostObjectId set: {hostObjectId}");
+                }
+                
+                if (categoryId != -1)
+                {
+                    rengaNewEntityArgs.CategoryId = categoryId;
+                    debugInfo.AppendLine($"CategoryId set: {categoryId}");
+                }
+                
+                // Create the model object directly
+                debugInfo.AppendLine("🚀 Attempting direct COM object creation...");
+                var rengaModelObject = this._i.CreateObject(rengaNewEntityArgs);
+                debugInfo.AppendLine($"✅ Direct COM object creation successful: {rengaModelObject != null}");
+                
+                // Wrap the result
+                var modelObject = new IModelObject(rengaModelObject);
+                
+                return new Dictionary<string, object>
+                {
+                    ["ModelObject"] = modelObject,
+                    ["DebugInfo"] = debugInfo.ToString(),
+                    ["Success"] = true
+                };
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Failed to create new entity args: {ex.Message}", ex);
+                debugInfo.AppendLine($"❌ Direct COM object creation failed: {ex.Message}");
+                debugInfo.AppendLine($"🔍 Error Type: {ex.GetType().Name}");
+                debugInfo.AppendLine($"📋 Stack Trace: {ex.StackTrace}");
+                
+                return new Dictionary<string, object>
+                {
+                    ["ModelObject"] = null,
+                    ["DebugInfo"] = debugInfo.ToString(),
+                    ["Success"] = false
+                };
             }
         }
 
-        /// <summary>
-        /// Creates a new model object
-        /// </summary>
-        /// <param name="args">Arguments for creating the model object</param>
-        /// <returns>Created IModelObject instance</returns>
-        [dr.IsVisibleInDynamoLibrary(true)]
-        public ModelObject CreateObject(object args)
-        {
-            if (this._i == null) 
-                throw new InvalidOperationException("Model interface is not initialized. Please check that Renga is running and a project is loaded.");
-            
-            if (args == null)
-                throw new ArgumentNullException(nameof(args), "Entity args cannot be null.");
-            
-            try
-            {
-                var modelObject = this._i.CreateObject(args as Renga.INewEntityArgs);
-                return new ModelObject(modelObject);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Failed to create model object: {ex.Message}", ex);
-            }
-        }
 
         /// <summary>
         /// Creates an operation (deprecated - use IProject::CreateOperation instead)
