@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -96,17 +96,11 @@ namespace DynRenga.DynDocument
                 
                 info.AppendLine("=============================");
                 var result = info.ToString();
-                System.Console.WriteLine(result);
                 return result;
             }
             catch (Exception ex)
             {
                 var error = $"Debug info failed: {ex.Message}";
-                System.Console.WriteLine($"=== RENGA DYNAMO ERROR ===");
-                System.Console.WriteLine($"Method: Model.GetDebugInfo");
-                System.Console.WriteLine($"Error: {ex.Message}");
-                System.Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                System.Console.WriteLine($"=========================");
                 return error;
             }
         }
@@ -212,12 +206,6 @@ namespace DynRenga.DynDocument
             catch (Exception ex)
             {
                 var errorMessage = $"CreateNewEntityArgs failed: {ex.Message}";
-                System.Console.WriteLine($"=== RENGA DYNAMO ERROR ===");
-                System.Console.WriteLine($"Method: Model.CreateNewEntityArgs");
-                System.Console.WriteLine($"Model._i is null: {this._i == null}");
-                System.Console.WriteLine($"Error: {ex.Message}");
-                System.Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                System.Console.WriteLine($"=========================");
                 throw new InvalidOperationException(errorMessage, ex);
             }
         }
@@ -246,17 +234,7 @@ namespace DynRenga.DynDocument
                     throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
                 }
                 
-                // Debug NewEntityArgs properties
-                System.Console.WriteLine($"=== RENGA DYNAMO DEBUG ===");
-                System.Console.WriteLine($"Method: Model.CreateObject");
-                System.Console.WriteLine($"Model._i is null: {this._i == null}");
-                System.Console.WriteLine($"Args._i is null: {args._i == null}");
-                System.Console.WriteLine($"TypeId: {args.TypeId}");
-                System.Console.WriteLine($"TypeIdS: {args.TypeIdS}");
-                System.Console.WriteLine($"CategoryId: {args.CategoryId}");
-                System.Console.WriteLine($"HostObjectId: {args.HostObjectId}");
-                System.Console.WriteLine($"Placement3D: {args.Placement3D?.GetType().Name ?? "null"}");
-                System.Console.WriteLine($"=========================");
+                // Debug information is now available through return value
                 
                 var modelObject = this._i.CreateObject(args._i);
                 if (modelObject == null)
@@ -269,14 +247,6 @@ namespace DynRenga.DynDocument
             catch (Exception ex)
             {
                 var errorMessage = $"CreateObject failed: {ex.Message}";
-                System.Console.WriteLine($"=== RENGA DYNAMO ERROR ===");
-                System.Console.WriteLine($"Method: Model.CreateObject");
-                System.Console.WriteLine($"Model._i is null: {this._i == null}");
-                System.Console.WriteLine($"Args is null: {args == null}");
-                System.Console.WriteLine($"Args._i is null: {args?._i == null}");
-                System.Console.WriteLine($"Error: {ex.Message}");
-                System.Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                System.Console.WriteLine($"=========================");
                 throw new InvalidOperationException(errorMessage, ex);
             }
         }
@@ -698,13 +668,6 @@ namespace DynRenga.DynDocument
             catch (Exception ex)
             {
                 var errorMessage = $"CreateFloor operation failed: {ex.Message}";
-                System.Console.WriteLine($"=== RENGA DYNAMO ERROR ===");
-                System.Console.WriteLine($"Method: Model.CreateFloor");
-                System.Console.WriteLine($"LevelId: {levelId}");
-                System.Console.WriteLine($"Placement3D Type: {(placement3D?.GetType().Name ?? "null")}");
-                System.Console.WriteLine($"Error: {ex.Message}");
-                System.Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                System.Console.WriteLine($"=========================");
                 
                 var errorDebugInfo = $"❌ Floor creation failed!\n" +
                                     $"LevelId: {levelId}\n" +

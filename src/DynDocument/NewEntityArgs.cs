@@ -75,12 +75,6 @@ namespace DynRenga.DynDocument
                 // Handle both DynRenga.DynGeometry.Placement3D wrapper and direct Renga.Placement3D
                 if (value is DynRenga.DynGeometry.Placement3D dynPlacement)
                 {
-                    System.Console.WriteLine($"=== RENGA DYNAMO DEBUG ===");
-                    System.Console.WriteLine($"Method: NewEntityArgs.Placement3D setter");
-                    System.Console.WriteLine($"Input Type: DynRenga.DynGeometry.Placement3D");
-                    System.Console.WriteLine($"DynPlacement._i is null: {dynPlacement._i == null}");
-                    System.Console.WriteLine($"DynPlacement._placement is default: {dynPlacement._placement.Equals(default(Renga.Placement3D))}");
-                    System.Console.WriteLine($"=========================");
                     
                     // Use the struct if available, otherwise try the COM interface
                     if (!dynPlacement._placement.Equals(default(Renga.Placement3D)))
@@ -99,19 +93,11 @@ namespace DynRenga.DynDocument
                 else if (value is Renga.Placement3D rengaPlacement)
                 {
                     // Direct Renga.Placement3D struct
-                    System.Console.WriteLine($"=== RENGA DYNAMO DEBUG ===");
-                    System.Console.WriteLine($"Method: NewEntityArgs.Placement3D setter");
-                    System.Console.WriteLine($"Input Type: Renga.Placement3D (direct)");
-                    System.Console.WriteLine($"=========================");
                     this._i.Placement3D = rengaPlacement;
                 }
                 else
                 {
                     // Try direct cast as fallback
-                    System.Console.WriteLine($"=== RENGA DYNAMO DEBUG ===");
-                    System.Console.WriteLine($"Method: NewEntityArgs.Placement3D setter");
-                    System.Console.WriteLine($"Input Type: {value?.GetType().Name ?? "null"} (fallback cast)");
-                    System.Console.WriteLine($"=========================");
                     this._i.Placement3D = (Renga.Placement3D)value;
                 }
             }
