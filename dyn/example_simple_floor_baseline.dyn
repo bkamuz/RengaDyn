@@ -1,7 +1,7 @@
 {
-  "Uuid": "12345678-1234-1234-1234-123456789abc",
+  "Uuid": "87654321-4321-4321-4321-210987654321",
   "IsCustomNode": false,
-  "Description": "Simple example showing how to create a floor with baseline in one step",
+  "Description": "Simple example: Create floor with baseline using C++ style workflow",
   "Name": "Simple Floor with Baseline",
   "ElementResolver": {
     "ResolutionMap": {}
@@ -9,335 +9,558 @@
   "NodeLibraryDependencies": [
     {
       "Name": "DynamoCoreNodes",
-      "Version": "2.12.1.8246"
+      "Version": "2.12.0.0",
+      "ReferenceType": "Package"
     },
     {
       "Name": "RengaDynMain",
-      "Version": "1.0.0.0"
+      "Version": "1.0.0.0",
+      "ReferenceType": "Package"
     }
   ],
-  "Connectors": [],
-  "Nodes": [
-    {
-      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
-      "NodeType": "Dynamo.Nodes.DoubleInput",
-      "Id": "12345678-1234-1234-1234-123456789001",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789002",
-          "Name": "",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Floor origin X",
-      "X": 100,
-      "Y": 100,
-      "Name": "Number",
+  "Version": "2.12.0.0",
+  "View": {
+    "Dynamo": {
+      "Version": "2.12.0.0",
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "X": 0.0,
+      "Y": 0.0,
+      "Width": 1000.0,
+      "Height": 600.0,
+      "Name": "Simple Floor with Baseline",
       "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "Value": "0.0"
+      "IsSetAsOutput": false
     },
-    {
-      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
-      "NodeType": "Dynamo.Nodes.DoubleInput",
-      "Id": "12345678-1234-1234-1234-123456789003",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789004",
-          "Name": "",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Floor origin Y",
-      "X": 100,
-      "Y": 150,
-      "Name": "Number",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "Value": "0.0"
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -30.0,
+      "EyeY": -30.0,
+      "EyeZ": 30.0,
+      "LookX": 0.0,
+      "LookY": 0.0,
+      "LookZ": 0.0,
+      "UpX": 0.0,
+      "UpY": 0.0,
+      "UpZ": 1.0
     },
-    {
-      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
-      "NodeType": "Dynamo.Nodes.DoubleInput",
-      "Id": "12345678-1234-1234-1234-123456789005",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789006",
-          "Name": "",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Floor origin Z",
-      "X": 100,
-      "Y": 200,
-      "Name": "Number",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "Value": "0.0"
-    },
-    {
-      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
-      "NodeType": "Dynamo.Nodes.Function",
-      "Id": "12345678-1234-1234-1234-123456789007",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789008",
-          "Name": "Placement3D",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
+    "Connectors": [
+      {
+        "Start": "87654321-4321-4321-4321-210987654001",
+        "End": "87654321-4321-4321-4321-210987654002",
+        "Id": "87654321-4321-4321-4321-210987654100",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "87654321-4321-4321-4321-210987654003",
+        "End": "87654321-4321-4321-4321-210987654004",
+        "Id": "87654321-4321-4321-4321-210987654101",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "87654321-4321-4321-4321-210987654005",
+        "End": "87654321-4321-4321-4321-210987654006",
+        "Id": "87654321-4321-4321-4321-210987654102",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "87654321-4321-4321-4321-210987654007",
+        "End": "87654321-4321-4321-4321-210987654008",
+        "Id": "87654321-4321-4321-4321-210987654103",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "87654321-4321-4321-4321-210987654009",
+        "End": "87654321-4321-4321-4321-210987654010",
+        "Id": "87654321-4321-4321-4321-210987654104",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "87654321-4321-4321-4321-210987654011",
+        "End": "87654321-4321-4321-4321-210987654012",
+        "Id": "87654321-4321-4321-4321-210987654105",
+        "IsHidden": false,
+        "ZIndex": 0
+      }
+    ],
+    "Nodes": [
+      {
+        "Id": "87654321-4321-4321-4321-210987654001",
+        "Name": "Code Block",
+        "X": 50.0,
+        "Y": 50.0,
+        "Width": 150.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654001_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
         },
-        {
-          "Id": "12345678-1234-1234-1234-123456789009",
-          "Name": "DebugInfo",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Create Placement3D for floor",
-      "X": 300,
-      "Y": 150,
-      "Name": "Placement3D.ByOrigin",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "FunctionSignature": "Placement3D.ByOrigin(double,double,double)"
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
-      "NodeType": "Dynamo.Nodes.IntegerSlider",
-      "Id": "12345678-1234-1234-1234-123456789010",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789011",
-          "Name": "",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Level ID for floor",
-      "X": 100,
-      "Y": 300,
-      "Name": "Integer Slider",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "Value": "100013"
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
-      "NodeType": "Dynamo.Nodes.DoubleInput",
-      "Id": "12345678-1234-1234-1234-123456789012",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789013",
-          "Name": "",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Baseline start X",
-      "X": 100,
-      "Y": 400,
-      "Name": "Number",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "Value": "0.0"
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
-      "NodeType": "Dynamo.Nodes.DoubleInput",
-      "Id": "12345678-1234-1234-1234-123456789014",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789015",
-          "Name": "",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Baseline start Y",
-      "X": 100,
-      "Y": 450,
-      "Name": "Number",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "Value": "0.0"
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
-      "NodeType": "Dynamo.Nodes.DoubleInput",
-      "Id": "12345678-1234-1234-1234-123456789016",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789017",
-          "Name": "",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Baseline end X",
-      "X": 100,
-      "Y": 500,
-      "Name": "Number",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "Value": "5.0"
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.DoubleInput, CoreNodeModels",
-      "NodeType": "Dynamo.Nodes.DoubleInput",
-      "Id": "12345678-1234-1234-1234-123456789018",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789019",
-          "Name": "",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Baseline end Y",
-      "X": 100,
-      "Y": 550,
-      "Name": "Number",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "Value": "0.0"
-    },
-    {
-      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
-      "NodeType": "Dynamo.Nodes.Function",
-      "Id": "12345678-1234-1234-1234-123456789020",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789021",
-          "Name": "Curve2D",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Create baseline curve",
-      "X": 300,
-      "Y": 450,
-      "Name": "Curve2D.ByLineSegment",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "FunctionSignature": "Curve2D.ByLineSegment(double,double,double,double)"
-    },
-    {
-      "ConcreteType": "Dynamo.Nodes.Function, DSFunctionNode",
-      "NodeType": "Dynamo.Nodes.Function",
-      "Id": "12345678-1234-1234-1234-123456789022",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "12345678-1234-1234-1234-123456789023",
-          "Name": "Floor",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
+        "Description": "Start point for baseline",
+        "Code": "0.0;"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654002",
+        "Name": "Curve2D.ByLineSegment",
+        "X": 250.0,
+        "Y": 50.0,
+        "Width": 200.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654002_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "87654321-4321-4321-4321-210987654002_in_1",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654002_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
         },
-        {
-          "Id": "12345678-1234-1234-1234-123456789024",
-          "Name": "DebugInfo",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": true
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Create floor with baseline in one step",
-      "X": 500,
-      "Y": 300,
-      "Name": "Model.CreateFloorWithBaseline",
-      "IsSetAsInput": false,
-      "IsSetAsOutput": false,
-      "ShowGeometry": true,
-      "Excluded": false,
-      "FunctionSignature": "Model.CreateFloorWithBaseline(int,object,object)"
-    }
-  ],
-  "Annotations": [
-    {
-      "Id": "12345678-1234-1234-1234-123456789025",
-      "Title": "Simple Floor with Baseline - One Step Creation",
-      "DescriptionText": "This example shows the streamlined approach to creating a floor with a baseline:\n\n🚀 **SIMPLIFIED WORKFLOW:**\n\n### **Method 1: One-Step Creation (Recommended)**\n1. **Placement3D.ByOrigin()** - Create 3D placement\n2. **Curve2D.ByLineSegment()** - Create 2D baseline curve\n3. **Model.CreateFloorWithBaseline()** - Create floor AND set baseline in one step\n\n### **Method 2: Two-Step Creation**\n1. **Model.CreateFloor()** - Create floor first\n2. **Baseline2DObject.ByModelObject()** - Get baseline interface\n3. **Baseline2DObject.SetBaseline()** - Set baseline separately\n\n🔧 **Key Features:**\n\n- **CreateFloorWithBaseline()** - New method that combines floor creation and baseline setting\n- **Automatic baseline detection** - Checks if floor supports baselines\n- **Error handling** - Graceful handling if baseline cannot be set\n- **Debug information** - Shows success/failure status for both operations\n\n✅ **Expected Results:**\n\n```\n✅ Floor created successfully!\nLevelId: 100013\nPlacement3D Type: Placement3D\nModel._i is null: False\nFloor ID: 100051\n✅ Baseline set successfully to floor ID: 100051\n```\n\n⚠️ **Important Notes:**\n\n- **Not all objects support baselines** - Some floors may not support baseline editing\n- **Baseline must be Curve2D** - Use proper 2D curve creation methods\n- **Baseline is in object's CS** - Baseline is set in floor's own coordinate system\n- **Optional parameter** - Baseline parameter is optional (can be null)\n\n🎯 **When to Use Each Method:**\n\n- **Use CreateFloorWithBaseline()** - When you want to create floor and set baseline together\n- **Use separate steps** - When you need more control over the process\n- **Use CreateFloor() only** - When you don't need a baseline",
-      "X": 50,
-      "Y": 50,
-      "Width": 600,
-      "Height": 700,
-      "TextblockHeight": 600,
-      "Background": "#FFDCDCDC",
-      "FontSize": 14,
-      "NodeIds": [
-        "12345678-1234-1234-1234-123456789001",
-        "12345678-1234-1234-1234-123456789003",
-        "12345678-1234-1234-1234-123456789005",
-        "12345678-1234-1234-1234-123456789007",
-        "12345678-1234-1234-1234-123456789010",
-        "12345678-1234-1234-1234-123456789012",
-        "12345678-1234-1234-1234-123456789014",
-        "12345678-1234-1234-1234-123456789016",
-        "12345678-1234-1234-1234-123456789018",
-        "12345678-1234-1234-1234-123456789020",
-        "12345678-1234-1234-1234-123456789022"
-      ],
-      "InitialTop": 50,
-      "InitialHeight": 700
-    }
-  ],
-  "X": 0,
-  "Y": 0,
-  "Zoom": 1
+        "Description": "Create 2D line segment for baseline"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654003",
+        "Name": "Code Block",
+        "X": 50.0,
+        "Y": 200.0,
+        "Width": 150.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654003_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Level ID",
+        "Code": "1;"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654004",
+        "Name": "Placement3D.ByOrigin",
+        "X": 250.0,
+        "Y": 200.0,
+        "Width": 200.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654004_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654004_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Create 3D placement"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654005",
+        "Name": "Code Block",
+        "X": 50.0,
+        "Y": 350.0,
+        "Width": 150.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654005_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Origin point",
+        "Code": "Point.ByCoordinates(0, 0, 0);"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654006",
+        "Name": "Model.ByProject",
+        "X": 250.0,
+        "Y": 350.0,
+        "Width": 200.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654006_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654006_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Get Renga model"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654007",
+        "Name": "Code Block",
+        "X": 50.0,
+        "Y": 500.0,
+        "Width": 150.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654007_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "End point for baseline",
+        "Code": "1000.0;"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654008",
+        "Name": "Model.CreateFloorWithBaselineCppStyle",
+        "X": 500.0,
+        "Y": 200.0,
+        "Width": 300.0,
+        "Height": 200.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654008_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "87654321-4321-4321-4321-210987654008_in_1",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "87654321-4321-4321-4321-210987654008_in_2",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654008_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "87654321-4321-4321-4321-210987654008_out_1",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "87654321-4321-4321-4321-210987654008_out_2",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Create floor with baseline (C++ style)"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654009",
+        "Name": "Code Block",
+        "X": 850.0,
+        "Y": 200.0,
+        "Width": 100.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654009_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Success status",
+        "Code": "// Success"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654010",
+        "Name": "Code Block",
+        "X": 850.0,
+        "Y": 300.0,
+        "Width": 100.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654010_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Debug info",
+        "Code": "// Debug Info"
+      },
+      {
+        "Id": "87654321-4321-4321-4321-210987654011",
+        "Name": "Code Block",
+        "X": 50.0,
+        "Y": 100.0,
+        "Width": 150.0,
+        "Height": 80.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "87654321-4321-4321-4321-210987654011_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Instructions",
+        "Code": "// Instructions:\n// 1. Connect your Renga project to Model.ByProject\n// 2. Set correct level ID (replace 1 with actual level ID)\n// 3. Run the graph to create floor with baseline\n// 4. Check DebugInfo output for detailed process info"
+      }
+    ],
+    "X": 0.0,
+    "Y": 0.0,
+    "Zoom": 1.0
+  },
+  "Bindings": [],
+  "Dependencies": []
 }

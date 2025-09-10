@@ -1,0 +1,986 @@
+{
+  "Uuid": "12345678-1234-1234-1234-123456789abc",
+  "IsCustomNode": false,
+  "Description": "Example demonstrating floor creation with baseline using C++ style workflow",
+  "Name": "Floor with Baseline - C++ Style",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynamoCoreNodes",
+      "Version": "2.12.0.0",
+      "ReferenceType": "Package"
+    },
+    {
+      "Name": "RengaDynMain",
+      "Version": "1.0.0.0",
+      "ReferenceType": "Package"
+    }
+  ],
+  "Version": "2.12.0.0",
+  "View": {
+    "Dynamo": {
+      "Version": "2.12.0.0",
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "X": 0.0,
+      "Y": 0.0,
+      "Width": 1200.0,
+      "Height": 800.0,
+      "Name": "Floor with Baseline - C++ Style",
+      "IsSetAsInput": false,
+      "IsSetAsOutput": false
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -30.0,
+      "EyeY": -30.0,
+      "EyeZ": 30.0,
+      "LookX": 0.0,
+      "LookY": 0.0,
+      "LookZ": 0.0,
+      "UpX": 0.0,
+      "UpY": 0.0,
+      "UpZ": 1.0
+    },
+    "Connectors": [
+      {
+        "Start": "12345678-1234-1234-1234-123456789001",
+        "End": "12345678-1234-1234-1234-123456789002",
+        "Id": "12345678-1234-1234-1234-123456789100",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789003",
+        "End": "12345678-1234-1234-1234-123456789004",
+        "Id": "12345678-1234-1234-1234-123456789101",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789005",
+        "End": "12345678-1234-1234-1234-123456789006",
+        "Id": "12345678-1234-1234-1234-123456789102",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789007",
+        "End": "12345678-1234-1234-1234-123456789008",
+        "Id": "12345678-1234-1234-1234-123456789103",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789009",
+        "End": "12345678-1234-1234-1234-123456789010",
+        "Id": "12345678-1234-1234-1234-123456789104",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789011",
+        "End": "12345678-1234-1234-1234-123456789012",
+        "Id": "12345678-1234-1234-1234-123456789105",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789013",
+        "End": "12345678-1234-1234-1234-123456789014",
+        "Id": "12345678-1234-1234-1234-123456789106",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789015",
+        "End": "12345678-1234-1234-1234-123456789016",
+        "Id": "12345678-1234-1234-1234-123456789107",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789017",
+        "End": "12345678-1234-1234-1234-123456789018",
+        "Id": "12345678-1234-1234-1234-123456789108",
+        "IsHidden": false,
+        "ZIndex": 0
+      },
+      {
+        "Start": "12345678-1234-1234-1234-123456789019",
+        "End": "12345678-1234-1234-1234-123456789020",
+        "Id": "12345678-1234-1234-1234-123456789109",
+        "IsHidden": false,
+        "ZIndex": 0
+      }
+    ],
+    "Nodes": [
+      {
+        "Id": "12345678-1234-1234-1234-123456789001",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 100.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789001_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Create a simple line segment for baseline",
+        "Code": "// Create a simple line segment for baseline\n// This follows the C++ example workflow\n\n// Start point (x1, y1)\n0.0;\n\n// End point (x2, y2) \n1000.0;"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789002",
+        "Name": "Curve2D.ByLineSegment",
+        "X": 350.0,
+        "Y": 100.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789002_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789002_in_1",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789002_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Create a 2D line segment curve for baseline"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789003",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 250.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789003_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Level ID for floor placement",
+        "Code": "// Level ID for floor placement\n// Use the ID of an existing level in your Renga project\n1;"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789004",
+        "Name": "Placement3D.ByOrigin",
+        "X": 350.0,
+        "Y": 250.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789004_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789004_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Create 3D placement for floor"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789005",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 400.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789005_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Origin point for floor placement",
+        "Code": "// Origin point for floor placement\n// This is where the floor will be created\nPoint.ByCoordinates(0, 0, 0);"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789006",
+        "Name": "Model.ByProject",
+        "X": 100.0,
+        "Y": 550.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789006_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789006_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Get Renga model from project"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789007",
+        "Name": "Model.CreateFloorWithBaselineCppStyle",
+        "X": 600.0,
+        "Y": 300.0,
+        "Width": 300.0,
+        "Height": 150.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789007_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789007_in_1",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789007_in_2",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789007_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789007_out_1",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789007_out_2",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Create floor with baseline using C++ style workflow"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789008",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 700.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789008_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Get Renga project",
+        "Code": "// Get Renga project\n// This should be connected to your Renga project node\n// Project.ByRengaApplication();"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789009",
+        "Name": "Code Block",
+        "X": 950.0,
+        "Y": 100.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789009_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Display success status",
+        "Code": "// Floor creation result\n// Check the Success output to see if the floor was created successfully\n// Check the DebugInfo output for detailed information about the process"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789010",
+        "Name": "Code Block",
+        "X": 950.0,
+        "Y": 250.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789009_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Display debug information",
+        "Code": "// Debug Information\n// This will show detailed step-by-step information about:\n// 1. Floor creation\n// 2. IBaseline2DObject interface detection\n// 3. Baseline curve validation\n// 4. Baseline setting process\n// 5. Verification results"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789011",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 100.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789011_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Alternative: Copy baseline from existing object",
+        "Code": "// Alternative workflow: Copy baseline from existing object\n// This follows the exact C++ example workflow\n//\n// 1. Get source object by ID\n// 2. Extract baseline from source\n// 3. Create new floor\n// 4. Apply baseline to new floor\n//\n// Use Model.CopyBaselineToNewFloor(sourceObjectId, levelId, placement3D)\n// where sourceObjectId is the ID of an existing object with baseline"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789012",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 250.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789012_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Source object ID for copying",
+        "Code": "// Source object ID for copying baseline\n// This should be the ID of an existing object with baseline\n// (e.g., a wall, beam, or other object that supports IBaseline2DObject)\n//\n// You can get object IDs from:\n// - Selection.GetSelectedObjects()\n// - ModelObject.Id property\n// - Model.GetObjectsByType()\n123; // Replace with actual object ID"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789013",
+        "Name": "Model.CopyBaselineToNewFloor",
+        "X": 600.0,
+        "Y": 500.0,
+        "Width": 300.0,
+        "Height": 150.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789013_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789013_in_1",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789013_in_2",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789013_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789013_out_1",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          },
+          {
+            "Id": "12345678-1234-1234-1234-123456789013_out_2",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Copy baseline from existing object to new floor (C++ style)"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789014",
+        "Name": "Code Block",
+        "X": 950.0,
+        "Y": 400.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789014_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Display copy result",
+        "Code": "// Baseline copy result\n// Check the Success output to see if the baseline was copied successfully\n// Check the DebugInfo output for detailed information about the copy process"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789015",
+        "Name": "Code Block",
+        "X": 950.0,
+        "Y": 550.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789015_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Display copy debug info",
+        "Code": "// Copy Debug Information\n// This will show detailed step-by-step information about:\n// 1. Source object retrieval\n// 2. Baseline extraction from source\n// 3. New floor creation\n// 4. Baseline application to new floor\n// 5. Verification of the copied baseline"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789016",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 400.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789016_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Level ID for copy operation",
+        "Code": "// Level ID for copy operation\n// Use the ID of an existing level in your Renga project\n1;"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789017",
+        "Name": "Placement3D.ByOrigin",
+        "X": 350.0,
+        "Y": 400.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "Function",
+        "InputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789017_in_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789017_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Create 3D placement for copied floor"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789018",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 550.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789018_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Origin point for copied floor",
+        "Code": "// Origin point for copied floor\n// This is where the new floor will be created\nPoint.ByCoordinates(0, 0, 0);"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789019",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 700.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789019_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Get Renga project for copy",
+        "Code": "// Get Renga project for copy operation\n// This should be connected to your Renga project node\n// Project.ByRengaApplication();"
+      },
+      {
+        "Id": "12345678-1234-1234-1234-123456789020",
+        "Name": "Code Block",
+        "X": 100.0,
+        "Y": 100.0,
+        "Width": 200.0,
+        "Height": 100.0,
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "ShowGeometry": false,
+        "IsVisible": true,
+        "IsUpstreamVisible": true,
+        "IsFrozen": false,
+        "IsPinned": false,
+        "IsSelected": false,
+        "NodeType": "CodeBlockNode",
+        "InputPorts": [],
+        "OutputPorts": [
+          {
+            "Id": "12345678-1234-1234-1234-123456789020_out_0",
+            "UseLevels": false,
+            "Level": 2,
+            "KeepListStructure": false,
+            "UsingDefaultValue": false,
+            "UsingLevel": false,
+            "UsingLevel2": false
+          }
+        ],
+        "Replication": {
+          "Replication": "Disabled",
+          "ReplicationStrategy": "Disabled"
+        },
+        "Description": "Instructions for using this example",
+        "Code": "// INSTRUCTIONS FOR USING THIS EXAMPLE\n//\n// This Dynamo example demonstrates two workflows for creating floors with baselines:\n//\n// WORKFLOW 1: Create Floor with Custom Baseline\n// 1. Create a Curve2D using Curve2D.ByLineSegment()\n// 2. Set the level ID where the floor should be created\n// 3. Create a Placement3D for the floor position\n// 4. Get the Renga model from your project\n// 5. Use Model.CreateFloorWithBaselineCppStyle() to create the floor\n//\n// WORKFLOW 2: Copy Baseline from Existing Object\n// 1. Get the ID of an existing object with baseline (wall, beam, etc.)\n// 2. Set the level ID for the new floor\n// 3. Create a Placement3D for the new floor position\n// 4. Get the Renga model from your project\n// 5. Use Model.CopyBaselineToNewFloor() to copy the baseline\n//\n// Both workflows follow the exact C++ example algorithm and should work correctly.\n// Check the DebugInfo outputs for detailed step-by-step information."
+      }
+    ],
+    "X": 0.0,
+    "Y": 0.0,
+    "Zoom": 1.0
+  },
+  "Bindings": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynamoCoreNodes",
+      "Version": "2.12.0.0",
+      "ReferenceType": "Package"
+    },
+    {
+      "Name": "RengaDynMain",
+      "Version": "1.0.0.0",
+      "ReferenceType": "Package"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "DynamoCoreNodes",
+      "Version": "2.12.0.0",
+      "ReferenceType": "Package"
+    },
+    {
+      "Name": "RengaDynMain",
+      "Version": "1.0.0.0",
+      "ReferenceType": "Package"
+    }
+  ]
+}
