@@ -1,0 +1,65 @@
+# Baseline2DObject Workflow Diagram
+
+## Process Flow
+
+1. **START**
+   ↓
+2. **Get ModelObject**
+   - From Selection.GetModelObjects()
+   - From Model.GetObjects()
+   - From Selection.GetModelObjectById()
+   ↓
+3. **Get Baseline2DObject**
+   - Method 1: Baseline2DObject.ByModelObject(modelObject)
+   - Method 2: modelObject.GetBaseline2DObject()
+   ↓
+4. **Check if Baseline2DObject is not null**
+   - If null: Object doesn't support IBaseline2DObject
+   - If not null: Continue to step 5
+   ↓
+5. **Work with Baseline**
+   - **Get Baseline:**
+     - GetBaseline() → Curve2D (in object's own CS)
+     - GetBaselineInCS(Placement2D) → Curve2D (in specified CS)
+   - **Set Baseline:**
+     - SetBaseline(Curve2D) → void (in object's own CS)
+     - SetBaselineInCS(Placement2D, Curve2D) → void (in specified CS)
+   ↓
+6. **Use Curve2D**
+   - Convert to Dynamo geometry
+   - Get curve properties (length, points, etc.)
+   - Transform or modify curve
+   ↓
+7. **END**
+
+## Dynamo Node Structure
+
+### RengaDyn.DynObjects.Baseline2DObject
+- ByModelObject(ModelObject) → Baseline2DObject
+- GetBaseline() → Curve2D
+- GetBaselineInCS(Placement2D) → Curve2D
+- SetBaseline(Curve2D) → void
+- SetBaselineInCS(Placement2D, Curve2D) → void
+
+### RengaDyn.DynObjects.ModelObject
+- GetBaseline2DObject() → Baseline2DObject
+
+## Example Dynamo Graph
+
+```
+[Application] 
+    ↓
+[Project]
+    ↓
+[Model]
+    ↓
+[GetObjects] or [Selection.GetModelObjects]
+    ↓
+[Filter by Object Type] (optional)
+    ↓
+[Baseline2DObject.ByModelObject]
+    ↓
+[Is Null?] → [If False: GetBaseline] → [Curve2D methods]
+    ↓
+[If True: Object doesn't support baselines]
+```

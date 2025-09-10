@@ -268,3 +268,12 @@ DynamoScripts/GPUCache/data_3
 DynamoScripts/GPUCache/index
 obj/Debug/Civil3D_CustomNodes.csproj.CoreCompileInputs.cache
 *.cache
+
+# Additional temporary files
+build_output.txt
+build.log
+debug_build.log
+*.tmp
+
+# Documentation build artifacts
+docs/build/
