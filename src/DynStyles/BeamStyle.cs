@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,37 +9,44 @@ using dr = Autodesk.DesignScript.Runtime;
 using dg = Autodesk.DesignScript.Geometry;
 using Renga;
 using DynRenga.DynGeometry;
+using DynRenga.Core;
 
 namespace DynRenga.DynStyles
 {
     /// <summary>
-    /// Класс для работы с интерфейсом Renga.IBeamStyle
+    /// Рефакторенный класс для работы с интерфейсом Renga.IBeamStyle
+    /// Наследует от BaseRengaStyle для устранения дублирования кода
     /// </summary>
-    public class BeamStyle
+    public class BeamStyle : BaseRengaStyle<Renga.IBeamStyle>
     {
-        public Renga.IBeamStyle _i;
         /// <summary>
         /// Инициализация интерфейса Renga.IBeamStyle из com-объекта
         /// </summary>
-        /// <param name="BeamStyle_object"></param>
-        internal BeamStyle(object BeamStyle_object)
-        {
-            this._i = BeamStyle_object as Renga.IBeamStyle;
-        }
+        /// <param name="beamStyleObject">COM-объект стиля балки</param>
+        internal BeamStyle(object beamStyleObject) : base(beamStyleObject) { }
+        
         /// <summary>
-        /// Получение целочисленного идентификатора стиля
+        /// Прямой конструктор с типизированным интерфейсом
         /// </summary>
-        /// <returns></returns>
-        public int Id => this._i.Id;
+        /// <param name="beamStyle">Интерфейс стиля балки</param>
+        internal BeamStyle(Renga.IBeamStyle beamStyle) : base(beamStyle) { }
+        
         /// <summary>
-        /// Получение наименования стиля
+        /// Получение целочисленного идентификатора стиля балки
         /// </summary>
-        /// <returns></returns>
-        public string Name => this._i.Name;
+        /// <returns>ID стиля</returns>
+        public override int Id => _i.Id;
+        
         /// <summary>
-        /// Получение интерфейса Renga.IProfile
+        /// Получение наименования стиля балки
         /// </summary>
-        /// <returns></returns>
-        public Profile Profile => new Profile(this._i.Profile);
+        /// <returns>Название стиля</returns>
+        public override string Name => _i.Name;
+        
+        /// <summary>
+        /// Получение профиля балки
+        /// </summary>
+        /// <returns>Объект профиля балки</returns>
+        public Profile Profile => new Profile(_i.Profile);
     }
 }

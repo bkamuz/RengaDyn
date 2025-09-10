@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,56 +8,84 @@ using System.Text;
 using dr = Autodesk.DesignScript.Runtime;
 using dg = Autodesk.DesignScript.Geometry;
 using Renga;
+using DynRenga.Core;
 
 namespace DynRenga.DynStyles
 {
     /// <summary>
-    /// Класс для работы с интерфейсом Renga.IEquipmentStyle, стилем оборудования
+    /// Рефакторенный класс для работы с интерфейсом Renga.IEquipmentStyle
+    /// Наследует от BaseRengaWrapper (не BaseRengaStyle, поскольку нет ID)
     /// </summary>
-    public class EquipmentStyle
+    public class EquipmentStyle : BaseRengaWrapper<Renga.IEquipmentStyle>
     {
-        public Renga.IEquipmentStyle _i;
         /// <summary>
         /// Инициация класса из интерфейса Renga.IEquipmentStyle
         /// </summary>
-        /// <param name="EquipmentStyle_object"></param>
-        internal EquipmentStyle(object EquipmentStyle_object)
-        {
-            this._i = EquipmentStyle_object as Renga.IEquipmentStyle;
-        }
+        /// <param name="equipmentStyleObject">COM-объект стиля оборудования</param>
+        internal EquipmentStyle(object equipmentStyleObject) : base(equipmentStyleObject) { }
+        
         /// <summary>
-        /// Получение наименования класса
+        /// Прямой конструктор с типизированным интерфейсом
         /// </summary>
-        /// <returns></returns>
-        public string Name => this._i.Name;
+        /// <param name="equipmentStyle">Интерфейс стиля оборудования</param>
+        internal EquipmentStyle(Renga.IEquipmentStyle equipmentStyle) : base(equipmentStyle) { }
+        
+        /// <summary>
+        /// Получение наименования стиля оборудования
+        /// </summary>
+        /// <returns>Название стиля</returns>
+        public string Name => _i.Name;
+        
+        /// <summary>
+        /// Получение категории оборудования
+        /// </summary>
+        /// <returns>Категория оборудования</returns>
+        public EquipmentCategory Category => _i.Category;
+        
         /// <summary>
         /// Получение строкового типа оборудования (Renga.EquipmentCategory)
         /// </summary>
-        /// <returns></returns>
-        public string GetCategory()
+        /// <returns>Строковое представление категории</returns>
+        public string GetCategoryAsString()
         {
-            return EquipmentCategories().Where(a => (Renga.EquipmentCategory)a.Value == this._i.Category).First().Key;
+            var categories = GetEquipmentCategories();
+            var match = categories.FirstOrDefault(kv => 
+                ((EquipmentCategory)kv.Value).Equals(_i.Category));
+            
+            return match.Key ?? $"Unknown_{_i.Category}";
         }
+        
         /// <summary>
-        /// Типы оборудования
+        /// Получение всех доступных категорий оборудования
         /// </summary>
-        /// <returns></returns>
-        private static Dictionary<string, object> EquipmentCategories()
+        /// <returns>Словарь категорий оборудования</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static Dictionary<string, object> GetEquipmentCategories()
         {
-            return new Dictionary<string, object>()
+            return new Dictionary<string, object>
             {
-                {"Unknown",Renga.EquipmentCategory.EquipmentCategory_Other },
-                {"Fauset",Renga.EquipmentCategory.EquipmentCategory_Faucet },
-                {"Manifold",Renga.EquipmentCategory.EquipmentCategory_Manifold },
-                {"Pump",Renga.EquipmentCategory.EquipmentCategory_Pump },
-                {"WashingMachine",Renga.EquipmentCategory.EquipmentCategory_WashingMachine },
-                {"Radiator",Renga.EquipmentCategory.EquipmentCategory_Radiator },
-                {"TowelRadiator",Renga.EquipmentCategory.EquipmentCategory_TowelRadiator },
-                {"ExpansionVessel",Renga.EquipmentCategory.EquipmentCategory_ExpansionVessel },
-                {"PlateHeatExchanger",Renga.EquipmentCategory.EquipmentCategory_PlateHeatExchanger },
-                {"Boiler",Renga.EquipmentCategory.EquipmentCategory_Boiler }
+                { "Other", Renga.EquipmentCategory.EquipmentCategory_Other },
+                { "Faucet", Renga.EquipmentCategory.EquipmentCategory_Faucet },
+                { "Manifold", Renga.EquipmentCategory.EquipmentCategory_Manifold },
+                { "Pump", Renga.EquipmentCategory.EquipmentCategory_Pump },
+                { "WashingMachine", Renga.EquipmentCategory.EquipmentCategory_WashingMachine },
+                { "Radiator", Renga.EquipmentCategory.EquipmentCategory_Radiator },
+                { "TowelRadiator", Renga.EquipmentCategory.EquipmentCategory_TowelRadiator },
+                { "ExpansionVessel", Renga.EquipmentCategory.EquipmentCategory_ExpansionVessel },
+                { "PlateHeatExchanger", Renga.EquipmentCategory.EquipmentCategory_PlateHeatExchanger },
+                { "Boiler", Renga.EquipmentCategory.EquipmentCategory_Boiler }
             };
-
+        }
+        
+        /// <summary>
+        /// Переопределенная отладочная информация для стиля оборудования
+        /// </summary>
+        /// <returns>Расширенная отладочная информация</returns>
+        public override string GetDebugInfo()
+        {
+            return base.GetDebugInfo() + 
+                   $"\n🏷️ Style Name: {Name ?? "NULL"}" +
+                   $"\n🔧 Category: {GetCategoryAsString()}";
         }
     }
 }
