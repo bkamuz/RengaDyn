@@ -8,6 +8,7 @@ using System.Text;
 using dr = Autodesk.DesignScript.Runtime;
 using dg = Autodesk.DesignScript.Geometry;
 using Renga;
+using DynRenga.DynDocument;
 
 namespace DynRenga.DynDocument.Project
 {
@@ -168,6 +169,16 @@ namespace DynRenga.DynDocument.Project
         /// Чертежи проекта
         /// </summary>
         public EntityCollection Drawings => new EntityCollection(this._i.Drawings);
+        
+        /// <summary>
+        /// Создает операцию для редактирования проекта
+        /// </summary>
+        /// <returns>Operation объект для управления изменениями</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public Operation CreateOperation()
+        {
+            return new Operation(this._i.CreateOperation());
+        }
     }
     
 }

@@ -17,12 +17,22 @@ namespace DynRenga.DynDocument
     /// <summary>
     /// Класс для работы с приложением Renga (интерфейсом Renga.IApplication)
     /// </summary>
-    public class Application
+    public class Application : IDisposable
     {
         /// <summary>
         /// Внутренний COM-объект Renga.IApplication
         /// </summary>
         public Renga.IApplication _i;
+        
+        /// <summary>
+        /// Флаг для отслеживания освобождения ресурсов
+        /// </summary>
+        private bool _disposed = false;
+        
+        /// <summary>
+        /// Флаг для отслеживания того, создали ли мы новый экземпляр Renga (нужно ли его закрывать)
+        /// </summary>
+        private bool _ownsInstance = false;
         /// <summary>
         /// Получает первый запущенный процесс Renga в системе и фиксирует интерфейс Renga.IApplication
         /// </summary>
@@ -451,6 +461,7 @@ namespace DynRenga.DynDocument
         {
             this._i = new Renga.Application();
             this._i.Visible = true;
+            this._ownsInstance = true; // Мы создали новый экземпляр, нужно его закрыть при освобождении
             int result;
             string file_extension = Path.GetExtension(PathToProject);
 
@@ -503,6 +514,89 @@ namespace DynRenga.DynDocument
                     registries.Add(monikers[0]);
             }
             return registries;
+        }
+        
+        /// <summary>
+        /// Освобождает ресурсы COM-объекта
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        
+        /// <summary>
+        /// Защищенный метод освобождения ресурсов
+        /// </summary>
+        /// <param name="disposing">true если вызывается из Dispose(), false если из финализатора</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Освобождаем управляемые ресурсы
+                    if (_i != null)
+                    {
+                        try
+                        {
+                            // Если мы создали новый экземпляр, закрываем его
+                            if (_ownsInstance)
+                            {
+                                _i.Quit();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            // Игнорируем ошибки при закрытии, так как объект может быть уже освобожден
+                            System.Diagnostics.Debug.WriteLine($"Error closing Renga instance: {ex.Message}");
+                        }
+                        finally
+                        {
+                            // Освобождаем COM-объект
+                            if (Marshal.IsComObject(_i))
+                            {
+                                Marshal.ReleaseComObject(_i);
+                            }
+                            _i = null;
+                        }
+                    }
+                }
+                
+                _disposed = true;
+            }
+        }
+        
+        /// <summary>
+        /// Финализатор для освобождения неуправляемых ресурсов
+        /// </summary>
+        ~Application()
+        {
+            Dispose(false);
+        }
+        
+        /// <summary>
+        /// Утилита для принудительной очистки всех COM-объектов и сборки мусора
+        /// Используйте этот метод для очистки памяти после работы с Renga
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static void ForceCleanup()
+        {
+            try
+            {
+                // Принудительная сборка мусора
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+                
+                // Дополнительная очистка для COM-объектов
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error during forced cleanup: {ex.Message}");
+            }
         }
     }
 }

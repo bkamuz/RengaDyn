@@ -178,6 +178,20 @@
     <Compile Include="DynObjects\Selection.cs" />
     <Compile Include="DynGeometry\CoordinateSystemUtils.cs" />
     <Compile Include="DynObjects\Baseline2DObject.cs" />
+    <Compile Include="RengaAPI\IApplication.cs" />
+    <Compile Include="RengaAPI\ISelection.cs" />
+    <Compile Include="RengaAPI\IModel.cs" />
+    <Compile Include="RengaAPI\IModelObject.cs" />
+    <Compile Include="RengaAPI\IModelObjectCollection.cs" />
+    <Compile Include="RengaAPI\IModelView.cs" />
+    <Compile Include="RengaAPI\IBaseline2DObject.cs" />
+    <Compile Include="RengaAPI\ICurve2D.cs" />
+    <Compile Include="RengaAPI\IMath.cs" />
+    <Compile Include="RengaAPI\IOperation.cs" />
+    <Compile Include="RengaAPI\IEntity.cs" />
+    <Compile Include="RengaAPI\IEntityCollection.cs" />
+    <Compile Include="RengaAPI\INewEntityArgs.cs" />
+    <Compile Include="Converters\Renga\2DGeometry\Curve2DConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Renga">

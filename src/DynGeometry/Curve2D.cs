@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 using dr = Autodesk.DesignScript.Runtime;
 using dg = Autodesk.DesignScript.Geometry;
@@ -1184,23 +1185,33 @@ namespace DynRenga.DynGeometry
                         if (mathInterface != null)
                         {
                             debugInfo += "✅ IMath interface created successfully!\n";
-                            // Create the line segment using IMath
-                            Renga.ICurve2D curve2D = mathInterface.CreateLineSegment2D(startPoint, endPoint);
                             
-                            if (curve2D != null)
+                            try
                             {
-                                debugInfo += "✅ Curve2D created using Renga IMath interface!\n";
-                                debugInfo += $"📏 Line length: {Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2)):F2} meters\n";
+                                // Create the line segment using IMath
+                                Renga.ICurve2D curve2D = mathInterface.CreateLineSegment2D(startPoint, endPoint);
                                 
-                                return new Dictionary<string, object>
+                                if (curve2D != null)
                                 {
-                                    { "Curve2D", new Curve2D(curve2D) },
-                                    { "DebugInfo", debugInfo }
-                                };
+                                    debugInfo += "✅ Curve2D created using Renga IMath interface!\n";
+                                    debugInfo += $"📏 Line length: {Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2)):F2} meters\n";
+                                    
+                                    return new Dictionary<string, object>
+                                    {
+                                        { "Curve2D", new Curve2D(curve2D) },
+                                        { "DebugInfo", debugInfo }
+                                    };
+                                }
+                                else
+                                {
+                                    debugInfo += "⚠️ IMath.CreateLineSegment2D returned null\n";
+                                }
                             }
-                            else
+                            finally
                             {
-                                debugInfo += "⚠️ IMath.CreateLineSegment2D returned null\n";
+                                // Properly dispose of the created IMath instance
+                                SafeReleaseComObject(mathInterface);
+                                ForceGarbageCollection();
                             }
                         }
                         else
@@ -1337,31 +1348,40 @@ namespace DynRenga.DynGeometry
                         {
                             debugInfo += "✅ Renga IApplication interface created successfully\n";
                             
-                            // Access Math property from IApplication
-                            debugInfo += "🔧 Accessing Math property from IApplication\n";
-                            var mathInterface = appInterface.Math;
-                            
-                            if (mathInterface != null)
+                            try
                             {
-                                debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                // Access Math property from IApplication
+                                debugInfo += "🔧 Accessing Math property from IApplication\n";
+                                var mathInterface = appInterface.Math;
                                 
-                                if (segments.Length == 1)
+                                if (mathInterface != null)
                                 {
-                                    // Single segment - convert directly
-                                    debugInfo += "📐 Single segment - converting directly\n";
-                                    return ConvertDynamoCurveToRengaWithMath(segments[0], mathInterface, ref debugInfo);
+                                    debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                    
+                                    if (segments.Length == 1)
+                                    {
+                                        // Single segment - convert directly
+                                        debugInfo += "📐 Single segment - converting directly\n";
+                                        return ConvertDynamoCurveToRengaWithMath(segments[0], mathInterface, ref debugInfo);
+                                    }
+                                    else
+                                    {
+                                        // Multiple segments - create composite curve
+                                        debugInfo += "📐 Multiple segments - creating composite curve\n";
+                                        return ConvertDynamoPolyCurveToRengaWithMath(dynamoPolyCurve, mathInterface, ref debugInfo);
+                                    }
                                 }
                                 else
                                 {
-                                    // Multiple segments - create composite curve
-                                    debugInfo += "📐 Multiple segments - creating composite curve\n";
-                                    return ConvertDynamoPolyCurveToRengaWithMath(dynamoPolyCurve, mathInterface, ref debugInfo);
+                                    debugInfo += "❌ Failed to access Math property from IApplication\n";
+                                    debugInfo += "💡 This might indicate that Renga is not properly initialized or the Math interface is not available\n";
                                 }
                             }
-                            else
+                            finally
                             {
-                                debugInfo += "❌ Failed to access Math property from IApplication\n";
-                                debugInfo += "💡 This might indicate that Renga is not properly initialized or the Math interface is not available\n";
+                                // Properly dispose of the created IApplication instance
+                                SafeReleaseComObject(appInterface);
+                                ForceGarbageCollection();
                             }
                         }
                         else
@@ -1978,6 +1998,41 @@ namespace DynRenga.DynGeometry
             }
         }
         
+        /// <summary>
+        /// Вспомогательный метод для правильного освобождения COM-объектов
+        /// </summary>
+        /// <param name="comObject">COM-объект для освобождения</param>
+        private static void SafeReleaseComObject(object comObject)
+        {
+            if (comObject != null && Marshal.IsComObject(comObject))
+            {
+                try
+                {
+                    Marshal.ReleaseComObject(comObject);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error releasing COM object: {ex.Message}");
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Вспомогательный метод для принудительной сборки мусора после освобождения COM-объектов
+        /// </summary>
+        private static void ForceGarbageCollection()
+        {
+            try
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error during garbage collection: {ex.Message}");
+            }
+        }
 
     }
 }

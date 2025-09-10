@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Runtime.InteropServices;
 
 using dr = Autodesk.DesignScript.Runtime;
 using dg = Autodesk.DesignScript.Geometry;
@@ -564,28 +565,37 @@ namespace DynRenga.DynObjects
                         {
                             debugInfo += "✅ Renga application instance created\n";
                             
-                            // Cast to IApplication interface
-                            var appInterface = rengaApp as Renga.IApplication;
-                            if (appInterface != null)
+                            try
                             {
-                                debugInfo += "✅ IApplication interface obtained\n";
-                                
-                                // Access Math property from IApplication
-                                debugInfo += "🔧 Accessing Math property from IApplication\n";
-                                mathInterface = appInterface.Math;
-                                
-                                if (mathInterface != null)
+                                // Cast to IApplication interface
+                                var appInterface = rengaApp as Renga.IApplication;
+                                if (appInterface != null)
                                 {
-                                    debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                    debugInfo += "✅ IApplication interface obtained\n";
+                                    
+                                    // Access Math property from IApplication
+                                    debugInfo += "🔧 Accessing Math property from IApplication\n";
+                                    mathInterface = appInterface.Math;
+                                    
+                                    if (mathInterface != null)
+                                    {
+                                        debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                    }
+                                    else
+                                    {
+                                        debugInfo += "❌ Failed to access Math property from IApplication\n";
+                                    }
                                 }
                                 else
                                 {
-                                    debugInfo += "❌ Failed to access Math property from IApplication\n";
+                                    debugInfo += "❌ Failed to cast to IApplication interface\n";
                                 }
                             }
-                            else
+                            finally
                             {
-                                debugInfo += "❌ Failed to cast to IApplication interface\n";
+                                // Properly dispose of the created Renga instance
+                                SafeReleaseComObject(rengaApp);
+                                ForceGarbageCollection();
                             }
                         }
                         else
@@ -897,28 +907,37 @@ namespace DynRenga.DynObjects
                         {
                             debugInfo += "✅ Renga application instance created\n";
                             
-                            // Cast to IApplication interface
-                            var appInterface = rengaApp as Renga.IApplication;
-                            if (appInterface != null)
+                            try
                             {
-                                debugInfo += "✅ IApplication interface obtained\n";
-                                
-                                // Access Math property from IApplication
-                                debugInfo += "🔧 Accessing Math property from IApplication\n";
-                                mathInterface = appInterface.Math;
-                                
-                                if (mathInterface != null)
+                                // Cast to IApplication interface
+                                var appInterface = rengaApp as Renga.IApplication;
+                                if (appInterface != null)
                                 {
-                                    debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                    debugInfo += "✅ IApplication interface obtained\n";
+                                    
+                                    // Access Math property from IApplication
+                                    debugInfo += "🔧 Accessing Math property from IApplication\n";
+                                    mathInterface = appInterface.Math;
+                                    
+                                    if (mathInterface != null)
+                                    {
+                                        debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                    }
+                                    else
+                                    {
+                                        debugInfo += "❌ Failed to access Math property from IApplication\n";
+                                    }
                                 }
                                 else
                                 {
-                                    debugInfo += "❌ Failed to access Math property from IApplication\n";
+                                    debugInfo += "❌ Failed to cast to IApplication interface\n";
                                 }
                             }
-                            else
+                            finally
                             {
-                                debugInfo += "❌ Failed to cast to IApplication interface\n";
+                                // Properly dispose of the created Renga instance
+                                SafeReleaseComObject(rengaApp);
+                                ForceGarbageCollection();
                             }
                         }
                         else
@@ -1962,28 +1981,37 @@ namespace DynRenga.DynObjects
                         {
                             debugInfo += "✅ Renga application instance created\n";
                             
-                            // Cast to IApplication interface
-                            var appInterface = rengaApp as Renga.IApplication;
-                            if (appInterface != null)
+                            try
                             {
-                                debugInfo += "✅ IApplication interface obtained\n";
-                                
-                                // Access Math property from IApplication
-                                debugInfo += "🔧 Accessing Math property from IApplication\n";
-                                mathInterface = appInterface.Math;
-                                
-                                if (mathInterface != null)
+                                // Cast to IApplication interface
+                                var appInterface = rengaApp as Renga.IApplication;
+                                if (appInterface != null)
                                 {
-                                    debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                    debugInfo += "✅ IApplication interface obtained\n";
+                                    
+                                    // Access Math property from IApplication
+                                    debugInfo += "🔧 Accessing Math property from IApplication\n";
+                                    mathInterface = appInterface.Math;
+                                    
+                                    if (mathInterface != null)
+                                    {
+                                        debugInfo += "✅ Renga IMath interface accessed successfully\n";
+                                    }
+                                    else
+                                    {
+                                        debugInfo += "❌ Failed to access Math property from IApplication\n";
+                                    }
                                 }
                                 else
                                 {
-                                    debugInfo += "❌ Failed to access Math property from IApplication\n";
+                                    debugInfo += "❌ Failed to cast to IApplication interface\n";
                                 }
                             }
-                            else
+                            finally
                             {
-                                debugInfo += "❌ Failed to cast to IApplication interface\n";
+                                // Properly dispose of the created Renga instance
+                                SafeReleaseComObject(rengaApp);
+                                ForceGarbageCollection();
                             }
                         }
                         else
@@ -2529,6 +2557,42 @@ namespace DynRenga.DynObjects
                     { "Reason", reason },
                     { "DebugInfo", debugInfo }
                 };
+            }
+        }
+        
+        /// <summary>
+        /// Вспомогательный метод для правильного освобождения COM-объектов
+        /// </summary>
+        /// <param name="comObject">COM-объект для освобождения</param>
+        private static void SafeReleaseComObject(object comObject)
+        {
+            if (comObject != null && Marshal.IsComObject(comObject))
+            {
+                try
+                {
+                    Marshal.ReleaseComObject(comObject);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error releasing COM object: {ex.Message}");
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Вспомогательный метод для принудительной сборки мусора после освобождения COM-объектов
+        /// </summary>
+        private static void ForceGarbageCollection()
+        {
+            try
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error during garbage collection: {ex.Message}");
             }
         }
     }
