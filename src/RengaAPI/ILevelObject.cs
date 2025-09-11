@@ -187,7 +187,7 @@ namespace DynRenga.RengaAPI
         /// </summary>
         /// <returns>Placement3D representing the object's placement</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public Placement3D GetPlacement()
+        public DynRenga.DynGeometry.Placement3D GetPlacement()
         {
             if (this._i == null) 
                 throw new InvalidOperationException("ILevelObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -195,7 +195,7 @@ namespace DynRenga.RengaAPI
             try
             {
                 var placement = this._i.GetPlacement();
-                return new Placement3D(placement);
+                return new DynRenga.DynGeometry.Placement3D(placement);
             }
             catch (Exception ex)
             {
@@ -212,7 +212,7 @@ namespace DynRenga.RengaAPI
         /// <returns>Dictionary with Success status and DebugInfo</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
         [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
-        public Dictionary<string, object> SetPlacement(Placement3D placement)
+        public Dictionary<string, object> SetPlacement(DynRenga.DynGeometry.Placement3D placement)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("ILevelObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -265,7 +265,7 @@ namespace DynRenga.RengaAPI
                 
                 debugInfo += "🚀 Attempting to set placement...\n";
                 
-                this._i.SetPlacement(placement._i_Internal);
+                this._i.SetPlacement(placement._i);
                 
                 debugInfo += "✅ Placement set successfully!\n";
                 
@@ -411,7 +411,7 @@ namespace DynRenga.RengaAPI
         /// <param name="placement">Placement to validate</param>
         /// <returns>True if placement is valid, false otherwise</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public bool IsPlacementValid(Placement3D placement)
+        public bool IsPlacementValid(DynRenga.DynGeometry.Placement3D placement)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("ILevelObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -422,9 +422,9 @@ namespace DynRenga.RengaAPI
             try
             {
                 // Basic validation - check if placement has valid values
-                var origin = placement.Origin;
-                var xAxis = placement.XAxis;
-                var zAxis = placement.ZAxis;
+                var origin = placement.Origin();
+                var xAxis = placement.AxisX();
+                var zAxis = placement.AxisZ();
                 
                 // Check for NaN or infinite values
                 if (double.IsNaN(origin.X) || double.IsNaN(origin.Y) || double.IsNaN(origin.Z) ||

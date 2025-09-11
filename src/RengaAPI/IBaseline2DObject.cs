@@ -92,9 +92,9 @@ namespace DynRenga.RengaAPI
         /// <summary>
         /// Returns the copy of the 2D baseline of the object in its own coordinate system
         /// </summary>
-        /// <returns>Curve2D representing the baseline</returns>
+        /// <returns>DynRenga.RengaAPI.ICurve2D representing the baseline</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public Curve2D GetBaseline()
+        public DynRenga.RengaAPI.ICurve2D GetBaseline()
         {
             if (this._i == null) 
                 throw new InvalidOperationException("IBaseline2DObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -102,7 +102,7 @@ namespace DynRenga.RengaAPI
             try
             {
                 var curve2D = this._i.GetBaseline();
-                return new Curve2D(curve2D);
+                return new DynRenga.RengaAPI.ICurve2D(curve2D);
             }
             catch (Exception ex)
             {
@@ -114,9 +114,9 @@ namespace DynRenga.RengaAPI
         /// Returns the copy of the 2D baseline of the object in the specified coordinate system
         /// </summary>
         /// <param name="placement2D">A coordinate system to which the 2D baseline will be transformed</param>
-        /// <returns>Curve2D representing the baseline in the specified coordinate system</returns>
+        /// <returns>DynRenga.RengaAPI.ICurve2D representing the baseline in the specified coordinate system</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public Curve2D GetBaselineInCS(DynRenga.DynGeometry.Placement2D placement2D)
+        public DynRenga.RengaAPI.ICurve2D GetBaselineInCS(DynRenga.DynGeometry.Placement2D placement2D)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("IBaseline2DObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -127,7 +127,7 @@ namespace DynRenga.RengaAPI
             try
             {
                 var curve2D = this._i.GetBaselineInCS(placement2D.ToRengaPlacement2D());
-                return new Curve2D(curve2D);
+                return new DynRenga.RengaAPI.ICurve2D(curve2D);
             }
             catch (Exception ex)
             {
@@ -143,7 +143,7 @@ namespace DynRenga.RengaAPI
         /// <returns>Dictionary with Success status and DebugInfo</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
         [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
-        public Dictionary<string, object> SetBaseline(Curve2D baseline)
+        public Dictionary<string, object> SetBaseline(DynRenga.RengaAPI.ICurve2D baseline)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("IBaseline2DObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -190,7 +190,7 @@ namespace DynRenga.RengaAPI
                  
                  debugInfo += "🚀 Attempting to set baseline...\n";
                  
-                 this._i.SetBaseline(baseline._i);
+                 this._i.SetBaseline(baseline._i_Internal);
                  
                  debugInfo += "✅ Baseline set successfully!\n";
                  
@@ -246,7 +246,7 @@ namespace DynRenga.RengaAPI
         /// <returns>Dictionary with Success status and DebugInfo</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
         [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
-        public Dictionary<string, object> SetBaselineInCS(DynRenga.DynGeometry.Placement2D placement2D, Curve2D baselineInCS)
+        public Dictionary<string, object> SetBaselineInCS(DynRenga.DynGeometry.Placement2D placement2D, DynRenga.RengaAPI.ICurve2D baselineInCS)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("IBaseline2DObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -308,7 +308,7 @@ namespace DynRenga.RengaAPI
                  
                  debugInfo += "🚀 Attempting to set baseline in coordinate system...\n";
                  
-                 this._i.SetBaselineInCS(placement2D.ToRengaPlacement2D(), baselineInCS._i);
+                 this._i.SetBaselineInCS(placement2D.ToRengaPlacement2D(), baselineInCS._i_Internal);
                  
                  debugInfo += "✅ Baseline set in coordinate system successfully!\n";
                  
@@ -433,9 +433,9 @@ namespace DynRenga.RengaAPI
         /// </summary>
         /// <param name="sourcePlacement">Source coordinate system</param>
         /// <param name="targetPlacement">Target coordinate system</param>
-        /// <returns>Curve2D representing the baseline in the target coordinate system</returns>
+        /// <returns>DynRenga.RengaAPI.ICurve2D representing the baseline in the target coordinate system</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public Curve2D TransformBaseline(DynRenga.DynGeometry.Placement2D sourcePlacement, DynRenga.DynGeometry.Placement2D targetPlacement)
+        public DynRenga.RengaAPI.ICurve2D TransformBaseline(DynRenga.DynGeometry.Placement2D sourcePlacement, DynRenga.DynGeometry.Placement2D targetPlacement)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("IBaseline2DObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -454,7 +454,7 @@ namespace DynRenga.RengaAPI
                 // Transform to target coordinate system
                 var baselineInTarget = this._i.GetBaselineInCS(targetPlacement.ToRengaPlacement2D());
                 
-                return new Curve2D(baselineInTarget);
+                return new DynRenga.RengaAPI.ICurve2D(baselineInTarget);
             }
             catch (Exception ex)
             {
@@ -468,7 +468,7 @@ namespace DynRenga.RengaAPI
         /// <param name="baseline">Baseline to validate</param>
         /// <returns>True if baseline is valid, false otherwise</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public bool IsBaselineValid(Curve2D baseline)
+        public bool IsBaselineValid(DynRenga.RengaAPI.ICurve2D baseline)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("IBaseline2DObject interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -480,7 +480,7 @@ namespace DynRenga.RengaAPI
             {
                 // Try to set the baseline temporarily to check if it's valid
                 var originalBaseline = this._i.GetBaseline();
-                this._i.SetBaseline(baseline._i);
+                this._i.SetBaseline(baseline._i_Internal);
                 
                 // Restore original baseline
                 this._i.SetBaseline(originalBaseline);

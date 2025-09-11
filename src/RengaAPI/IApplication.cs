@@ -172,16 +172,297 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
-        /// Gets the Math interface instance
+        /// Gets the Math interface instance as an action with debug output
         /// </summary>
+        /// <returns>Dictionary with Math interface and debug information</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public object Math
+        [dr.MultiReturn(new[] { "Math", "DebugInfo", "Success" })]
+        public Dictionary<string, object> GetMath()
+        {
+            var debugInfo = new System.Text.StringBuilder();
+            debugInfo.AppendLine("🔧 IApplication.GetMath Debug Information:");
+            
+            if (this._i == null) 
+            {
+                debugInfo.AppendLine("❌ Application interface is null");
+                return new Dictionary<string, object>
+                {
+                    { "Math", null },
+                    { "DebugInfo", debugInfo.ToString() },
+                    { "Success", false }
+                };
+            }
+            
+            debugInfo.AppendLine("✅ Application interface is available");
+            
+            try
+            {
+                var math = this._i.Math;
+                if (math == null)
+                {
+                    debugInfo.AppendLine("❌ Math interface is null");
+                    debugInfo.AppendLine("💡 This may indicate:");
+                    debugInfo.AppendLine("   - Renga is not fully initialized");
+                    debugInfo.AppendLine("   - Math interface is not supported in current context");
+                    debugInfo.AppendLine("   - Renga version doesn't support Math interface");
+                    
+                    return new Dictionary<string, object>
+                    {
+                        { "Math", null },
+                        { "DebugInfo", debugInfo.ToString() },
+                        { "Success", false }
+                    };
+                }
+                
+                debugInfo.AppendLine("✅ Math interface is available");
+                debugInfo.AppendLine($"✅ Math interface type: {math.GetType().Name}");
+                debugInfo.AppendLine($"✅ Math interface full type: {math.GetType().FullName}");
+                
+                // Try multiple approaches to get the properly typed interface
+                Renga.IMath rengaMath = null;
+                string approachUsed = "None";
+                
+                // Approach 1: Try using QueryInterface to get the proper interface
+                debugInfo.AppendLine("🔄 Trying Approach 1: QueryInterface for IMath");
+                try
+                {
+                    var iid = typeof(Renga.IMath).GUID;
+                    var ptr = System.Runtime.InteropServices.Marshal.GetIUnknownForObject(math);
+                    try
+                    {
+                        var result = System.Runtime.InteropServices.Marshal.QueryInterface(ptr, ref iid, out var mathPtr);
+                        if (result == 0 && mathPtr != IntPtr.Zero)
+                        {
+                            rengaMath = (Renga.IMath)System.Runtime.InteropServices.Marshal.GetObjectForIUnknown(mathPtr);
+                            System.Runtime.InteropServices.Marshal.Release(mathPtr);
+                            approachUsed = "QueryInterface";
+                            debugInfo.AppendLine("✅ Approach 1 succeeded: QueryInterface");
+                        }
+                        else
+                        {
+                            debugInfo.AppendLine($"❌ Approach 1 failed: QueryInterface returned {result}");
+                        }
+                    }
+                    finally
+                    {
+                        System.Runtime.InteropServices.Marshal.Release(ptr);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    debugInfo.AppendLine($"❌ Approach 1 failed: QueryInterface - {ex.Message}");
+                }
+                
+                // Approach 2: Try direct cast
+                if (rengaMath == null)
+                {
+                    debugInfo.AppendLine("🔄 Trying Approach 2: Direct cast (as Renga.IMath)");
+                    rengaMath = math as Renga.IMath;
+                    if (rengaMath != null)
+                    {
+                        approachUsed = "Direct cast";
+                        debugInfo.AppendLine("✅ Approach 2 succeeded: Direct cast");
+                    }
+                    else
+                    {
+                        debugInfo.AppendLine("❌ Approach 2 failed: Direct cast returned null");
+                    }
+                }
+                
+                // Approach 3: Try explicit cast
+                if (rengaMath == null)
+                {
+                    debugInfo.AppendLine("🔄 Trying Approach 3: Explicit cast (Renga.IMath)");
+                    try
+                    {
+                        rengaMath = (Renga.IMath)math;
+                        approachUsed = "Explicit cast";
+                        debugInfo.AppendLine("✅ Approach 3 succeeded: Explicit cast");
+                    }
+                    catch (InvalidCastException ex)
+                    {
+                        debugInfo.AppendLine($"❌ Approach 3 failed: Explicit cast - {ex.Message}");
+                    }
+                }
+                
+                // Approach 4: Try using Marshal.GetObjectForIUnknown
+                if (rengaMath == null)
+                {
+                    debugInfo.AppendLine("🔄 Trying Approach 4: Marshal.GetObjectForIUnknown");
+                    try
+                    {
+                        var ptr = System.Runtime.InteropServices.Marshal.GetIUnknownForObject(math);
+                        try
+                        {
+                            rengaMath = (Renga.IMath)System.Runtime.InteropServices.Marshal.GetObjectForIUnknown(ptr);
+                            approachUsed = "Marshal approach";
+                            debugInfo.AppendLine("✅ Approach 4 succeeded: Marshal approach");
+                        }
+                        finally
+                        {
+                            System.Runtime.InteropServices.Marshal.Release(ptr);
+                        }
+                    }
+                    catch (Exception marshalEx)
+                    {
+                        debugInfo.AppendLine($"❌ Approach 4 failed: Marshal approach - {marshalEx.Message}");
+                    }
+                }
+                
+                if (rengaMath == null)
+                {
+                    debugInfo.AppendLine("❌ All approaches failed to cast Math COM object to Renga.IMath");
+                    debugInfo.AppendLine($"🔍 Final object type: {math.GetType().Name}");
+                    debugInfo.AppendLine($"🔍 Final object full type: {math.GetType().FullName}");
+                    
+                    return new Dictionary<string, object>
+                    {
+                        { "Math", null },
+                        { "DebugInfo", debugInfo.ToString() },
+                        { "Success", false }
+                    };
+                }
+                
+                debugInfo.AppendLine($"✅ Successfully obtained Renga.IMath using: {approachUsed}");
+                debugInfo.AppendLine($"✅ Renga.IMath type: {rengaMath.GetType().Name}");
+                debugInfo.AppendLine($"✅ Renga.IMath full type: {rengaMath.GetType().FullName}");
+                
+                return new Dictionary<string, object>
+                {
+                    { "Math", rengaMath },
+                    { "DebugInfo", debugInfo.ToString() },
+                    { "Success", true }
+                };
+            }
+            catch (Exception ex)
+            {
+                debugInfo.AppendLine($"❌ Exception during Math interface access: {ex.Message}");
+                debugInfo.AppendLine($"🔍 Exception type: {ex.GetType().Name}");
+                debugInfo.AppendLine($"🔍 Stack trace: {ex.StackTrace}");
+                
+                return new Dictionary<string, object>
+                {
+                    { "Math", null },
+                    { "DebugInfo", debugInfo.ToString() },
+                    { "Success", false }
+                };
+            }
+        }
+
+        /// <summary>
+        /// Gets the Math interface instance (property for backward compatibility)
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(false)] // Hide the property in Dynamo
+        public Renga.IMath Math
         {
             get
             {
-                if (this._i == null) 
-                    throw new InvalidOperationException("Renga application is not running. Please start Renga first.");
-                return this._i.Math;
+                var result = GetMath();
+                return (Renga.IMath)result["Math"];
+            }
+        }
+
+        /// <summary>
+        /// Checks if the Math interface is available
+        /// </summary>
+        /// <returns>True if Math interface is available, false otherwise</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public bool IsMathAvailable()
+        {
+            if (this._i == null) 
+                return false;
+            
+            try
+            {
+                var math = this._i.Math;
+                return math != null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets debug information about the Math interface availability
+        /// </summary>
+        /// <returns>Dictionary with debug information</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "IsAvailable", "Error", "DebugInfo", "Math" })]
+        public Dictionary<string, object> GetMathDebugInfo()
+        {
+            var debugInfo = new System.Text.StringBuilder();
+            debugInfo.AppendLine("🔧 IApplication.Math Debug Information:");
+            
+            if (this._i == null)
+            {
+                debugInfo.AppendLine("❌ Application interface is null");
+                return new Dictionary<string, object>
+                {
+                    { "IsAvailable", false },
+                    { "Error", "Application interface is null" },
+                    { "DebugInfo", debugInfo.ToString() },
+                    { "Math", null }
+                };
+            }
+            
+            debugInfo.AppendLine("✅ Application interface is available");
+            
+            try
+            {
+                var math = this._i.Math;
+                if (math == null)
+                {
+                    debugInfo.AppendLine("❌ Math interface is null");
+                    debugInfo.AppendLine("💡 This may indicate:");
+                    debugInfo.AppendLine("   - Renga is not fully initialized");
+                    debugInfo.AppendLine("   - Math interface is not supported in current context");
+                    debugInfo.AppendLine("   - Renga version doesn't support Math interface");
+                    
+                    return new Dictionary<string, object>
+                    {
+                        { "IsAvailable", false },
+                        { "Error", "Math interface is null" },
+                        { "DebugInfo", debugInfo.ToString() },
+                        { "Math", null }
+                    };
+                }
+                
+                debugInfo.AppendLine("✅ Math interface is available");
+                debugInfo.AppendLine($"✅ Math interface type: {math.GetType().Name}");
+                
+                // Test casting to Renga.IMath
+                var rengaMath = math as Renga.IMath;
+                if (rengaMath != null)
+                {
+                    debugInfo.AppendLine("✅ Successfully cast to Renga.IMath");
+                }
+                else
+                {
+                    debugInfo.AppendLine("❌ Failed to cast to Renga.IMath");
+                    debugInfo.AppendLine($"🔍 Raw COM object type: {math.GetType().FullName}");
+                }
+                
+                return new Dictionary<string, object>
+                {
+                    { "IsAvailable", rengaMath != null },
+                    { "Error", rengaMath == null ? "Failed to cast to Renga.IMath" : null },
+                    { "DebugInfo", debugInfo.ToString() },
+                    { "Math", rengaMath }
+                };
+            }
+            catch (Exception ex)
+            {
+                debugInfo.AppendLine($"❌ Error accessing Math interface: {ex.Message}");
+                debugInfo.AppendLine($"🔍 Exception type: {ex.GetType().Name}");
+                
+                return new Dictionary<string, object>
+                {
+                    { "IsAvailable", false },
+                    { "Error", ex.Message },
+                    { "DebugInfo", debugInfo.ToString() },
+                    { "Math", null }
+                };
             }
         }
 

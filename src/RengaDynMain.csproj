@@ -192,8 +192,11 @@
     <Compile Include="RengaAPI\IEntityCollection.cs" />
     <Compile Include="RengaAPI\INewEntityArgs.cs" />
     <Compile Include="RengaAPI\IProject.cs" />
+    <Compile Include="RengaAPI\ILevel.cs" />
+    <Compile Include="RengaAPI\ILevelObject.cs" />
     <Compile Include="RengaAPI\Constants\Constants.cs" />
     <Compile Include="Converters\Renga\2DGeometry\Curve2DConverter.cs" />
+    <Compile Include="Converters\Dynamo\2DGeometry\PolyCurveConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Renga">

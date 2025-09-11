@@ -1,0 +1,3281 @@
+{
+  "Uuid": "1b9b3047-ffeb-4664-8873-eb919235a83a",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "Test2",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "0735e590c9f14b239c8fb2d031be0b49",
+      "NodeType": "FunctionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2fc17e7a0f5e4a11a901d65156bb2f83",
+          "Name": "void",
+          "Description": "void",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.DynDocument.Application.ForceCleanup",
+      "Replication": "Auto",
+      "Description": "Утилита для принудительной очистки всех COM-объектов и сборки мусора Используйте этот метод для очистки памяти после работы с Renga\n\nApplication.ForceCleanup ( ): void"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "1f8cd96b72374203abdca936ace3ebc7",
+      "NodeType": "FunctionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "712aea6038b24730bd8e124f7a2da9e9",
+          "Name": "var[]..[]",
+          "Description": "Список информации о запущенных экземплярах Renga",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.DynDocument.Application.GetRunningRengaInstances",
+      "Replication": "Auto",
+      "Description": "Получение информации о всех запущенных экземплярах Renga\n\nApplication.GetRunningRengaInstances ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "9d936120011e4f418469b02c374acece",
+      "NodeType": "FunctionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "403fb944f6a447cc8fddd373994a6453",
+          "Name": "string[]",
+          "Description": "Список строк с информацией об экземплярах",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.DynDocument.Application.GetRengaInstanceList",
+      "Replication": "Auto",
+      "Description": "Получение простого списка доступных экземпляров Renga для выбора\n\nApplication.GetRengaInstanceList ( ): string[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "40b4d753085740e793adc22cd7bad299",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "201a0971e7e74721a6ad8533963bd129",
+          "Name": "integer",
+          "Description": "0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "0;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "60a67a7d8f124ca499fa1c127284790f",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "c70ffa0d9c6a41048d537039937823e3",
+          "Name": "instanceIndex",
+          "Description": "Index of Renga instance (0-based)\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a9484c706f424674bc5c55a65ff6251a",
+          "Name": "IApplication",
+          "Description": "IApplication",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IApplication.IApplication@int",
+      "Replication": "Auto",
+      "Description": "Constructor - Creates connection to specific Renga instance by index\n\nIApplication.IApplication (instanceIndex: int): IApplication"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "72312d93472644dba1e847f0acb7a240",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "c072624cf2b1443c90726052d6ff871c",
+          "Name": "iSelection",
+          "Description": "DynRenga.RengaAPI.ISelection",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7b7a7420d3d64f9f8ea01728bd15ec60",
+          "Name": "int[]",
+          "Description": "Collection of IDs of selected objects",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.ISelection.GetSelectedObjects",
+      "Replication": "Auto",
+      "Description": "Returns a collection of IDs of objects selected in the current view\n\nISelection.GetSelectedObjects ( ): int[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "bb35467fe2a04f94b171972f3acbe819",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "cf0e76802624442ca93f6baa25089f7b",
+          "Name": "application",
+          "Description": "Renga application instance\n\nIApplication",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5d385ea2c5e94a538bc016f7f04c3f63",
+          "Name": "ISelection",
+          "Description": "ISelection",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.ISelection.ISelection@DynRenga.RengaAPI.IApplication",
+      "Replication": "Auto",
+      "Description": "Constructor - Creates DynISelection from IApplication\n\nISelection.ISelection (application: IApplication): ISelection"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "08530108dcc24a8787039b36c6051567",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a5ecc6620be344c3914f36a334776b88",
+          "Name": "application",
+          "Description": "Renga application instance\n\nIApplication",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f64aa9ae9ab54e3c884badf9fbc507d2",
+          "Name": "IModel",
+          "Description": "IModel",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModel.IModel@DynRenga.RengaAPI.IApplication",
+      "Replication": "Auto",
+      "Description": "Constructor - Creates IModel from IApplication\n\nIModel.IModel (application: IApplication): IModel"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "652360a806584bedbf87e4aa99857f8f",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "9d10e362852e4a47b36a3e411989e0cb",
+          "Name": "iModel",
+          "Description": "DynRenga.RengaAPI.IModel",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "70fe88804e324de1ae57268ca8500ecd",
+          "Name": "IModelObjectCollection",
+          "Description": "IModelObjectCollection containing all model objects",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModel.GetObjects",
+      "Replication": "Auto",
+      "Description": "Returns a collection of all objects present in the model\n\nIModel.GetObjects ( ): IModelObjectCollection"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "b1053820fe3346d3aff036907fa11802",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "357cc9f571de4761bdd2e5d4d500cbaa",
+          "Name": "iModelObjectCollection",
+          "Description": "DynRenga.RengaAPI.IModelObjectCollection",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "397cd23323c44ab78e7105f403a3eb0c",
+          "Name": "id",
+          "Description": "Object identifier\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "82f4dffed0ea4088ba71277639b73dc1",
+          "Name": "IModelObject",
+          "Description": "IModelObject instance or null if not found",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModelObjectCollection.GetById@int",
+      "Replication": "Auto",
+      "Description": "Gets an object by its identifier\n\nIModelObjectCollection.GetById (id: int): IModelObject"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "1fcb67dcc340433b92845da18001275e",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "dfeeda0435d24f47862844ef4138ce4f",
+          "Name": "iBaseline2DObject",
+          "Description": "DynRenga.RengaAPI.IBaseline2DObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "afc06ec7a8844c5599c0f528077ef525",
+          "Name": "ICurve2D",
+          "Description": "DynRenga.RengaAPI.ICurve2D representing the baseline",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IBaseline2DObject.GetBaseline",
+      "Replication": "Auto",
+      "Description": "Returns the copy of the 2D baseline of the object in its own coordinate system\n\nIBaseline2DObject.GetBaseline ( ): ICurve2D"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "61cc659934dc4442bade163c88c81157",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "40293c797029443aa742604aef94f893",
+          "Name": "iModelObject",
+          "Description": "DynRenga.RengaAPI.IModelObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5f8dd6b4872941c6883360e2bb67ffe8",
+          "Name": "interfaceName",
+          "Description": "The name of the requested interface\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "bea7bd3ad57c4d27add1f3720de76914",
+          "Name": "var[]..[]",
+          "Description": "Requested interface as proper RengaAPI wrapper type",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModelObject.GetInterfaceByName@string",
+      "Replication": "Auto",
+      "Description": "Returns an interface by its name (alternative to COM QueryInterface) Returns proper RengaAPI wrapper types for known interfaces\n\nIModelObject.GetInterfaceByName (interfaceName: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "5534bd3154d443928838653b274eb42a",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d6a4b2485999438a86f2ea938f0e4cc8",
+          "Name": "string",
+          "Description": "\"IBaseline2DObject\"",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"IBaseline2DObject\";"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "0a3005161dc648659bc13b4b83990bb6",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "832c27986a8941959fa9cefc0875a1f5",
+          "Name": "curve2D",
+          "Description": "DynRenga.RengaAPI.ICurve2D to convert\n\nICurve2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "15084a2b6a194f0e93a515b25536463e",
+          "Name": "partsPerMeter",
+          "Description": "Number of points per meter for curve discretization (default: 2)\n\nint\nDefault value : 2",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9ba9b4aed5624f57986876d52f368824",
+          "Name": "PolyCurve",
+          "Description": "Dynamo PolyCurve representing the curve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.Converters.Renga.Geometry2D.Curve2DConverter.ToDynamoPolyCurveOptimized@DynRenga.RengaAPI.ICurve2D,int",
+      "Replication": "Auto",
+      "Description": "Converts DynRenga.RengaAPI.ICurve2D to Dynamo PolyCurve with optimized handling for closed curves\n\nCurve2DConverter.ToDynamoPolyCurveOptimized (curve2D: ICurve2D, partsPerMeter: int = 2): PolyCurve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "b0351f39472c4dca8d1a57cba2576fbf",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "75d008a745c64a57a13e891ca38f26db",
+          "Name": "curve2D",
+          "Description": "DynRenga.RengaAPI.ICurve2D to analyze\n\nICurve2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "19170dda02524e7ba98ac5485962dff4",
+          "Name": "string",
+          "Description": "Debug information string",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.Converters.Renga.Geometry2D.Curve2DConverter.GetDebugInfo@DynRenga.RengaAPI.ICurve2D",
+      "Replication": "Auto",
+      "Description": "Gets debug information about the conversion process\n\nCurve2DConverter.GetDebugInfo (curve2D: ICurve2D): string"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "7788684cb5d7496fa7985497d873a374",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "825f77d8354644b997aebb8b8b756e40",
+          "Name": "curve2D",
+          "Description": "DynRenga.RengaAPI.ICurve2D to analyze\n\nICurve2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "55400200745f4c029e696b40e5d08e2c",
+          "Name": "CurveType",
+          "Description": "Dictionary with curve information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "dfa13689c2d04b7a8a5e13c40838ae08",
+          "Name": "IsClosed",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "024cb07dcfb54f69902176100145fc74",
+          "Name": "Length",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3b57adb636af4701ac10bc3b895bb1dc",
+          "Name": "ParameterRange",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e8cf3d4b073d4943821c9940540a9830",
+          "Name": "SegmentCount",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "abf7774bed8240e28bedaf974f02020f",
+          "Name": "BoundingBox",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.Converters.Renga.Geometry2D.Curve2DConverter.GetCurveInfo@DynRenga.RengaAPI.ICurve2D",
+      "Replication": "Auto",
+      "Description": "Gets curve information and type details\n\nCurve2DConverter.GetCurveInfo (curve2D: ICurve2D): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "02fd692c6e34458ead2fcecf1f065024",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "9542f559e0f24beea2e6148bf26d43c6",
+          "Name": "polyCurve",
+          "Description": "Autodesk.DesignScript.Geometry.PolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "973c814a17164b35b93a53ea95c8b3b2",
+          "Name": "Point[]",
+          "Description": "Point[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.Points",
+      "Replication": "Auto",
+      "Description": "Returns the start point of the first component and the end points of every component curve. For a closed polycurve, as the start and end points are the same, the end point is excluded.\n\nPolyCurve.Points: Point[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "6230db78ba76485f867fd6556eed2b44",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "bce5cd76feb84405b81f151cae919e17",
+          "Name": "polyCurve",
+          "Description": "Autodesk.DesignScript.Geometry.PolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "174397d6ff9c4d39a4ad4515af26a627",
+          "Name": "Curve[]",
+          "Description": "Curve[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.Curves",
+      "Replication": "Auto",
+      "Description": "Returns curves of the polycurve\n\nPolyCurve.Curves ( ): Curve[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "eec594952a42484cbb7c132525492614",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "5943ef812dd345079ef16b986eb528e6",
+          "Name": "SelectedObjectBaseline",
+          "Description": "SelectedObjectBaseline",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f245963c4e2c4e538aed8a65c9757b6b",
+          "Name": "SelectedObjectBaseline",
+          "Description": "SelectedObjectBaseline",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "SelectedObjectBaseline;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "64228e6bdaf74d8ea147539db4742fe5",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "65f191145ce84100b3aa24ae0547d457",
+          "Name": "model",
+          "Description": "model",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c21fa35d8e6c4fc2a0f335bf08dcb87c",
+          "Name": "model",
+          "Description": "model",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "model;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "48627c3441b14c18b60020af889fb10d",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "3c416e910e614c50b7afbce09ed96e78",
+          "Name": "iOperation",
+          "Description": "DynRenga.RengaAPI.IOperation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2b2470b089fa4cb6a7fd6c8108d3b07e",
+          "Name": "Success",
+          "Description": "Dictionary containing success status and debug information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "03ac2c7d59cd41d286bdec0c5bd33520",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IOperation.ApplyWithDebug",
+      "Replication": "Auto",
+      "Description": "Applies the operation with debug information\n\nIOperation.ApplyWithDebug ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "e04a1addccab446aab1eb14446766e55",
+      "NodeType": "FunctionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "29b70d24817d4a0885c3a2996d6f808e",
+          "Name": "var",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.Constants.ObjectTypes.Floor",
+      "Replication": "Auto",
+      "Description": "Floor object type\n\nObjectTypes.Floor: var"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "188ee0468ef34eed975acc1b598ec96f",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "7ad9592ae33446d38ad610026bdb47fd",
+          "Name": "iModel",
+          "Description": "DynRenga.RengaAPI.IModel",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fc40ca1ba23a4e66a442e06c1e5d0ff2",
+          "Name": "typeId",
+          "Description": "The object type ID (required)\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "04bf80a6c6814b488185c25408d4b8a8",
+          "Name": "hostObjectId",
+          "Description": "The host object ID (optional, -1 to skip)\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "448980ad5d9841278e865144176c9426",
+          "Name": "categoryId",
+          "Description": "The category ID (optional, -1 to skip)\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9c71ada1d74147608f62f9edcc9f4944",
+          "Name": "placement3D",
+          "Description": "The 3D placement (optional, null to skip)\n\nPlacement3D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "72c007f9825d45aba686fddc0c39df37",
+          "Name": "ModelObject",
+          "Description": "Dictionary with ModelObject, DebugInfo, and Success status",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a31f527ffd4243dfbe3d9b13499af6f7",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2989dd4c58a24e4095e0f13e2257e332",
+          "Name": "Success",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModel.CreateObject@var,int,int,DynRenga.DynGeometry.Placement3D",
+      "Replication": "Auto",
+      "Description": "Creates a new model object using direct COM interface manipulation This method bypasses wrapper layers to ensure proper TypeId synchronization\n\nIModel.CreateObject (typeId: var, hostObjectId: int = -1, categoryId: int = -1, placement3D: Placement3D): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "0f2192ce62264e21837538d8da3c3304",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "53b0a2370fd44519bd1c0fc15164491d",
+          "Name": "string",
+          "Description": "\"HostObjectId\"",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"HostObjectId\";"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "7b577eb9ca81433c8f382080ba71de97",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "69705c6d67c14e89990b3e61f13e2bf3",
+          "Name": "iModelObject",
+          "Description": "DynRenga.RengaAPI.IModelObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ce868f549eb94970a5ce41a7221f42a2",
+          "Name": "var[]..[]",
+          "Description": "Dictionary with host object information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModelObject.GetHostObjectInfo",
+      "Replication": "Auto",
+      "Description": "Gets detailed host object information including level details\n\nIModelObject.GetHostObjectInfo ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "5ae365f646fa4bd3a3373d067bff1361",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a1ea268809e941faa98fedce9f7fd17b",
+          "Name": "dictionary",
+          "Description": "DesignScript.Builtin.Dictionary",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "82ab2320b851414aaabcf1aa96c93eea",
+          "Name": "key",
+          "Description": "The key in the Dictionary to obtain value for\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "bed0ee9b28274243bbfc8cfa6f63f8e4",
+          "Name": "value",
+          "Description": "Value at the specified key or null if it is not set",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DesignScript.Builtin.Dictionary.ValueAtKey@string",
+      "Replication": "Auto",
+      "Description": "Obtain the value at a specified key\n\nDictionary.ValueAtKey (key: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "67faf4ea47e9424699c02466150c3bab",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a148fd9b4f7d4f5a8b29468a9258018d",
+          "Name": "iModelObject",
+          "Description": "DynRenga.RengaAPI.IModelObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d7fa0736c3a54b419d0c9df0de2732d7",
+          "Name": "interfaceName",
+          "Description": "The name of the requested interface\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "15d65a76144b4d6bab3ee54a9268aed9",
+          "Name": "var[]..[]",
+          "Description": "Requested interface as proper RengaAPI wrapper type",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModelObject.GetInterfaceByName@string",
+      "Replication": "Auto",
+      "Description": "Returns an interface by its name (alternative to COM QueryInterface) Returns proper RengaAPI wrapper types for known interfaces\n\nIModelObject.GetInterfaceByName (interfaceName: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "6e4beb8a46cb4b139f99a2801a3e1cd8",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "cdf6961d0b8049d18601e9310a0bddbe",
+          "Name": "string",
+          "Description": "\"IBaseline2DObject\"",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"IBaseline2DObject\";"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "5ff9b12cb0a94c5a9b01ff5916927ac4",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "15e5a543e34f4e21a93d007463c8d2c8",
+          "Name": "iBaseline2DObject",
+          "Description": "DynRenga.RengaAPI.IBaseline2DObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1b0d15fd7191467fac22a2d02b366f32",
+          "Name": "baseline",
+          "Description": "New baseline of the object\n\nICurve2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "580fd04a314e4847a528a4162e5f990a",
+          "Name": "Success",
+          "Description": "Dictionary with Success status and DebugInfo",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3b2f3934264d4af38e70f6b46399c026",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IBaseline2DObject.SetBaseline@DynRenga.RengaAPI.ICurve2D",
+      "Replication": "Auto",
+      "Description": "Sets the 2D baseline of the object in its own coordinate system Limitations: It is impossible to edit the baseline of an object with dependent objects (e.g., Roof)\n\nIBaseline2DObject.SetBaseline (baseline: ICurve2D): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "ad18b48815e74cf197adec0b579f8213",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "197ec6870615456e875acc7296f4a5cf",
+          "Name": "iOperation",
+          "Description": "DynRenga.RengaAPI.IOperation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "345796457b57443f9b85103e3335d785",
+          "Name": "Success",
+          "Description": "Dictionary containing success status and debug information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ef7166a168274ce19a88f0856a3bc986",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IOperation.StartWithDebug",
+      "Replication": "Auto",
+      "Description": "Starts an operation with debug information\n\nIOperation.StartWithDebug ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "93130b3421c8496abbd7dbb47017de95",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a3376ed6601c40e182549ec36963765a",
+          "Name": "iModel",
+          "Description": "DynRenga.RengaAPI.IModel",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "316c60eaad8a4924b2f967d29411a540",
+          "Name": "IOperation",
+          "Description": "IOperation object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModel.CreateOperation",
+      "Replication": "Auto",
+      "Description": "Creates an operation (deprecated - use IProject::CreateOperation instead)\n\nIModel.CreateOperation ( ): IOperation"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "3f1ea25e3c47451e8d7bb068ab8e37a1",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "42861cbeb5e44784b4182a71b35bfb3b",
+          "Name": "iOperation",
+          "Description": "DynRenga.RengaAPI.IOperation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f2fefba1310447818be355459bd2c13b",
+          "Name": "Success",
+          "Description": "Dictionary containing success status and debug information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b2a16c712e5945ce9e2f4d237547a840",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IOperation.StartWithDebug",
+      "Replication": "Auto",
+      "Description": "Starts an operation with debug information\n\nIOperation.StartWithDebug ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "7e8cc23691774c348d8573c61ea450fb",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "d8f4e01c078a42b8a19aa37fd12dfb0d",
+          "Name": "iApplication",
+          "Description": "DynRenga.RengaAPI.IApplication",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "67137d66836c4b5e8831e237bbfc36d8",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IApplication.Project",
+      "Replication": "Auto",
+      "Description": "Gets the currently opened project\n\nIApplication.Project: var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "0389472d1aee4bd1921d659eb101e5a0",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "9a67f18e052e448cb424f24598f302ad",
+          "Name": "test",
+          "Description": "test",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "70fa5e13d1ec4935b58fbff05be14795",
+          "Name": "operation",
+          "Description": "operation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b5ea86b332f54e3daf71f1bbe585bf95",
+          "Name": "pass",
+          "Description": "pass",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "773159082b864044a52f04ec8c811863",
+          "Name": "conditional",
+          "Description": "(test ? operation : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1e742924f5d74eb9b4ff4ac491baee2e",
+          "Name": "conditional",
+          "Description": "(test ? pass : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "test ? operation : null;\ntest ? pass : null;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "e8cbd4fd585a49bcbed0196331d1d35e",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "534c5e1456114ccda6de653dbdf0eb0c",
+          "Name": "test",
+          "Description": "test",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "701ab0bb1239477491d63326e76e28ea",
+          "Name": "operation",
+          "Description": "operation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "95f5bf9be0784a23a80bda37ffb067c7",
+          "Name": "pass",
+          "Description": "pass",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bf4615fa19244c26b9aca5f9f04e5b0f",
+          "Name": "additional",
+          "Description": "additional",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4d4a641d38de4fb5b9d4ec0d207e0893",
+          "Name": "conditional",
+          "Description": "(test ? operation : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0e6b703107594d32b4664fce6fddce5a",
+          "Name": "conditional",
+          "Description": "(test ? pass : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "89c4f6118f5a4260aac56c81cc87bb66",
+          "Name": "additional",
+          "Description": "additional",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "test ? operation : null;\ntest ? pass : null;\nadditional;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "e4132b69f99141948b9484f6f9d9c4a8",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "15d7c49428434214a97d4b010d9a9632",
+          "Name": "test",
+          "Description": "test",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "96ccbdb2e7574cc1ae469cf66c3fe839",
+          "Name": "operation",
+          "Description": "operation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8519756c3839478796a307b9d0236100",
+          "Name": "pass",
+          "Description": "pass",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "258fe630e4b44165bfd9af94b1779c5e",
+          "Name": "additional",
+          "Description": "additional",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "59a96f829b054d9c962ad29819597b30",
+          "Name": "conditional",
+          "Description": "(test ? operation : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5794432cb1364ed4bd86ed55dab11d10",
+          "Name": "conditional",
+          "Description": "(test ? pass : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d9910d2f030f4e0d89a3ef3440577b44",
+          "Name": "additional",
+          "Description": "additional",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "test ? operation : null;\ntest ? pass : null;\nadditional;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "82d5c30d0545405783f1144506f2380d",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "c9de2e882b4c47038be64c9296217336",
+          "Name": "test",
+          "Description": "test",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "90e2bc43bb554a63b2487a556856ee51",
+          "Name": "operation",
+          "Description": "operation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "17c103d00904464783823214688f8eeb",
+          "Name": "pass",
+          "Description": "pass",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2a76ae167f28499d8788e3ad7d68e26e",
+          "Name": "conditional",
+          "Description": "(test ? operation : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "94c81d097d6d4c9a80158d069febe314",
+          "Name": "conditional",
+          "Description": "(test ? pass : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "test ? operation : null;\ntest ? pass : null;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "0669d0a7d8f04fefa2046239c7354843",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "04197437e4d246efb26144f19c4f9831",
+          "Name": "iModelObject",
+          "Description": "DynRenga.RengaAPI.IModelObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3f83286f97234b8c8b45e12b1781c65b",
+          "Name": "var[]..[]",
+          "Description": "Dictionary with object information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModelObject.GetObjectInfo",
+      "Replication": "Auto",
+      "Description": "Gets object information as a dictionary for debugging\n\nIModelObject.GetObjectInfo ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "5ab1a9c7bd894369bb4a712e6d4057f0",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a96fac13b3fd48c59b678d572e6742ac",
+          "Name": "iLevelObject",
+          "Description": "DynRenga.RengaAPI.ILevelObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "bde459af36a347ed90805b133e4b93e7",
+          "Name": "Placement3D",
+          "Description": "Placement3D representing the object's placement",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.ILevelObject.GetPlacement",
+      "Replication": "Auto",
+      "Description": "Returns the copy of the local coordinate system of an object in three-dimensional space\n\nILevelObject.GetPlacement ( ): Placement3D"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "0c6328b144844499a1c7749703fc4110",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2fd3f6de25284049b869ef00ecedb0a0",
+          "Name": "iModelObject",
+          "Description": "DynRenga.RengaAPI.IModelObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9bcdecb3face45698eb2ea9697ac4303",
+          "Name": "interfaceName",
+          "Description": "The name of the requested interface\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4d5abbe84d434a6ab8d5b100824e9541",
+          "Name": "var[]..[]",
+          "Description": "Requested interface as proper RengaAPI wrapper type",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IModelObject.GetInterfaceByName@string",
+      "Replication": "Auto",
+      "Description": "Returns an interface by its name (alternative to COM QueryInterface) Returns proper RengaAPI wrapper types for known interfaces\n\nIModelObject.GetInterfaceByName (interfaceName: string): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "4bc0bcc020754941b52368ed36acde68",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "efe91b5e89e142bb90400306665338e5",
+          "Name": "string",
+          "Description": "\"ILevelObject\"",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"ILevelObject\";"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "55f048e2943d4d348a02163521955ec6",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "be2481ab76d043a2a3564306e275774b",
+          "Name": "iBaseline2DObject",
+          "Description": "DynRenga.RengaAPI.IBaseline2DObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "333897ee5f7a4571bb40f06daa045e79",
+          "Name": "placement2D",
+          "Description": "A coordinate system to which the 2D baseline will be transformed\n\nPlacement2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ae862006d88641eea8fcac9a5a7c7fdc",
+          "Name": "baselineInCS",
+          "Description": "New baseline of the object in the specified coordinate system\n\nICurve2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e79cb45edc024ac4a387623037490fa1",
+          "Name": "Success",
+          "Description": "Dictionary with Success status and DebugInfo",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ac7c126b85994439b764485cb4f89efc",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IBaseline2DObject.SetBaselineInCS@DynRenga.DynGeometry.Placement2D,DynRenga.RengaAPI.ICurve2D",
+      "Replication": "Auto",
+      "Description": "Sets the 2D baseline of the object in the specified coordinate system Limitations: It is impossible to edit the baseline of an object with dependent objects (e.g., Roof)\n\nIBaseline2DObject.SetBaselineInCS (placement2D: Placement2D, baselineInCS: ICurve2D): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "c175fc86afd64336b66aed9b91f2d526",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "c03f18533bea4e5ca2a434fe441ad3a3",
+          "Name": "polyCurve",
+          "Description": "Autodesk.DesignScript.Geometry.PolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "15fd457ec2ff4e32bf9e645bec186b8d",
+          "Name": "signedDistance",
+          "Description": "A positive offset distance applies in the direction of the cross product between the polycurve's tangent and the plane's normal vector, while a negative offset applies in the opposite direction.\n\ndouble",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5bbb7c90278e434aa30e11ce13b82cb1",
+          "Name": "extendCircular",
+          "Description": "If there are gaps between the offset component curves then, depending on the gap closure settings, they may be filled either by circular arcs (true value) to give smooth corners, or by extending (false value) the offset curves.\n\nbool",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9f177e736ce8480cbc203a5404f57a6e",
+          "Name": "planeNormal",
+          "Description": "The curve's plane normal. Defaults to the input curve's plane normal\n\nVector\nDefault value : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "78508af2ea8146899ffbfdd98777346a",
+          "Name": "Curve[]..[]",
+          "Description": "One or more offset polycurves",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.OffsetMany@double,bool,Autodesk.DesignScript.Geometry.Vector",
+      "Replication": "Auto",
+      "Description": "Create one or more Polycurves by offsetting a planar polycurve by the given distance in a plane defined by the plane normal. The \"planeNormal\" input argument defaults to the normal of the plane containing the curve but an explicit normal parallel to the original curve normal can be provided to better control the direction of the offset. For example, if a consistent offset direction is required for multiple curves sharing the same plane, the \"planeNormal\" can be used to override individual curve normals and force all curves to be offset in the same direction. Reversing the normal reverses the direction of the offset.\n\nPolyCurve.OffsetMany (signedDistance: double, extendCircular: bool, planeNormal: Vector = null): Curve[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "3bd0bbb208284572921ce925d122fc30",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c1a2f7b7cbf64379939216a3766cbcd1",
+          "Name": "double",
+          "Description": "-0.3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "-0.3;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "982abe25a0934365b66b96b101e87a39",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f4f0b9ebc8914e769d714d93698ac23d",
+          "Name": "boolean",
+          "Description": "true",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "true;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "6352e1e8921e480894d4fcecaf7430e4",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "c65f0a77fb9441a7be5cda479e449e32",
+          "Name": "polyCurve",
+          "Description": "Dynamo PolyCurve to convert\n\nPolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bae6233eca0049c39d5f3d2243926e16",
+          "Name": "math",
+          "Description": "DynRenga.RengaAPI.IMath interface for curve creation\n\nIMath",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c41ef1dd3779441886d88e71a23182fd",
+          "Name": "tolerance",
+          "Description": "Tolerance for curve connection (default: 1e-6)\n\ndouble\nDefault value : 1E-06",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "55c4137709754645ac361b947e8e3840",
+          "Name": "ICurve2D",
+          "Description": "DynRenga.RengaAPI.ICurve2D representing the polycurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.Converters.Dynamo.Geometry2D.PolyCurveConverter.FromDynamoPolyCurve@Autodesk.DesignScript.Geometry.PolyCurve,DynRenga.RengaAPI.IMath,double",
+      "Replication": "Auto",
+      "Description": "Converts Dynamo PolyCurve to DynRenga.RengaAPI.ICurve2D Uses RengaBIM SDK IMath interface to create composite curves\n\nPolyCurveConverter.FromDynamoPolyCurve (polyCurve: PolyCurve, math: IMath, tolerance: double = 1E-06): ICurve2D"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "867007f12e074a24a38a54cdf2346fce",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "578ee60b1ee14c01860fe3f6fcdffa35",
+          "Name": "math",
+          "Description": "COM object implementing IMath\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "947c307def3c42f39269502e61cb0b77",
+          "Name": "IMath",
+          "Description": "IMath",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IMath.IMath@var",
+      "Replication": "Auto",
+      "Description": "Constructor from COM object\n\nIMath.IMath (math: var): IMath"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "ff37aae773594b4fb64c92c624831d8d",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "14662cd6fe40435eb355be5dc5154396",
+          "Name": "iApplication",
+          "Description": "DynRenga.RengaAPI.IApplication",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "effcdb1a2b4a4a7a9ccc7bf53c622ec9",
+          "Name": "IsAvailable",
+          "Description": "Dictionary with debug information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d63060817c51430c8dfe4c4503b4a739",
+          "Name": "Error",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d124842648c246e18906801ba37cbcdd",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b88a6a865ec74a05ab7539f09b086278",
+          "Name": "Math",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IApplication.GetMathDebugInfo",
+      "Replication": "Auto",
+      "Description": "Gets debug information about the Math interface availability\n\nIApplication.GetMathDebugInfo ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "1a49ab66579f470c8a2fd25865d38718",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "d5a8a22f73544ccba12b33947ef33111",
+          "Name": "iApplication",
+          "Description": "DynRenga.RengaAPI.IApplication",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "134a15c8036047fd909e949928961602",
+          "Name": "Math",
+          "Description": "Dictionary with Math interface and debug information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e0ddefcfa56d499599dbd5e840687961",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "06c76116350245c8aae91d61b7d79f81",
+          "Name": "Success",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IApplication.GetMath",
+      "Replication": "Auto",
+      "Description": "Gets the Math interface instance as an action with debug output\n\nIApplication.GetMath ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "26abe3ebfb434a7ab8d1fa0586809831",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "060070a8121140f18b3c2573b8b99e85",
+          "Name": "iCurve2D",
+          "Description": "DynRenga.RengaAPI.ICurve2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "00adeac12ff54e7e847ddae50c472c93",
+          "Name": "string",
+          "Description": "Debug information string",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.ICurve2D.GetDebugInfo",
+      "Replication": "Auto",
+      "Description": "Gets debug information about the interface state\n\nICurve2D.GetDebugInfo ( ): string"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "41b0fd663aa246c1a916fa44ebea66c3",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "a113d582748947b3ba5ab0a8c5250e18",
+          "Name": "curve2D",
+          "Description": "DynRenga.RengaAPI.ICurve2D to analyze\n\nICurve2D",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ac0add369192448bb99bd92129417a79",
+          "Name": "CurveType",
+          "Description": "Dictionary with curve information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b5637978646e4746be1d014d89194bc0",
+          "Name": "IsClosed",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1a583195e710471f8179be0ab70f3559",
+          "Name": "Length",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a525d05da347408ba9a1ecde5a681b55",
+          "Name": "ParameterRange",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c57df3c80899494ca92232734977e012",
+          "Name": "SegmentCount",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4df420b078234c60ab6bc6ac796707b9",
+          "Name": "BoundingBox",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.Converters.Renga.Geometry2D.Curve2DConverter.GetCurveInfo@DynRenga.RengaAPI.ICurve2D",
+      "Replication": "Auto",
+      "Description": "Gets curve information and type details\n\nCurve2DConverter.GetCurveInfo (curve2D: ICurve2D): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "c7bda2a05c254a6e84cc2be55c7da76f",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "21692c281eb54fcd8873b708700b7228",
+          "Name": "polyCurve",
+          "Description": "Autodesk.DesignScript.Geometry.PolyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2320ce5f8c614001a3bf223edbe1c836",
+          "Name": "radius",
+          "Description": "Radius of fillet\n\ndouble\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8c34215cc5ec4fc0bd1b66ab0d52e1f1",
+          "Name": "clockwise_corners",
+          "Description": "Indicates which corners should be filleted, if it is true then corners where the tangent at the start of the second component is clockwise from the tangent at the end of the first component (relative to the curve normal) will get filleted. If it is false then anti-clockwise corners will get filleted.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "59572394a45d46b1b0d0ed0303207803",
+          "Name": "PolyCurve",
+          "Description": "Filleted polyCurve",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.PolyCurve.Fillet@double,bool",
+      "Replication": "Auto",
+      "Description": "Fillet corners of planar polycurve.\n\nPolyCurve.Fillet (radius: double = 1, clockwise_corners: bool = true): PolyCurve"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "99c46a92aded426dac4943f39682d154",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f863a90a45124f21b64ee04a07b15970",
+          "Name": "double",
+          "Description": "0.3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "0.3;"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NumberType": "Double",
+      "MaximumValue": 1.0,
+      "MinimumValue": 0.0,
+      "StepValue": 0.01,
+      "Id": "1cf2b056d8e241dc8d05dc40c9602c05",
+      "NodeType": "NumberInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6ad875bc8fa54a55a8e8a028e47dda86",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Produces numeric values",
+      "InputValue": 0.7
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "4758788ba71e4a5c9ef7177c2c57a9d2",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2dc9fec112f247d886828b585ee1439b",
+          "Name": "iOperation",
+          "Description": "DynRenga.RengaAPI.IOperation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cf574631d99246598a690faf7a86e0c7",
+          "Name": "Success",
+          "Description": "Dictionary containing success status and debug information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "635453cd3b7c47048a3c84c125c2ebad",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IOperation.ApplyWithDebug",
+      "Replication": "Auto",
+      "Description": "Applies the operation with debug information\n\nIOperation.ApplyWithDebug ( ): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "1c54a8a92ca74456b109d823dc8dee08",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "d527d8b4e92748eb9e881637e580752b",
+          "Name": "test",
+          "Description": "test",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "818c9719000d4786baa6084031bbc737",
+          "Name": "operation",
+          "Description": "operation",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f318c0567e9443d184d72007a5c8d61b",
+          "Name": "pass",
+          "Description": "pass",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7fecbffd911b4733871cbb29245f6482",
+          "Name": "additional",
+          "Description": "additional",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6ebc61758e454661a1f804266a474734",
+          "Name": "conditional",
+          "Description": "(test ? operation : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a7cfb028f2c34a8ba4d8694ae1019077",
+          "Name": "conditional",
+          "Description": "(test ? pass : null)",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2f1f2af511454ba1a509e561757d30fe",
+          "Name": "additional",
+          "Description": "additional",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "test ? operation : null;\ntest ? pass : null;\nadditional;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "cfc8e532595848f88fe11bc9709f2f76",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": ""
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "fc263d466069478f857dc40a3ac7b89f",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "7c23f67b3769421ab62330c6c2348e94",
+          "Name": "iBaseline2DObject",
+          "Description": "DynRenga.RengaAPI.IBaseline2DObject",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ef396eb8a722492f84ed94574cf091d3",
+          "Name": "Success",
+          "Description": "Dictionary with success status and debug information",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "926f69fb459f40b69a01dfe6761d3b80",
+          "Name": "DebugInfo",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DynRenga.RengaAPI.IBaseline2DObject.RefreshBaseline",
+      "Replication": "Auto",
+      "Description": "Forces a refresh of the baseline by re-setting it with the current value This can help with real-time updates in Dynamo\n\nIBaseline2DObject.RefreshBaseline ( ): var[]..[]"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "201a0971e7e74721a6ad8533963bd129",
+      "End": "c70ffa0d9c6a41048d537039937823e3",
+      "Id": "8dcbd308b620487792ec4d16f452e20f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a9484c706f424674bc5c55a65ff6251a",
+      "End": "cf0e76802624442ca93f6baa25089f7b",
+      "Id": "3e00b546856c4574aba4616e4e34a85c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a9484c706f424674bc5c55a65ff6251a",
+      "End": "a5ecc6620be344c3914f36a334776b88",
+      "Id": "ae25a565f3634a6998a2e6d07152e9b0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a9484c706f424674bc5c55a65ff6251a",
+      "End": "d8f4e01c078a42b8a19aa37fd12dfb0d",
+      "Id": "00b265f73b7d454aa0f0c6bc1c2bc631",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a9484c706f424674bc5c55a65ff6251a",
+      "End": "14662cd6fe40435eb355be5dc5154396",
+      "Id": "d479263fd6014c72b47f7475e9a3c6a6",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a9484c706f424674bc5c55a65ff6251a",
+      "End": "d5a8a22f73544ccba12b33947ef33111",
+      "Id": "daa7c821df3f4b208577a76cd7c990a7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7b7a7420d3d64f9f8ea01728bd15ec60",
+      "End": "397cd23323c44ab78e7105f403a3eb0c",
+      "Id": "9380207e32b548b890ca230afd458f00",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5d385ea2c5e94a538bc016f7f04c3f63",
+      "End": "c072624cf2b1443c90726052d6ff871c",
+      "Id": "ca5f704506cc4a46b31f3fe0c5cde52b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f64aa9ae9ab54e3c884badf9fbc507d2",
+      "End": "9d10e362852e4a47b36a3e411989e0cb",
+      "Id": "48366e3693e547f5a462c73c4bb51309",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f64aa9ae9ab54e3c884badf9fbc507d2",
+      "End": "65f191145ce84100b3aa24ae0547d457",
+      "Id": "ca81462744b64899b74030f37fd19fe8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "70fe88804e324de1ae57268ca8500ecd",
+      "End": "357cc9f571de4761bdd2e5d4d500cbaa",
+      "Id": "f347a9cedbca4d6faaae8589394c33e1",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "82f4dffed0ea4088ba71277639b73dc1",
+      "End": "40293c797029443aa742604aef94f893",
+      "Id": "a30c3428c12e4398afdef731784fe132",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "82f4dffed0ea4088ba71277639b73dc1",
+      "End": "69705c6d67c14e89990b3e61f13e2bf3",
+      "Id": "7a73b46434a4417c84e1859194d90f02",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "82f4dffed0ea4088ba71277639b73dc1",
+      "End": "04197437e4d246efb26144f19c4f9831",
+      "Id": "ced29aea66944e0fb21704842e19f8c0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "82f4dffed0ea4088ba71277639b73dc1",
+      "End": "2fd3f6de25284049b869ef00ecedb0a0",
+      "Id": "90b70c9a1f674c4aa00082a828e725c0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "afc06ec7a8844c5599c0f528077ef525",
+      "End": "825f77d8354644b997aebb8b8b756e40",
+      "Id": "29658df8a3ae41dca94030f5633c430a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "afc06ec7a8844c5599c0f528077ef525",
+      "End": "75d008a745c64a57a13e891ca38f26db",
+      "Id": "c9237e99abf341a2a1c3158172d614ad",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "afc06ec7a8844c5599c0f528077ef525",
+      "End": "832c27986a8941959fa9cefc0875a1f5",
+      "Id": "5a96afce2a9a4f47b884c3b042c10454",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bea7bd3ad57c4d27add1f3720de76914",
+      "End": "dfeeda0435d24f47862844ef4138ce4f",
+      "Id": "ad5ceb338bea4118a9b1bb3f6d152c54",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bea7bd3ad57c4d27add1f3720de76914",
+      "End": "5943ef812dd345079ef16b986eb528e6",
+      "Id": "6a20998fe7ec4f8e8f64ee9ec8bc68e8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d6a4b2485999438a86f2ea938f0e4cc8",
+      "End": "5f8dd6b4872941c6883360e2bb67ffe8",
+      "Id": "0b9b910928c54ddf900248d4a07cca08",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9ba9b4aed5624f57986876d52f368824",
+      "End": "9542f559e0f24beea2e6148bf26d43c6",
+      "Id": "2209588452054cce85b0fd9993d67aa8",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9ba9b4aed5624f57986876d52f368824",
+      "End": "bce5cd76feb84405b81f151cae919e17",
+      "Id": "40f07938e04a452a80b17deb3580e504",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "9ba9b4aed5624f57986876d52f368824",
+      "End": "c03f18533bea4e5ca2a434fe441ad3a3",
+      "Id": "2f23a13f875b44d6a6c4467e8a209127",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c21fa35d8e6c4fc2a0f335bf08dcb87c",
+      "End": "a3376ed6601c40e182549ec36963765a",
+      "Id": "b7c5743cd37d455888d9a670799e47fd",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c21fa35d8e6c4fc2a0f335bf08dcb87c",
+      "End": "b5ea86b332f54e3daf71f1bbe585bf95",
+      "Id": "394428d2b0f14ef0a64687404ea50a60",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "29b70d24817d4a0885c3a2996d6f808e",
+      "End": "fc40ca1ba23a4e66a442e06c1e5d0ff2",
+      "Id": "a6f41a07fea1488f93dade5a29aaa9d7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "72c007f9825d45aba686fddc0c39df37",
+      "End": "95f5bf9be0784a23a80bda37ffb067c7",
+      "Id": "133e4f751e3c4c8bafe8541bd9b03e34",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2989dd4c58a24e4095e0f13e2257e332",
+      "End": "534c5e1456114ccda6de653dbdf0eb0c",
+      "Id": "1f1b823c08924c488ac1c555da10df49",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "53b0a2370fd44519bd1c0fc15164491d",
+      "End": "82ab2320b851414aaabcf1aa96c93eea",
+      "Id": "53e0a601413c4ad7938c2d1818c5c6fe",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ce868f549eb94970a5ce41a7221f42a2",
+      "End": "a1ea268809e941faa98fedce9f7fd17b",
+      "Id": "5264a9e17b7647d9a28d34b3b48d9a3a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bed0ee9b28274243bbfc8cfa6f63f8e4",
+      "End": "04bf80a6c6814b488185c25408d4b8a8",
+      "Id": "b741791118204d55b1b4fc53a4023c0c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "15d65a76144b4d6bab3ee54a9268aed9",
+      "End": "15e5a543e34f4e21a93d007463c8d2c8",
+      "Id": "09a159652fdc4f72b9d9f846bbbd7102",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "15d65a76144b4d6bab3ee54a9268aed9",
+      "End": "17c103d00904464783823214688f8eeb",
+      "Id": "c4d94a53d772432a90c38d1a462298c4",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "15d65a76144b4d6bab3ee54a9268aed9",
+      "End": "7c23f67b3769421ab62330c6c2348e94",
+      "Id": "e31c6c4f4ea34eb888f74bf76e735c99",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "cdf6961d0b8049d18601e9310a0bddbe",
+      "End": "d7fa0736c3a54b419d0c9df0de2732d7",
+      "Id": "b9412f730b404f4d9966ad064da69a60",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "580fd04a314e4847a528a4162e5f990a",
+      "End": "c9de2e882b4c47038be64c9296217336",
+      "Id": "aefb078908f040759200c047241706ec",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "345796457b57443f9b85103e3335d785",
+      "End": "15d7c49428434214a97d4b010d9a9632",
+      "Id": "4556333dab4645458c5ea7a76fcecb21",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "316c60eaad8a4924b2f967d29411a540",
+      "End": "42861cbeb5e44784b4182a71b35bfb3b",
+      "Id": "3120ad1240614780be1418e98aaf6f4f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "316c60eaad8a4924b2f967d29411a540",
+      "End": "70fa5e13d1ec4935b58fbff05be14795",
+      "Id": "a08b6d8e860c41bc9c59e67be1a0614d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f2fefba1310447818be355459bd2c13b",
+      "End": "9a67f18e052e448cb424f24598f302ad",
+      "Id": "d94fb275e7cf45498b2f10cb570b425a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "773159082b864044a52f04ec8c811863",
+      "End": "701ab0bb1239477491d63326e76e28ea",
+      "Id": "04a1800e318f4ffea9b5f644f23fc4ec",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "1e742924f5d74eb9b4ff4ac491baee2e",
+      "End": "7ad9592ae33446d38ad610026bdb47fd",
+      "Id": "2f1fc5ad6529409592907ecb32a4c420",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4d4a641d38de4fb5b9d4ec0d207e0893",
+      "End": "2dc9fec112f247d886828b585ee1439b",
+      "Id": "a918f347e3164fc88f905a8f4a65e295",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4d4a641d38de4fb5b9d4ec0d207e0893",
+      "End": "818c9719000d4786baa6084031bbc737",
+      "Id": "f766c98f8ce14dff8ecb850b76cbbe18",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0e6b703107594d32b4664fce6fddce5a",
+      "End": "f318c0567e9443d184d72007a5c8d61b",
+      "Id": "44cc0ffdeea34c3d8c034568ac0eaf98",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "89c4f6118f5a4260aac56c81cc87bb66",
+      "End": "7fecbffd911b4733871cbb29245f6482",
+      "Id": "f64b2639cf5a41f380ebbbf0b5532c48",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "59a96f829b054d9c962ad29819597b30",
+      "End": "90e2bc43bb554a63b2487a556856ee51",
+      "Id": "abedbed08f504349ad8f9937dc0ca1d2",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5794432cb1364ed4bd86ed55dab11d10",
+      "End": "a148fd9b4f7d4f5a8b29468a9258018d",
+      "Id": "5bfcb0f61d3b434fa6001b9f33971c0e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d9910d2f030f4e0d89a3ef3440577b44",
+      "End": "1b0d15fd7191467fac22a2d02b366f32",
+      "Id": "c9d16e07849e4fc39b5de4459f2988c4",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2a76ae167f28499d8788e3ad7d68e26e",
+      "End": "3c416e910e614c50b7afbce09ed96e78",
+      "Id": "dc3064f76cdb4a31b042cf2bb8a19b51",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bde459af36a347ed90805b133e4b93e7",
+      "End": "9c71ada1d74147608f62f9edcc9f4944",
+      "Id": "ef85b66bea4943ef952179472f865ece",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4d5abbe84d434a6ab8d5b100824e9541",
+      "End": "a96fac13b3fd48c59b678d572e6742ac",
+      "Id": "80d4ae9a7d7546549f98b15bfdaa724b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "efe91b5e89e142bb90400306665338e5",
+      "End": "9bcdecb3face45698eb2ea9697ac4303",
+      "Id": "80b9b241c53d43e9bb1f4d73377be7dc",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "78508af2ea8146899ffbfdd98777346a",
+      "End": "21692c281eb54fcd8873b708700b7228",
+      "Id": "87c1b47b4754468cb85ee7a3b8e8a587",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "c1a2f7b7cbf64379939216a3766cbcd1",
+      "End": "15fd457ec2ff4e32bf9e645bec186b8d",
+      "Id": "63d80f4129c94319859199520c5bda76",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "f4f0b9ebc8914e769d714d93698ac23d",
+      "End": "5bbb7c90278e434aa30e11ce13b82cb1",
+      "Id": "94fc080429c84aca88a5abbb4482f826",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "55c4137709754645ac361b947e8e3840",
+      "End": "060070a8121140f18b3c2573b8b99e85",
+      "Id": "f1821ad428d7487ab9ba42374f98dacb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "55c4137709754645ac361b947e8e3840",
+      "End": "a113d582748947b3ba5ab0a8c5250e18",
+      "Id": "3a0d6de789884d349e1ab9cf94f448b9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "55c4137709754645ac361b947e8e3840",
+      "End": "bf4615fa19244c26b9aca5f9f04e5b0f",
+      "Id": "1da1b37030ea47148aedc4795b0f5834",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "947c307def3c42f39269502e61cb0b77",
+      "End": "bae6233eca0049c39d5f3d2243926e16",
+      "Id": "8931218f7fab45eca7f75c1798add259",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "134a15c8036047fd909e949928961602",
+      "End": "578ee60b1ee14c01860fe3f6fcdffa35",
+      "Id": "f16fbc134ccb435cb958e9f620b6bc96",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "59572394a45d46b1b0d0ed0303207803",
+      "End": "c65f0a77fb9441a7be5cda479e449e32",
+      "Id": "7369f1712ba54da7a0b253bd6239e147",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6ad875bc8fa54a55a8e8a028e47dda86",
+      "End": "2320ce5f8c614001a3bf223edbe1c836",
+      "Id": "dc3ce93c0920428eb37f3348fbd27ed6",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "cf574631d99246598a690faf7a86e0c7",
+      "End": "d527d8b4e92748eb9e881637e580752b",
+      "Id": "0486d7cec8c24bbf9feaab32c8c5289e",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6ebc61758e454661a1f804266a474734",
+      "End": "197ec6870615456e875acc7296f4a5cf",
+      "Id": "56298febd83f4aa9816c45f27834c102",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6ebc61758e454661a1f804266a474734",
+      "End": "96ccbdb2e7574cc1ae469cf66c3fe839",
+      "Id": "4138d321c6774541bfe023125f344dfb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "a7cfb028f2c34a8ba4d8694ae1019077",
+      "End": "8519756c3839478796a307b9d0236100",
+      "Id": "f152aafad16a4e2fa7001a63b626dded",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2f1f2af511454ba1a509e561757d30fe",
+      "End": "258fe630e4b44165bfd9af94b1779c5e",
+      "Id": "139f467ab33c4b41b4a53a0ded40bd9f",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "RengaDynMain.dll",
+      "ReferenceType": "ZeroTouch",
+      "Nodes": [
+        "0735e590c9f14b239c8fb2d031be0b49",
+        "1f8cd96b72374203abdca936ace3ebc7",
+        "9d936120011e4f418469b02c374acece",
+        "60a67a7d8f124ca499fa1c127284790f",
+        "72312d93472644dba1e847f0acb7a240",
+        "bb35467fe2a04f94b171972f3acbe819",
+        "08530108dcc24a8787039b36c6051567",
+        "652360a806584bedbf87e4aa99857f8f",
+        "b1053820fe3346d3aff036907fa11802",
+        "1fcb67dcc340433b92845da18001275e",
+        "61cc659934dc4442bade163c88c81157",
+        "0a3005161dc648659bc13b4b83990bb6",
+        "b0351f39472c4dca8d1a57cba2576fbf",
+        "7788684cb5d7496fa7985497d873a374",
+        "48627c3441b14c18b60020af889fb10d",
+        "e04a1addccab446aab1eb14446766e55",
+        "188ee0468ef34eed975acc1b598ec96f",
+        "7b577eb9ca81433c8f382080ba71de97",
+        "67faf4ea47e9424699c02466150c3bab",
+        "5ff9b12cb0a94c5a9b01ff5916927ac4",
+        "ad18b48815e74cf197adec0b579f8213",
+        "93130b3421c8496abbd7dbb47017de95",
+        "3f1ea25e3c47451e8d7bb068ab8e37a1",
+        "7e8cc23691774c348d8573c61ea450fb",
+        "0669d0a7d8f04fefa2046239c7354843",
+        "5ab1a9c7bd894369bb4a712e6d4057f0",
+        "0c6328b144844499a1c7749703fc4110",
+        "55f048e2943d4d348a02163521955ec6",
+        "6352e1e8921e480894d4fcecaf7430e4",
+        "867007f12e074a24a38a54cdf2346fce",
+        "ff37aae773594b4fb64c92c624831d8d",
+        "1a49ab66579f470c8a2fd25865d38718",
+        "26abe3ebfb434a7ab8d1fa0586809831",
+        "41b0fd663aa246c1a916fa44ebea66c3",
+        "4758788ba71e4a5c9ef7177c2c57a9d2",
+        "fc263d466069478f857dc40a3ac7b89f"
+      ]
+    }
+  ],
+  "EnableLegacyPolyCurveBehavior": true,
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "4.0",
+      "Data": {}
+    }
+  ],
+  "Author": "",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "4.0.0.2330",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": 10.864675521850586,
+      "EyeY": 7.273873329162598,
+      "EyeZ": 14.756484031677246,
+      "LookX": -7.427755355834961,
+      "LookY": -10.607308387756348,
+      "LookZ": -9.746565818786621,
+      "UpX": -0.28922346234321594,
+      "UpY": 0.878817081451416,
+      "UpZ": -0.3795132040977478
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "0735e590c9f14b239c8fb2d031be0b49",
+        "Name": "Application.ForceCleanup",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -540.0076874573904,
+        "Y": 105.97390873589276
+      },
+      {
+        "Id": "1f8cd96b72374203abdca936ace3ebc7",
+        "Name": "Application.GetRunningRengaInstances",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -956.7354263603647,
+        "Y": 103.26508208882066
+      },
+      {
+        "Id": "9d936120011e4f418469b02c374acece",
+        "Name": "Application.GetRengaInstanceList",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -1349.3525899004749,
+        "Y": 103.07167178831313
+      },
+      {
+        "Id": "40b4d753085740e793adc22cd7bad299",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -243.2097704280767,
+        "Y": 108.76062096354795
+      },
+      {
+        "Id": "60a67a7d8f124ca499fa1c127284790f",
+        "Name": "IApplication.IApplication",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -41.64962624965341,
+        "Y": 109.06103203078118
+      },
+      {
+        "Id": "72312d93472644dba1e847f0acb7a240",
+        "Name": "ISelection.GetSelectedObjects",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 869.8242050963837,
+        "Y": 109.60682305726186
+      },
+      {
+        "Id": "bb35467fe2a04f94b171972f3acbe819",
+        "Name": "ISelection.ISelection",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 526.3550398148593,
+        "Y": 109.34700508801018
+      },
+      {
+        "Id": "08530108dcc24a8787039b36c6051567",
+        "Name": "IModel.IModel",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 534.1140763339228,
+        "Y": -385.55740097317664
+      },
+      {
+        "Id": "652360a806584bedbf87e4aa99857f8f",
+        "Name": "IModel.GetObjects",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 870.5619298344392,
+        "Y": -75.84336279191902
+      },
+      {
+        "Id": "b1053820fe3346d3aff036907fa11802",
+        "Name": "IModelObjectCollection.GetById",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1468.9499603110478,
+        "Y": -75.95448108862769
+      },
+      {
+        "Id": "1fcb67dcc340433b92845da18001275e",
+        "Name": "IBaseline2DObject.GetBaseline",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2416.4630211155336,
+        "Y": -78.19399823322928
+      },
+      {
+        "Id": "61cc659934dc4442bade163c88c81157",
+        "Name": "IModelObject.GetInterfaceByName",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1920.0683075733107,
+        "Y": -337.4835346968061
+      },
+      {
+        "Id": "5534bd3154d443928838653b274eb42a",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1534.7449532441665,
+        "Y": -303.12996057800746
+      },
+      {
+        "Id": "0a3005161dc648659bc13b4b83990bb6",
+        "Name": "Curve2DConverter.ToDynamoPolyCurveOptimized",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3169.2194172760765,
+        "Y": -80.72043437926501
+      },
+      {
+        "Id": "b0351f39472c4dca8d1a57cba2576fbf",
+        "Name": "Curve2DConverter.GetDebugInfo",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3168.4685487524134,
+        "Y": 478.75255470074853
+      },
+      {
+        "Id": "7788684cb5d7496fa7985497d873a374",
+        "Name": "Curve2DConverter.GetCurveInfo",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4842.653963165649,
+        "Y": 284.46043958755297
+      },
+      {
+        "Id": "02fd692c6e34458ead2fcecf1f065024",
+        "Name": "PolyCurve.Points",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3980.1398300933683,
+        "Y": 0.709137581979121
+      },
+      {
+        "Id": "6230db78ba76485f867fd6556eed2b44",
+        "Name": "PolyCurve.Curves",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3976.915531274366,
+        "Y": 155.164601096245
+      },
+      {
+        "Id": "eec594952a42484cbb7c132525492614",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3714.5395153585864,
+        "Y": -246.7247406350857
+      },
+      {
+        "Id": "64228e6bdaf74d8ea147539db4742fe5",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4020.2296140847757,
+        "Y": -391.8609186285105
+      },
+      {
+        "Id": "48627c3441b14c18b60020af889fb10d",
+        "Name": "IOperation.ApplyWithDebug",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 9870.980648253815,
+        "Y": -618.7729293153268
+      },
+      {
+        "Id": "e04a1addccab446aab1eb14446766e55",
+        "Name": "ObjectTypes.Floor",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5316.371853125484,
+        "Y": -311.203501165445
+      },
+      {
+        "Id": "188ee0468ef34eed975acc1b598ec96f",
+        "Name": "IModel.CreateObject",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5625.949892735597,
+        "Y": -307.9516666714826
+      },
+      {
+        "Id": "0f2192ce62264e21837538d8da3c3304",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1914.5430065697738,
+        "Y": 935.3946583791898
+      },
+      {
+        "Id": "7b577eb9ca81433c8f382080ba71de97",
+        "Name": "IModelObject.GetHostObjectInfo",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1809.9636438478867,
+        "Y": 796.5634302643161
+      },
+      {
+        "Id": "5ae365f646fa4bd3a3373d067bff1361",
+        "Name": "Dictionary.ValueAtKey",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2182.9258884505616,
+        "Y": 799.9242270232554
+      },
+      {
+        "Id": "67faf4ea47e9424699c02466150c3bab",
+        "Name": "IModelObject.GetInterfaceByName",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 8491.249778228861,
+        "Y": -323.6399657846427
+      },
+      {
+        "Id": "6e4beb8a46cb4b139f99a2801a3e1cd8",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 8225.205190654633,
+        "Y": -36.505964003500424
+      },
+      {
+        "Id": "5ff9b12cb0a94c5a9b01ff5916927ac4",
+        "Name": "IBaseline2DObject.SetBaseline",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 8886.759929095737,
+        "Y": -165.24011581492005
+      },
+      {
+        "Id": "ad18b48815e74cf197adec0b579f8213",
+        "Name": "IOperation.StartWithDebug",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 7444.6743575079945,
+        "Y": -690.0513889042182
+      },
+      {
+        "Id": "93130b3421c8496abbd7dbb47017de95",
+        "Name": "IModel.CreateOperation",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4333.095649536464,
+        "Y": -590.4463540803276
+      },
+      {
+        "Id": "3f1ea25e3c47451e8d7bb068ab8e37a1",
+        "Name": "IOperation.StartWithDebug",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4666.704142548028,
+        "Y": -733.6585388112057
+      },
+      {
+        "Id": "7e8cc23691774c348d8573c61ea450fb",
+        "Name": "IApplication.Project",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 517.1293765987789,
+        "Y": 579.6119078935086
+      },
+      {
+        "Id": "0389472d1aee4bd1921d659eb101e5a0",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5134.986690301713,
+        "Y": -503.16832276422775
+      },
+      {
+        "Id": "e8cbd4fd585a49bcbed0196331d1d35e",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 6038.319562918057,
+        "Y": -533.5632885932719
+      },
+      {
+        "Id": "e4132b69f99141948b9484f6f9d9c4a8",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 7862.676316975919,
+        "Y": -581.2105719608006
+      },
+      {
+        "Id": "82d5c30d0545405783f1144506f2380d",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 9371.001119696743,
+        "Y": -619.8486941078672
+      },
+      {
+        "Id": "0669d0a7d8f04fefa2046239c7354843",
+        "Name": "IModelObject.GetObjectInfo",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1622.6586167404803,
+        "Y": 272.68095813562024
+      },
+      {
+        "Id": "5ab1a9c7bd894369bb4a712e6d4057f0",
+        "Name": "ILevelObject.GetPlacement",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2762.710829096001,
+        "Y": 1094.5379347429523
+      },
+      {
+        "Id": "0c6328b144844499a1c7749703fc4110",
+        "Name": "IModelObject.GetInterfaceByName",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1930.4437276073209,
+        "Y": 79.65226583194942
+      },
+      {
+        "Id": "4bc0bcc020754941b52368ed36acde68",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1545.1203732781767,
+        "Y": 114.00583995074805
+      },
+      {
+        "Id": "55f048e2943d4d348a02163521955ec6",
+        "Name": "IBaseline2DObject.SetBaselineInCS",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 9881.114447030128,
+        "Y": -227.36655503765834
+      },
+      {
+        "Id": "c175fc86afd64336b66aed9b91f2d526",
+        "Name": "PolyCurve.OffsetMany",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 3871.585178439876,
+        "Y": 372.8255596250685
+      },
+      {
+        "Id": "3bd0bbb208284572921ce925d122fc30",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3559.914570492669,
+        "Y": 375.6409696791013
+      },
+      {
+        "Id": "982abe25a0934365b66b96b101e87a39",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3560.7752820738174,
+        "Y": 512.5355021797991
+      },
+      {
+        "Id": "6352e1e8921e480894d4fcecaf7430e4",
+        "Name": "PolyCurveConverter.FromDynamoPolyCurve",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4580.550570546456,
+        "Y": 865.0384523096731
+      },
+      {
+        "Id": "867007f12e074a24a38a54cdf2346fce",
+        "Name": "IMath.IMath",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2825.5531061500583,
+        "Y": 1301.5007820202632
+      },
+      {
+        "Id": "ff37aae773594b4fb64c92c624831d8d",
+        "Name": "IApplication.GetMathDebugInfo",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2755.406117965157,
+        "Y": 690.2694026280508
+      },
+      {
+        "Id": "1a49ab66579f470c8a2fd25865d38718",
+        "Name": "IApplication.GetMath",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2414.855975113247,
+        "Y": 975.4343606415832
+      },
+      {
+        "Id": "26abe3ebfb434a7ab8d1fa0586809831",
+        "Name": "ICurve2D.GetDebugInfo",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5086.091119393982,
+        "Y": 1164.7830799096014
+      },
+      {
+        "Id": "41b0fd663aa246c1a916fa44ebea66c3",
+        "Name": "Curve2DConverter.GetCurveInfo",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 5871.957110643578,
+        "Y": 345.60187875524315
+      },
+      {
+        "Id": "c7bda2a05c254a6e84cc2be55c7da76f",
+        "Name": "PolyCurve.Fillet",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4245.040294782368,
+        "Y": 547.6679019469692
+      },
+      {
+        "Id": "99c46a92aded426dac4943f39682d154",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3974.0,
+        "Y": 769.0
+      },
+      {
+        "Id": "1cf2b056d8e241dc8d05dc40c9602c05",
+        "Name": "Number Slider",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 8017.203336214279,
+        "Y": 155.53965487296324
+      },
+      {
+        "Id": "4758788ba71e4a5c9ef7177c2c57a9d2",
+        "Name": "IOperation.ApplyWithDebug",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 6517.626214632113,
+        "Y": -751.1576090141431
+      },
+      {
+        "Id": "1c54a8a92ca74456b109d823dc8dee08",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 6871.609396681201,
+        "Y": -553.6980849702804
+      },
+      {
+        "Id": "cfc8e532595848f88fe11bc9709f2f76",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 8067.0,
+        "Y": 371.0
+      },
+      {
+        "Id": "fc263d466069478f857dc40a3ac7b89f",
+        "Name": "IBaseline2DObject.RefreshBaseline",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 9310.573089325884,
+        "Y": -230.5495345321118
+      }
+    ],
+    "Annotations": [],
+    "X": -4062.3747189721116,
+    "Y": 443.1710752253767,
+    "Zoom": 0.5090497149554547
+  }
+}

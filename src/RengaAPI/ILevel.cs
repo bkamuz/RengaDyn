@@ -138,7 +138,7 @@ namespace DynRenga.RengaAPI
         /// The placement origin Z coordinate is equal to the Elevation property value
         /// </summary>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public Placement3D Placement
+        public DynRenga.DynGeometry.Placement3D Placement
         {
             get
             {
@@ -147,8 +147,8 @@ namespace DynRenga.RengaAPI
                 
                 try
                 {
-                    var placement = this._i.Placement;
-                    return new Placement3D(placement);
+                var placement = this._i.Placement;
+                return new DynRenga.DynGeometry.Placement3D(placement);
                 }
                 catch (Exception ex)
                 {
@@ -175,7 +175,7 @@ namespace DynRenga.RengaAPI
             var debugInfo = "🔧 ILevel.GetLevelInfo Debug Info:\n";
             var elevation = 0.0;
             var levelName = "";
-            Placement3D placement = null;
+            DynRenga.DynGeometry.Placement3D placement = null;
             
             try
             {
@@ -191,8 +191,8 @@ namespace DynRenga.RengaAPI
                 
                 // Get placement
                 var rengaPlacement = this._i.Placement;
-                placement = new Placement3D(rengaPlacement);
-                debugInfo += $"✅ Placement: Origin=({placement.Origin.X}, {placement.Origin.Y}, {placement.Origin.Z})\n";
+                placement = new DynRenga.DynGeometry.Placement3D(rengaPlacement);
+                debugInfo += $"✅ Placement: Origin=({placement.Origin().X}, {placement.Origin().Y}, {placement.Origin().Z})\n";
                 
                 debugInfo += "✅ Level information retrieved successfully\n";
             }
@@ -301,7 +301,7 @@ namespace DynRenga.RengaAPI
                 {
                     info += $"✅ Level Name: {this.LevelName}\n";
                     info += $"✅ Elevation: {this.Elevation} mm\n";
-                    info += $"✅ Placement: Origin=({this.Placement.Origin.X}, {this.Placement.Origin.Y}, {this.Placement.Origin.Z})\n";
+                    info += $"✅ Placement: Origin=({this.Placement.Origin().X}, {this.Placement.Origin().Y}, {this.Placement.Origin().Z})\n";
                 }
                 catch (Exception ex)
                 {

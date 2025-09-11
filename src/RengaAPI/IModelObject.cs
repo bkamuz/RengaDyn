@@ -226,6 +226,12 @@ namespace DynRenga.RengaAPI
                     case "IBaseline2DObject":
                         return new IBaseline2DObject(comObject);
                     
+                    case "ILevelObject":
+                        return new ILevelObject(comObject);
+                    
+                    case "ILevel":
+                        return new ILevel(comObject);
+                    
                     // Add more interface mappings as needed
                     // case "IObjectWithMaterial":
                     //     return new IObjectWithMaterial(comObject);

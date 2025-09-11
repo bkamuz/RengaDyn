@@ -145,16 +145,21 @@ namespace DynRenga.RengaAPI
         /// <param name="typeId">The object type ID (required)</param>
         /// <param name="hostObjectId">The host object ID (optional, -1 to skip)</param>
         /// <param name="categoryId">The category ID (optional, -1 to skip)</param>
+        /// <param name="placement3D">The 3D placement (optional, null to skip)</param>
         /// <returns>Dictionary with ModelObject, DebugInfo, and Success status</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
         [dr.MultiReturn(new[] { "ModelObject", "DebugInfo", "Success" })]
-        public Dictionary<string, object> CreateObject(Guid typeId, int hostObjectId = -1, int categoryId = -1)
+        public Dictionary<string, object> CreateObject(Guid typeId, int hostObjectId = -1, int categoryId = -1, DynRenga.DynGeometry.Placement3D placement3D = null)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("Model interface is not initialized. Please check that Renga is running and a project is loaded.");
             
             var debugInfo = new System.Text.StringBuilder();
             debugInfo.AppendLine("🔧 IModel.CreateObject Debug Info:");
+            debugInfo.AppendLine($"TypeId: {typeId}");
+            debugInfo.AppendLine($"HostObjectId: {hostObjectId}");
+            debugInfo.AppendLine($"CategoryId: {categoryId}");
+            debugInfo.AppendLine($"Placement3D provided: {placement3D != null}");
             
             try
             {
@@ -179,6 +184,35 @@ namespace DynRenga.RengaAPI
                 {
                     rengaNewEntityArgs.CategoryId = categoryId;
                     debugInfo.AppendLine($"CategoryId set: {categoryId}");
+                }
+                
+                // Set placement if provided
+                if (placement3D != null)
+                {
+                    try
+                    {
+                        // Use the struct if available, otherwise try the COM interface
+                        if (!placement3D._placement.Equals(default(Renga.Placement3D)))
+                        {
+                            rengaNewEntityArgs.Placement3D = placement3D._placement;
+                            debugInfo.AppendLine($"Placement3D set from struct successfully");
+                        }
+                        else if (placement3D._i != null)
+                        {
+                            rengaNewEntityArgs.Placement3D = placement3D._i.Placement;
+                            debugInfo.AppendLine($"Placement3D set from COM interface successfully");
+                        }
+                        else
+                        {
+                            debugInfo.AppendLine($"⚠️ Warning: Placement3D wrapper has neither COM interface nor struct data");
+                        }
+                        
+                        debugInfo.AppendLine($"Placement3D Origin: ({placement3D.Origin().X}, {placement3D.Origin().Y}, {placement3D.Origin().Z})");
+                    }
+                    catch (Exception placementEx)
+                    {
+                        debugInfo.AppendLine($"⚠️ Warning: Could not set Placement3D: {placementEx.Message}");
+                    }
                 }
                 
                 // Create the model object directly
