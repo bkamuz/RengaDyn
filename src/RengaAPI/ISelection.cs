@@ -212,10 +212,10 @@ namespace DynRenga.RengaAPI
         /// <summary>
         /// Get selected objects as ModelObject instances
         /// </summary>
-        /// <param name="model">Model instance to get objects from</param>
-        /// <returns>List of selected ModelObject instances</returns>
+        /// <param name="model">IModel instance to get objects from</param>
+        /// <returns>List of selected IModelObject instances</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public List<ModelObject> GetSelectedModelObjects(Model model)
+        public List<IModelObject> GetSelectedModelObjects(IModel model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model), "Model cannot be null.");
@@ -226,14 +226,15 @@ namespace DynRenga.RengaAPI
             try
             {
                 var selectedIds = GetSelectedObjects();
-                var selectedObjects = new List<ModelObject>();
+                var selectedObjects = new List<IModelObject>();
                 
                 foreach (int id in selectedIds)
                 {
                     try
                     {
-                        var modelObject = Selection.GetModelObjectById(model, id);
-                        selectedObjects.Add(modelObject);
+                        var iModelObject = model.GetObjectById(id);
+                        if (iModelObject != null)
+                            selectedObjects.Add(iModelObject);
                     }
                     catch (Exception ex)
                     {

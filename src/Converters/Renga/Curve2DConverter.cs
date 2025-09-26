@@ -6,7 +6,7 @@ using dg = Autodesk.DesignScript.Geometry;
 using Renga;
 using DynRenga.DynGeometry;
 
-namespace DynRenga.Converters.Renga.Geometry2D
+namespace DynRenga.Converters.Renga
 {
     /// <summary>
     /// Converter for transforming DynRenga.RengaAPI.ICurve2D to Dynamo geometry

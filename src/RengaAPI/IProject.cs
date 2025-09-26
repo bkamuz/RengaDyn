@@ -141,6 +141,26 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
+        /// Gets the column style manager for this project
+        /// </summary>
+        /// <returns>IColumnStyleManager wrapper</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public IColumnStyleManager GetColumnStyleManager()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("Project interface is not initialized.");
+            try
+            {
+                var mgr = this._i.ColumnStyleManager;
+                return new IColumnStyleManager(mgr);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to get ColumnStyleManager: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
         /// Creates an operation for editing the project
         /// </summary>
         /// <returns>IOperation object for managing changes</returns>

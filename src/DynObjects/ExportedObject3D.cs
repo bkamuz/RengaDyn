@@ -52,6 +52,18 @@ namespace DynRenga.DynObjects
         /// </summary>
         /// <returns></returns>
         public int ModelObjectId => this._i.ModelObjectId;
+        
+        /// <summary>
+        /// Получение типа объекта модели
+        /// </summary>
+        /// <returns></returns>
+        public Guid ModelObjectType => this._i.ModelObjectType;
+        
+        /// <summary>
+        /// Получение типа объекта модели в виде строки
+        /// </summary>
+        /// <returns></returns>
+        public string ModelObjectTypeS => this._i.ModelObjectTypeS;
         /// <summary>
         /// Получение количества мэшей
         /// </summary>

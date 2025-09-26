@@ -481,16 +481,21 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
-        /// Gets the currently opened project
+        /// Gets the currently opened project as an `IProject` wrapper
         /// </summary>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public object Project
+        public DynRenga.RengaAPI.IProject Project
         {
             get
             {
-                if (this._i == null) 
+                if (this._i == null)
                     throw new InvalidOperationException("Renga application is not running. Please start Renga first.");
-                return this._i.Project;
+
+                var rengaProjectObj = this._i.Project;
+                if (rengaProjectObj == null)
+                    return null;
+
+                return new DynRenga.RengaAPI.IProject(rengaProjectObj);
             }
         }
 
@@ -790,12 +795,26 @@ namespace DynRenga.RengaAPI
                         {
                             var hasProject = rengaApp.HasProject();
                             
+                            string projectPath = "No project loaded";
+                            if (hasProject)
+                            {
+                                try
+                                {
+                                    var projectWrapper = new DynRenga.RengaAPI.IProject(rengaApp.Project);
+                                    projectPath = projectWrapper.FilePath ?? "Unknown";
+                                }
+                                catch
+                                {
+                                    projectPath = "Unknown";
+                                }
+                            }
+
                             var instanceInfo = new Dictionary<string, object>
                             {
                                 { "Index", i },
                                 { "IsConnected", true },
                                 { "HasProject", hasProject },
-                                { "ProjectPath", hasProject ? rengaApp.Project.GetType().GetProperty("FilePath")?.GetValue(rengaApp.Project)?.ToString() ?? "Unknown" : "No project loaded" },
+                                { "ProjectPath", projectPath },
                                 { "IsVisible", rengaApp.Visible },
                                 { "ProcessId", GetProcessIdFromMoniker(rengaMonikers[i]) }
                             };

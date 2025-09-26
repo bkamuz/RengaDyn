@@ -88,12 +88,27 @@ namespace DynRenga.DynDocument
                         
                         if (rengaApp != null)
                         {
+                            string projectPath = "No project loaded";
+                            var hasProject = rengaApp.HasProject();
+                            if (hasProject)
+                            {
+                                try
+                                {
+                                    var projWrapper = new DynRenga.RengaAPI.IProject(rengaApp.Project);
+                                    projectPath = projWrapper.FilePath ?? "Unknown";
+                                }
+                                catch
+                                {
+                                    projectPath = "Unknown";
+                                }
+                            }
+
                             var instanceInfo = new Dictionary<string, object>
                             {
                                 { "Index", i },
                                 { "IsConnected", true },
-                                { "HasProject", rengaApp.HasProject() },
-                                { "ProjectPath", rengaApp.HasProject() ? rengaApp.Project.FilePath : "No project loaded" },
+                                { "HasProject", hasProject },
+                                { "ProjectPath", projectPath },
                                 { "IsVisible", rengaApp.Visible },
                                 { "ProcessId", GetProcessIdFromMoniker(rengaMonikers[i]) }
                             };

@@ -230,10 +230,26 @@ namespace DynRenga.RengaAPI
                         return new IBaseline2DObject(comInterface);
                     case "ICurve2D":
                         return new ICurve2D(comInterface);
+                    case "IRegion2D":
+                        return new IRegion2D(comInterface);
+                    case "IRegion2DCollection":
+                        return new IRegion2DCollection(comInterface);
                     case "IMath":
                         return new IMath(comInterface);
                     case "IOperation":
                         return new IOperation(comInterface);
+                    case "IProfile":
+                        return new IProfile(comInterface);
+                    case "IProfileDescription":
+                        return new IProfileDescription(comInterface);
+                    case "IProfileDescriptionManager":
+                        return new IProfileDescriptionManager(comInterface);
+                    case "IColumnParams":
+                        return new IColumnParams(comInterface);
+                    case "IColumnStyle":
+                        return new IColumnStyle(comInterface);
+                    case "IColumnStyleManager":
+                        return new IColumnStyleManager(comInterface);
                     default:
                         // For unknown interfaces, return the raw COM object
                         return comInterface;

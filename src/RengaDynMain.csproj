@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
+  <ItemGroup>
+    <Compile Include="Converters\Dynamo\PolyCurveConverter.cs" />
+    <Compile Include="Converters\Renga\Curve2DConverter.cs" />
+    <Compile Include="Converters\Renga\Curve3DConverter.cs" />
+    <Compile Include="Converters\\Renga\\PlacementConverter.cs" />
+    <Compile Include="Converters\Renga\Point3DConverter.cs" />
+  </ItemGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
@@ -194,9 +201,32 @@
     <Compile Include="RengaAPI\IProject.cs" />
     <Compile Include="RengaAPI\ILevel.cs" />
     <Compile Include="RengaAPI\ILevelObject.cs" />
+    <Compile Include="RengaAPI\IParameter.cs" />
+    <Compile Include="RengaAPI\IParameterContainer.cs" />
+    <Compile Include="RengaAPI\IParameterDefinition.cs" />
+    <Compile Include="RengaAPI\ILine3DParams.cs" />
+    <Compile Include="RengaAPI\ICurve3D.cs" />
+    <Compile Include="RengaAPI\IDataExporter.cs" />
+    <Compile Include="RengaAPI\IGridWithMaterialCollection.cs" />
+    <Compile Include="RengaAPI\IExportedObject3DCollection.cs" />
+  <Compile Include="RengaAPI\IExportedObject3D.cs" />
+  <Compile Include="RengaAPI\IMesh.cs" />
+  <Compile Include="RengaAPI\IGrid.cs" />
+  <Compile Include="RengaAPI\IRegion2D.cs" />
+  <Compile Include="RengaAPI\IRegion2DCollection.cs" />
+  <Compile Include="RengaAPI\IProfile.cs" />
+  <Compile Include="RengaAPI\IProfileDescription.cs" />
+  <Compile Include="RengaAPI\IProfileDescriptionManager.cs" />
+  <Compile Include="Converters\Renga\MeshConverter.cs" />
+  <Compile Include="RengaAPI\IColumnParams.cs" />
+  <Compile Include="RengaAPI\IColumnStyle.cs" />
+  <Compile Include="RengaAPI\IColumnStyleManager.cs" />
     <Compile Include="RengaAPI\Constants\Constants.cs" />
-    <Compile Include="Converters\Renga\2DGeometry\Curve2DConverter.cs" />
-    <Compile Include="Converters\Dynamo\2DGeometry\PolyCurveConverter.cs" />
+    <Compile Include="Converters\Dynamo\PolyCurveConverter.cs" />
+    <Compile Include="Converters\Renga\Curve2DConverter.cs" />
+    <Compile Include="Converters\Renga\Curve3DConverter.cs" />
+    <Compile Include="Converters\\Renga\\PlacementConverter.cs" />
+    <Compile Include="Converters\Renga\Point3DConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Renga">

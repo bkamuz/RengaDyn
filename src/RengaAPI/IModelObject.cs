@@ -196,6 +196,76 @@ namespace DynRenga.RengaAPI
 
         #endregion
 
+        /// <summary>
+        /// Attempts to retrieve the 3D placement (local coordinate system) for this model object.
+        /// Tries several strategies: ILevelObject.GetPlacement(), direct GetPlacement() on the COM object,
+        /// or properties named Placement / Placement3D. Returns a DynRenga.DynGeometry.Placement3D wrapper.
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public DynRenga.DynGeometry.Placement3D GetPlacement()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("ModelObject interface is not initialized.");
+
+            try
+            {
+                // If object supports ILevelObject, prefer that (it has GetPlacement())
+                var levelObj = this._i.GetInterfaceByName("ILevelObject");
+                if (levelObj != null)
+                {
+                    try
+                    {
+                        var lvl = levelObj as Renga.ILevelObject;
+                        if (lvl != null)
+                        {
+                            var placement = lvl.GetPlacement();
+                            return new DynRenga.DynGeometry.Placement3D(placement);
+                        }
+                    }
+                    catch
+                    {
+                        // ignore and fallback
+                    }
+                }
+
+                // Try direct method GetPlacement() on the COM object
+                var comType = this._i.GetType();
+                var getPlacementMethod = comType.GetMethod("GetPlacement");
+                if (getPlacementMethod != null)
+                {
+                    var placementObj = getPlacementMethod.Invoke(this._i, null);
+                    if (placementObj != null)
+                    {
+                        return new DynRenga.DynGeometry.Placement3D(placementObj);
+                    }
+                }
+
+                // Try properties named Placement or Placement3D
+                var prop = comType.GetProperty("Placement3D") ?? comType.GetProperty("Placement");
+                if (prop != null)
+                {
+                    var placementVal = prop.GetValue(this._i);
+                    if (placementVal != null)
+                    {
+                        // If it's the Renga.Placement3D struct
+                        if (placementVal is Renga.Placement3D placementStruct)
+                        {
+                            return new DynRenga.DynGeometry.Placement3D(placementStruct);
+                        }
+
+                        // If it's a COM interface wrapper
+                        return new DynRenga.DynGeometry.Placement3D(placementVal);
+                    }
+                }
+
+                throw new InvalidOperationException("Placement not available for this model object.");
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to get placement: {ex.Message}", ex);
+            }
+        }
+
         #region IModelObject Methods
 
         /// <summary>
@@ -232,6 +302,37 @@ namespace DynRenga.RengaAPI
                     case "ILevel":
                         return new ILevel(comObject);
                     
+                    case "IParameterContainer":
+                        return new IParameterContainer(comObject as Renga.IParameterContainer);
+                    
+                    case "IParameter":
+                        return new IParameter(comObject as Renga.IParameter);
+                    
+                    case "IParameterDefinition":
+                        return new IParameterDefinition(comObject as Renga.IParameterDefinition);
+                    
+                    case "ILine3DParams":
+                        return new ILine3DParams(comObject as Renga.ILine3DParams);
+                    
+                    case "ICurve3D":
+                        return new ICurve3D(comObject as Renga.ICurve3D);
+                    case "IRegion2D":
+                        return new IRegion2D(comObject as Renga.IRegion2D);
+                    case "IRegion2DCollection":
+                        return new IRegion2DCollection(comObject as Renga.IRegion2DCollection);
+                    case "IProfile":
+                        return new IProfile(comObject as Renga.IProfile);
+                    case "IProfileDescription":
+                        return new IProfileDescription(comObject as Renga.IProfileDescription);
+                    case "IProfileDescriptionManager":
+                        return new IProfileDescriptionManager(comObject as Renga.IProfileDescriptionManager);
+                    case "IColumnParams":
+                        return new IColumnParams(comObject as Renga.IColumnParams);
+                    case "IColumnStyle":
+                        return new IColumnStyle(comObject as Renga.IColumnStyle);
+                    case "IColumnStyleManager":
+                        return new IColumnStyleManager(comObject as Renga.IColumnStyleManager);
+                    
                     // Add more interface mappings as needed
                     // case "IObjectWithMaterial":
                     //     return new IObjectWithMaterial(comObject);
@@ -256,9 +357,9 @@ namespace DynRenga.RengaAPI
         /// <summary>
         /// Returns the parameter container interface for the object
         /// </summary>
-        /// <returns>ParameterContainer instance</returns>
+        /// <returns>IParameterContainer instance</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public ParameterContainer GetParameters()
+        public IParameterContainer GetParameters()
         {
             if (this._i == null) 
                 throw new InvalidOperationException("ModelObject interface is not initialized.");
@@ -266,7 +367,7 @@ namespace DynRenga.RengaAPI
             try
             {
                 var parameterContainer = this._i.GetParameters();
-                return new ParameterContainer(parameterContainer);
+                return new IParameterContainer(parameterContainer);
             }
             catch (Exception ex)
             {

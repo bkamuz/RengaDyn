@@ -86,5 +86,37 @@ namespace DynRenga.DynObjects.Geometry
             };
         }
 
+        /// <summary>
+        /// Convert this Renga.IMesh to a Dynamo Mesh (Autodesk.DesignScript.Geometry.Mesh)
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(false)]
+        public dg.Mesh ToDynamoMesh()
+        {
+            var points = new List<dg.Point>();
+            var indexes = new List<dg.IndexGroup>();
+
+            for (int g = 0; g < this._i.GridCount; g++)
+            {
+                var grid = this._i.GetGrid(g);
+                int baseIndex = points.Count;
+                for (int v = 0; v < grid.VertexCount; v++)
+                {
+                    var p = grid.GetVertex(v);
+                    points.Add(dg.Point.ByCoordinates(p.X / 1000.0, p.Y / 1000.0, p.Z / 1000.0));
+                }
+
+                for (int t = 0; t < grid.TriangleCount; t++)
+                {
+                    var tr = grid.GetTriangle(t);
+                    indexes.Add(dg.IndexGroup.ByIndices((uint)(baseIndex + tr.V0), (uint)(baseIndex + tr.V1), (uint)(baseIndex + tr.V2)));
+                }
+            }
+
+            if (points.Count == 0)
+                return null;
+
+            return dg.Mesh.ByPointsFaceIndices(points, indexes);
+        }
+
     }
 }

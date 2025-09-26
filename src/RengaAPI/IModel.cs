@@ -47,13 +47,17 @@ namespace DynRenga.RengaAPI
                 throw new InvalidOperationException("Project is not available. This usually means:\n" +
                     "1. No project is loaded in Renga - please open a project in Renga\n" +
                     "2. The project failed to load properly - check the project file");
-            
+
             try
             {
-                // Get project from application
-                var project = application.Project as dynamic;
-                this._i = project.Model as Renga.IModel;
-                
+                // Get project wrapper from application (IProject)
+                var projectWrapper = application.Project;
+                if (projectWrapper == null)
+                    throw new InvalidOperationException("Project wrapper is null. Ensure a project is loaded in Renga.");
+
+                // Access underlying COM project and obtain its Model
+                this._i = projectWrapper._i?.Model as Renga.IModel;
+
                 if (this._i == null)
                     throw new InvalidOperationException("Failed to get Model from Project. This usually means:\n" +
                         "1. The project is not properly loaded in Renga\n" +
