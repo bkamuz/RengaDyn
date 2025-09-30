@@ -74,26 +74,47 @@ namespace DynRenga.DynObjects
         }
 
         /// <summary>
-        /// Get all layered materials in the project (Custom method)
-        /// Получение всех слоистых материалов в проекте (Пользовательский метод)
+        /// Get all layered materials in the project
+        /// Получение всех слоистых материалов в проекте
         /// </summary>
-        /// <returns>List of all layered materials</returns>
+        /// <param name="project">Renga project to get materials from</param>
+        /// <returns>Dictionary of material ID and name pairs</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
-        public List<LayeredMaterial> GetAllLayeredMaterials()
+        public Dictionary<int, string> GetAllLayeredMaterials(object project)
         {
             if (this._i == null)
                 throw new InvalidOperationException("LayeredMaterialManager is not initialized");
             
-            var materials = new List<LayeredMaterial>();
+            var materials = new Dictionary<int, string>();
             
             try
             {
-                // Note: The original Renga API doesn't have a direct "GetAllLayeredMaterials" method
-                // This is a placeholder implementation that would require additional logic
-                // to iterate through available material IDs
+                // Handle both IProject wrapper and underlying COM object
+                dynamic rengaProject = null;
                 
-                // TODO: Implement proper iteration through available layered material IDs
-                // This would require access to a method that returns all available IDs
+                if (project is DynRenga.RengaAPI.IProject projectWrapper)
+                {
+                    rengaProject = projectWrapper._i; // Access underlying COM object
+                }
+                else
+                {
+                    rengaProject = project; // Assume it's already a COM object
+                }
+                
+                if (rengaProject == null)
+                    throw new ArgumentException("Invalid project object");
+
+                var allMaterials = rengaProject.LayeredMaterials;
+                for (int i = 0; i < allMaterials.Count; i++)
+                {
+                    var entity = allMaterials.GetByIndex(i);
+                    var layeredMaterial = this._i.GetLayeredMaterial(entity.Id);
+                    
+                    if (layeredMaterial != null)
+                    {
+                        materials[layeredMaterial.Id] = layeredMaterial.Name;
+                    }
+                }
                 
                 return materials;
             }

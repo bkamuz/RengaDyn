@@ -282,7 +282,14 @@ namespace DynRenga.DynObjects
         [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
         public Dictionary<string, object> SetLayeredMaterial(int layeredMaterialId, object project)
         {
-            return DynRenga.DynDocument.LayeredMaterialHelper.SetLayeredMaterial(this, layeredMaterialId, project);
+            // Convert this ModelObject to IModelObject and put it in an array
+            var iModelObject = new DynRenga.RengaAPI.IModelObject(this);
+            var modelObjects = new DynRenga.RengaAPI.IModelObject[] { iModelObject };
+            
+            // Convert project to IProject
+            var iProject = new DynRenga.RengaAPI.IProject(project);
+            
+            return DynRenga.DynDocument.LayeredMaterialHelper.SetLayeredMaterial(modelObjects, layeredMaterialId, iProject);
         }
 
         /// <summary>

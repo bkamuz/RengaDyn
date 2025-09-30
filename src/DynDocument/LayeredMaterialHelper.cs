@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Renga;
 using dr = Autodesk.DesignScript.Runtime;
 
 namespace DynRenga.DynDocument
@@ -53,114 +54,120 @@ namespace DynRenga.DynDocument
         #region Helper Methods
 
         /// <summary>
-        /// Sets layered material on any Renga model object
+        /// Sets layered material on one or more Renga model objects (following Control plugin pattern)
         /// </summary>
-        /// <param name="modelObject">Renga model object to modify</param>
+        /// <param name="modelObjects">Array of model objects to modify</param>
         /// <param name="layeredMaterialId">ID of layered material to assign</param>
         /// <param name="project">Renga project for creating operation</param>
         /// <returns>Success status and debug info</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
         [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
         public static Dictionary<string, object> SetLayeredMaterial(
-            DynObjects.ModelObject modelObject, 
-            int layeredMaterialId, 
-            object project)
+            DynRenga.RengaAPI.IModelObject[] modelObjects,
+            int layeredMaterialId,
+            DynRenga.RengaAPI.IProject project)
         {
-            var debugInfo = "🎨 Setting layered material...\n";
+            var debugInfo = "🎨 Setting layered material on multiple objects...\n";
+            bool allSuccess = true;
             
-            try
+            if (modelObjects == null || modelObjects.Length == 0)
             {
-                if (modelObject?._i == null)
-                {
-                    debugInfo += "❌ Model object is null or not initialized\n";
-                    return CreateResult(false, debugInfo);
-                }
-
-                if (layeredMaterialId <= 0)
-                {
-                    debugInfo += "❌ Invalid layered material ID\n";
-                    return CreateResult(false, debugInfo);
-                }
-
-                // Get project and create operation
-                dynamic rengaProject = project;
-                if (rengaProject == null)
-                {
-                    debugInfo += "❌ Project is null\n";
-                    return CreateResult(false, debugInfo);
-                }
-
-                debugInfo += $"📋 Object ID: {modelObject.Id}\n";
-                debugInfo += $"🎨 Material ID: {layeredMaterialId}\n";
-
-                // Create operation for undo support
-                var operation = rengaProject.CreateOperation();
-                if (operation == null)
-                {
-                    debugInfo += "❌ Failed to create operation\n";
-                    return CreateResult(false, debugInfo);
-                }
-
-                operation.Start();
+                debugInfo += "❌ No model objects provided\n";
+                return CreateResult(false, debugInfo);
+            }
+            if (layeredMaterialId <= 0)
+            {
+                debugInfo += "❌ Invalid layered material ID\n";
+                return CreateResult(false, debugInfo);
+            }
+            if (project == null)
+            {
+                debugInfo += "❌ Project is null\n";
+                return CreateResult(false, debugInfo);
+            }
 
                 try
                 {
-                    // Get parameter container
-                    var parameterContainer = modelObject._i.GetParameters();
-                    if (parameterContainer == null)
+                    // Get raw COM objects directly (Control plugin approach)
+                    dynamic rengaProject = project._i;
+                    var model = rengaProject.Model;
+                    var modelObjs = model.GetObjects();
+                    
+                    foreach (var modelObject in modelObjects)
                     {
-                        debugInfo += "❌ Failed to get parameter container\n";
-                        operation.Rollback();
-                        return CreateResult(false, debugInfo);
-                    }
-
-                    // Check if object supports layered materials
-                    if (parameterContainer.Contains(GuidStyleLayeredMaterial))
-                    {
-                        debugInfo += "✅ Object supports layered materials\n";
+                        if (modelObject == null || modelObject._i == null)
+                        {
+                            debugInfo += "❌ Model object is null or not initialized\n";
+                            allSuccess = false;
+                            continue;
+                        }
                         
-                        // Get the layered material parameter
-                        var layeredMaterialParam = parameterContainer.Get(GuidStyleLayeredMaterial);
+                        debugInfo += $"📋 Object ID: {modelObject.Id}\n";
+                        debugInfo += $"🎨 Material ID: {layeredMaterialId}\n";
                         
-                        // Set the layered material ID
                         try
                         {
-                            layeredMaterialParam.SetIntValue(layeredMaterialId);
-                            debugInfo += "✅ Layered material ID set successfully\n";
+                            // Get the object directly from model objects collection (Control plugin approach)
+                            var obj = modelObjs.GetById(modelObject.Id);
+                            if (obj == null)
+                            {
+                                debugInfo += "❌ Object not found in model\n";
+                                allSuccess = false;
+                                continue;
+                            }
                             
-                            // Try to set thickness from the layered material's base layer
-                            SetThicknessFromLayeredMaterial(parameterContainer, layeredMaterialId, rengaProject, ref debugInfo);
+                            debugInfo += $"🔍 Got object from model, type: {obj.GetType()}\n";
+                            
+                            var pc = obj.GetParameters();
+                            debugInfo += $"🔍 Got parameter container, type: {pc.GetType()}\n";
+                            
+                            // Use string version of GUID to avoid marshaling issues
+                            var guidStr = "{" + GuidStyleLayeredMaterial.ToString().ToUpper() + "}";
+                            debugInfo += $"🔍 Checking for GUID: {guidStr}\n";
+                            
+                            if (pc.Contains(GuidStyleLayeredMaterial))
+                            {
+                                debugInfo += "✅ Object supports layered materials\n";
+                                var p = pc.Get(GuidStyleLayeredMaterial);
+                                debugInfo += $"🔍 Got parameter, ValueType: {p.ValueType} ({(int)p.ValueType})\n";
+                                
+                                // Exactly like Control plugin - check type and set value
+                                // ParameterValueType_Int = 2 (as used in the original working code)
+                                if ((int)p.ValueType == 2)
+                                {
+                                    debugInfo += $"🔍 Setting int value: {layeredMaterialId}\n";
+                                    p.SetIntValue(layeredMaterialId);
+                                    debugInfo += "✅ Layered material ID set successfully\n";
+                                }
+                                else
+                                {
+                                    debugInfo += $"❌ Parameter type mismatch: expected Int (2), got {p.ValueType} ({(int)p.ValueType})\n";
+                                    allSuccess = false;
+                                }
+                            }
+                            else
+                            {
+                                debugInfo += "❌ Object does not support layered materials\n";
+                                allSuccess = false;
+                            }
                         }
                         catch (Exception ex)
                         {
-                            debugInfo += $"❌ Failed to set layered material parameter: {ex.Message}\n";
-                            operation.Rollback();
-                            return CreateResult(false, debugInfo);
+                            debugInfo += $"❌ Failed to set layered material on object {modelObject.Id}: {ex.Message}\n";
+                            debugInfo += $"🔍 Exception type: {ex.GetType().Name}\n";
+                            debugInfo += $"🔍 HRESULT: {ex.HResult:X8}\n";
+                            if (ex.InnerException != null)
+                            {
+                                debugInfo += $"🔍 Inner exception: {ex.InnerException.Message}\n";
+                            }
+                            allSuccess = false;
                         }
-                    }
-                    else
-                    {
-                        debugInfo += "❌ Object does not support layered materials\n";
-                        operation.Rollback();
-                        return CreateResult(false, debugInfo);
-                    }
-
-                    // Apply the operation
-                    operation.Apply();
-                    debugInfo += "✅ Operation applied successfully\n";
-                    
-                    return CreateResult(true, debugInfo);
-                }
-                catch (Exception ex)
-                {
-                    operation.Rollback();
-                    debugInfo += $"❌ Error during operation: {ex.Message}\n";
-                    return CreateResult(false, debugInfo);
-                }
+                    }                debugInfo += "✅ Layered material setting completed\n";
+                return CreateResult(allSuccess, debugInfo);
             }
             catch (Exception ex)
             {
-                debugInfo += $"❌ Failed to set layered material: {ex.Message}\n";
+                debugInfo += $"❌ Error during parameter setting: {ex.Message}\n";
                 return CreateResult(false, debugInfo);
             }
         }

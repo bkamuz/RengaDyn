@@ -139,8 +139,18 @@ namespace DynRenga.RengaAPI
             
             try 
             {
-                // Try different casting approaches for project
-                dynamic rengaProject = project;
+                // Handle both IProject wrapper and underlying COM object
+                dynamic rengaProject = null;
+                
+                if (project is IProject projectWrapper)
+                {
+                    rengaProject = projectWrapper._i; // Access underlying COM object
+                }
+                else
+                {
+                    rengaProject = project; // Assume it's already a COM object
+                }
+                
                 if (rengaProject == null)
                     throw new ArgumentException("Invalid project object");
 
@@ -152,10 +162,32 @@ namespace DynRenga.RengaAPI
                     
                     if (layeredMaterial != null)
                     {
-                        var idGroupPair = layeredMaterial.GetIdGroupPair();
-                        if ((int)idGroupPair.Group == materialGroup)
+                        try
                         {
-                            materials[layeredMaterial.Id] = layeredMaterial.Name;
+                            var idGroupPair = layeredMaterial.GetIdGroupPair();
+                            if ((int)idGroupPair.Group == materialGroup)
+                            {
+                                // Safely access the name property using dynamic to avoid casting issues
+                                dynamic dynamicMaterial = layeredMaterial;
+                                string materialName;
+                                
+                                try
+                                {
+                                    var nameProperty = dynamicMaterial.Name;
+                                    materialName = nameProperty?.ToString() ?? $"Material_{layeredMaterial.Id}";
+                                }
+                                catch
+                                {
+                                    // If dynamic access fails, try direct string conversion
+                                    materialName = $"Material_{layeredMaterial.Id}";
+                                }
+                                
+                                materials[layeredMaterial.Id] = materialName;
+                            }
+                        }
+                        catch
+                        {
+                            // Skip materials that can't be processed
                         }
                     }
                 }
@@ -199,6 +231,136 @@ namespace DynRenga.RengaAPI
         public Dictionary<int, string> GetRoofLayeredMaterials(object project)
         {
             return GetLayeredMaterialsByGroup(3, project); // LayeredMaterialGroup_Roof = 3
+        }
+
+        /// <summary>
+        /// Gets all layered materials from the project regardless of group type
+        /// </summary>
+        /// <param name="project">Renga project to get materials from</param>
+        /// <returns>Dictionary of material ID and name pairs for all layered materials</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public Dictionary<int, string> GetAllLayeredMaterials(object project)
+        {
+            if (_i == null) 
+                throw new InvalidOperationException("ILayeredMaterialManager interface is not initialized.");
+            
+            var materials = new Dictionary<int, string>();
+            
+            try 
+            {
+                // Handle both IProject wrapper and underlying COM object
+                dynamic rengaProject = null;
+                
+                if (project is IProject projectWrapper)
+                {
+                    rengaProject = projectWrapper._i; // Access underlying COM object
+                }
+                else
+                {
+                    rengaProject = project; // Assume it's already a COM object
+                }
+                
+                if (rengaProject == null)
+                    throw new ArgumentException("Invalid project object");
+
+                var allMaterials = rengaProject.LayeredMaterials;
+                for (int i = 0; i < allMaterials.Count; i++)
+                {
+                    var entity = allMaterials.GetByIndex(i);
+                    var layeredMaterial = _i.GetLayeredMaterial(entity.Id);
+                    
+                    if (layeredMaterial != null)
+                    {
+                        try
+                        {
+                            // Safely access the name property using dynamic to avoid casting issues
+                            dynamic dynamicMaterial = layeredMaterial;
+                            string materialName;
+                            
+                            try
+                            {
+                                var nameProperty = dynamicMaterial.Name;
+                                materialName = nameProperty?.ToString() ?? $"Material_{layeredMaterial.Id}";
+                            }
+                            catch
+                            {
+                                // If dynamic access fails, try direct string conversion
+                                materialName = $"Material_{layeredMaterial.Id}";
+                            }
+                            
+                            materials[layeredMaterial.Id] = materialName;
+                        }
+                        catch
+                        {
+                            // If name access fails, use a fallback name with the ID
+                            materials[layeredMaterial.Id] = $"Material_{layeredMaterial.Id}";
+                        }
+                    }
+                }
+                
+                return materials;
+            } 
+            catch (Exception ex) 
+            { 
+                throw new InvalidOperationException($"Failed to get all layered materials: {ex.Message}", ex); 
+            }
+        }
+
+        /// <summary>
+        /// Gets all layered materials from the project as ILayeredMaterial objects
+        /// </summary>
+        /// <param name="project">Renga project to get materials from</param>
+        /// <returns>List of ILayeredMaterial wrapper objects</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public List<ILayeredMaterial> GetAllLayeredMaterialsAsObjects(object project)
+        {
+            if (_i == null) 
+                throw new InvalidOperationException("ILayeredMaterialManager interface is not initialized.");
+            
+            var materials = new List<ILayeredMaterial>();
+            
+            try 
+            {
+                // Handle both IProject wrapper and underlying COM object
+                dynamic rengaProject = null;
+                
+                if (project is IProject projectWrapper)
+                {
+                    rengaProject = projectWrapper._i; // Access underlying COM object
+                }
+                else
+                {
+                    rengaProject = project; // Assume it's already a COM object
+                }
+                
+                if (rengaProject == null)
+                    throw new ArgumentException("Invalid project object");
+
+                var allMaterials = rengaProject.LayeredMaterials;
+                for (int i = 0; i < allMaterials.Count; i++)
+                {
+                    var entity = allMaterials.GetByIndex(i);
+                    var layeredMaterial = _i.GetLayeredMaterial(entity.Id);
+                    
+                    if (layeredMaterial != null)
+                    {
+                        try
+                        {
+                            materials.Add(new ILayeredMaterial(layeredMaterial));
+                        }
+                        catch
+                        {
+                            // Skip materials that can't be wrapped
+                        }
+                    }
+                }
+                
+                return materials;
+            } 
+            catch (Exception ex) 
+            { 
+                throw new InvalidOperationException($"Failed to get all layered materials as objects: {ex.Message}", ex); 
+            }
         }
 
         /// <summary>
