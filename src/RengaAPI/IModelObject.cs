@@ -333,6 +333,9 @@ namespace DynRenga.RengaAPI
                     case "IColumnStyleManager":
                         return new IColumnStyleManager(comObject as Renga.IColumnStyleManager);
                     
+                    case "IFloorParams":
+                        return new IFloorParams(comObject);
+                    
                     // Add more interface mappings as needed
                     // case "IObjectWithMaterial":
                     //     return new IObjectWithMaterial(comObject);
@@ -584,6 +587,48 @@ namespace DynRenga.RengaAPI
                 "WallFoundation",
                 "Window"
             };
+        }
+
+        #endregion
+
+        #region Layered Material Methods
+
+        /// <summary>
+        /// Sets layered material to this model object
+        /// This is a convenience method that uses ILayeredMaterialManager internally
+        /// </summary>
+        /// <param name="layeredMaterialManager">Layered material manager instance</param>
+        /// <param name="layeredMaterialId">Layered material ID to assign</param>
+        /// <param name="setThickness">Whether to also set thickness from base layer (optional, default true)</param>
+        /// <returns>True if successful, false otherwise</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public bool SetLayeredMaterial(ILayeredMaterialManager layeredMaterialManager, int layeredMaterialId, bool setThickness = true)
+        {
+            if (layeredMaterialManager == null)
+                throw new ArgumentNullException(nameof(layeredMaterialManager), "LayeredMaterialManager cannot be null");
+            
+            return layeredMaterialManager.SetLayeredMaterialToObject(this, layeredMaterialId, setThickness);
+        }
+
+        /// <summary>
+        /// Checks if this object supports layered materials
+        /// </summary>
+        /// <returns>True if the object supports layered materials</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public bool SupportsLayeredMaterials()
+        {
+            // GUID for layered material parameter (from Control plugin)
+            var guidStyleLayeredMaterial = new Guid("2cbc4964-61a0-4553-8103-36e2dd2ab31c");
+            
+            try
+            {
+                var parameterContainer = GetParameters();
+                return parameterContainer.Contains(guidStyleLayeredMaterial);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion

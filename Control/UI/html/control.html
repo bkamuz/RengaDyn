@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Генератор контролов</title>
+  <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/webform.css" rel="stylesheet" type="text/css" />
+  <link href="../css/control.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="control-theme">
+  <div class="control-shell">
+    <header class="control-header">
+      <nav class="control-nav" aria-label="Главная навигация">
+        <div class="control-nav__group">
+          <button class="nav-chip active" data-nav="generate">Сгенерировать</button>
+          <button class="nav-chip" data-nav="controls">Контролы</button>
+          <button class="nav-chip" data-nav="navigation">Навигация</button>
+        </div>
+        <span class="nav-separator">|</span>
+        <div class="control-nav__group">
+          <span class="nav-label">Тип контроля</span>
+          <div class="chip-group" role="group">
+            <button class="nav-chip active" data-type="lights">Светильники</button>
+            <button class="nav-chip" data-type="sensors">Датчики</button>
+            <button class="nav-chip" data-type="zones">Зоны освещения</button>
+          </div>
+        </div>
+        <span class="nav-separator">|</span>
+        <div class="control-nav__group">
+          <span class="nav-label">Способ построения</span>
+          <div class="chip-group" role="group">
+            <button class="nav-chip active" data-mode-toggle="automatic">Автоматический</button>
+            <button class="nav-chip" data-mode-toggle="manual">Ручной</button>
+          </div>
+        </div>
+        <div class="control-nav__spacer"></div>
+        <div class="control-nav__status" id="roomInfo">&nbsp;</div>
+      </nav>
+    </header>
+
+    <main class="control-main">
+      <aside class="control-side">
+        <section class="panel" data-panel="common">
+          <button class="panel__header" type="button" data-collapse="common">
+            <span class="panel__title">Общие параметры</span>
+            <span class="panel__icon" aria-hidden="true"></span>
+          </button>
+          <div class="panel__body">
+            <label class="field">
+              <span class="field__label">Материал</span>
+              <select id="material" class="field__input"></select>
+            </label>
+            <label class="field">
+              <span class="field__label">Отступ от стен, мм</span>
+              <input id="wallGap" type="number" min="0" max="2000" value="300" class="field__input" />
+            </label>
+            <label class="field">
+              <span class="field__label">Радиус скругления, мм</span>
+              <input id="round" type="number" min="0" max="2000" value="150" class="field__input" />
+            </label>
+            <label class="field">
+              <span class="field__label">Расстояние между контролами, мм</span>
+              <input id="gap" type="number" min="0" max="1000" value="200" class="field__input" />
+            </label>
+            <label class="field">
+              <span class="field__label">Поворот, °</span>
+              <input id="rot" type="number" min="-180" max="180" value="0" class="field__input" />
+            </label>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="tool">
+          <button class="panel__header" type="button" data-collapse="tool">
+            <span class="panel__title">Параметры инструмента</span>
+            <span class="panel__icon" aria-hidden="true"></span>
+          </button>
+          <div class="panel__body">
+            <label class="field">
+              <span class="field__label">Допуск, мм</span>
+              <input id="alignTol" type="number" min="0" max="2000" value="100" class="field__input" />
+            </label>
+            <label class="field">
+              <span class="field__label">Смещение по вертикали, мм</span>
+              <input id="vOff" type="number" min="-1000" max="1000" value="45" class="field__input" />
+            </label>
+            <div class="manual-only">
+              <label class="field">
+                <span class="field__label">Количество рядов</span>
+                <input id="rows" type="number" min="1" max="20" value="4" class="field__input" />
+              </label>
+              <label class="field">
+                <span class="field__label">Количество столбцов</span>
+                <input id="cols" type="number" min="1" max="20" value="4" class="field__input" />
+              </label>
+              <label class="field field--checkbox">
+                <input class="field__checkbox" type="checkbox" id="maskHoles" />
+                <span>Пропуск ячеек без светильников</span>
+              </label>
+              <button id="btnCalcGrid" class="action action--ghost" type="button">Рассчитать по светильникам</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="control-actions">
+          <button id="btnCreate" class="action action--primary" type="button">Создать контролы</button>
+          <button id="btnPreview" class="action action--secondary" type="button">Обновить</button>
+          <button id="btnUndo" class="action action--ghost" type="button">Отменить</button>
+        </div>
+      </aside>
+
+      <section class="control-preview">
+        <header class="control-preview__header">
+          <h2 class="control-preview__title">Предпросмотр</h2>
+          <button class="icon-button" type="button" aria-label="Обновить" title="Обновить" id="btnPreviewToolbar">
+            <span></span>
+          </button>
+        </header>
+        <div class="control-preview__canvas">
+          <canvas id="preview" width="800" height="520"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../js/bootstrap/bootstrap.bundle.min.js"></script>
+  <script src="../js/handlebars/handlebars.js"></script>
+  <script src="../js/model.js"></script>
+  <script src="../js/webform.js"></script>
+  <script src="../js/alert.js"></script>
+  <script src="../js/control.js"></script>
+</body>
+</html>

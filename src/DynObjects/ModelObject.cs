@@ -272,5 +272,75 @@ namespace DynRenga.DynObjects
             return interfaces;
         }
 
+        /// <summary>
+        /// Sets layered material to this model object
+        /// </summary>
+        /// <param name="layeredMaterialId">ID of layered material to assign</param>
+        /// <param name="project">Renga project for creating operation</param>
+        /// <returns>Success status and debug info</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "Success", "DebugInfo" })]
+        public Dictionary<string, object> SetLayeredMaterial(int layeredMaterialId, object project)
+        {
+            return DynRenga.DynDocument.LayeredMaterialHelper.SetLayeredMaterial(this, layeredMaterialId, project);
+        }
+
+        /// <summary>
+        /// Checks if this object supports layered materials
+        /// </summary>
+        /// <returns>True if object supports layered materials</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public bool SupportsLayeredMaterials()
+        {
+            try
+            {
+                if (this._i == null) return false;
+                
+                var parameterContainer = this._i.GetParameters();
+                if (parameterContainer == null) return false;
+                
+                return parameterContainer.Contains(DynRenga.DynDocument.LayeredMaterialHelper.GuidStyleLayeredMaterial);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets the current layered material ID of this object (if any)
+        /// </summary>
+        /// <returns>Current layered material ID or -1 if none set</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public int GetLayeredMaterialId()
+        {
+            try
+            {
+                if (this._i == null) return -1;
+                
+                var parameterContainer = this._i.GetParameters();
+                if (parameterContainer == null) return -1;
+                
+                if (parameterContainer.Contains(DynRenga.DynDocument.LayeredMaterialHelper.GuidStyleLayeredMaterial))
+                {
+                    var layeredMaterialParam = parameterContainer.Get(DynRenga.DynDocument.LayeredMaterialHelper.GuidStyleLayeredMaterial);
+                    try
+                    {
+                        return layeredMaterialParam.GetIntValue();
+                    }
+                    catch
+                    {
+                        return -1; // Parameter exists but couldn't get value
+                    }
+                }
+                
+                return -1;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
     }
 }

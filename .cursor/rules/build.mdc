@@ -7,7 +7,7 @@ to build project use
 & "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" "src\RengaDynMain.csproj" /p:Configuration=Debug /p:Platform=x64 /verbosity:minimal
 
 Allways Use context7 if you working with renga api
-<https://context7.com/jackdainzh/rengabim-sdk>
+<https://context7.com/websites/help_rengabim_api>
 
 Do not output debug info to the console log. Output it to the second output (DebugInfo) of the node.
 

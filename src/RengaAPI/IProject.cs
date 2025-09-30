@@ -161,6 +161,26 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
+        /// Gets the layered material manager for this project
+        /// </summary>
+        /// <returns>ILayeredMaterialManager wrapper</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public ILayeredMaterialManager GetLayeredMaterialManager()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("Project interface is not initialized.");
+            try
+            {
+                var mgr = this._i.LayeredMaterialManager;
+                return new ILayeredMaterialManager(mgr);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to get LayeredMaterialManager: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
         /// Creates an operation for editing the project
         /// </summary>
         /// <returns>IOperation object for managing changes</returns>
