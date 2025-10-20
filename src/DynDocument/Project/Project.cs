@@ -48,7 +48,7 @@ namespace DynRenga.DynDocument.Project
         /// Получение инфрмации об участке LandPlotInfo, в виде интерфейса IPropertyContainer
         /// </summary>
         /// <returns></returns>
-        public LandPlotInfo ILandPlotInfo => new LandPlotInfo(this._i.LandPlotInfo);
+        // public LandPlotInfo ILandPlotInfo => new LandPlotInfo(this._i.LandPlotInfo);
         /// <summary>
         /// Стили аксессуаров для труб.
         /// </summary>

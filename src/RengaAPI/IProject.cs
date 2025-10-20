@@ -36,6 +36,200 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
+        /// Gets the ProjectInfo as a DynDocument wrapper
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public DynRenga.DynDocument.Project.ProjectInfo GetProjectInfo()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("Project interface is not initialized.");
+            try
+            {
+                return new DynRenga.DynDocument.Project.ProjectInfo(this._i.ProjectInfo);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to get ProjectInfo: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets BuildingInfo wrapper
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public DynRenga.DynDocument.Project.BuildingInfo GetBuildingInfo()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("Project interface is not initialized.");
+            try
+            {
+                return new DynRenga.DynDocument.Project.BuildingInfo(this._i.BuildingInfo);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to get BuildingInfo: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Returns the DataExporter for the project
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public IDataExporter GetDataExporter()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("Project interface is not initialized.");
+            try
+            {
+                return new IDataExporter(this);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to get DataExporter: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets an IEntityCollection wrapper for BeamStyles
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public IEntityCollection GetBeamStyles()
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.BeamStyles); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get BeamStyles: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for ColumnStyles
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetColumnStyles()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.ColumnStyles); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get ColumnStyles: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for DoorStyles
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetDoorStyles()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.DoorStyles); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get DoorStyles: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for Drawings
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetDrawings()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.Drawings); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get Drawings: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for Drawings2 (alternative drawings collection)
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetDrawings2()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.Drawings2); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get Drawings2: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for DuctAccessoryCategories
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetDuctAccessoryCategories()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.DuctAccessoryCategories); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get DuctAccessoryCategories: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for DuctAccessoryStyles
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetDuctAccessoryStyles()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.DuctAccessoryStyles); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get DuctAccessoryStyles: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for DuctFittingCategories
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetDuctFittingCategories()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.DuctFittingCategories); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get DuctFittingCategories: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for DuctFittingStyles
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetDuctFittingStyles()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.DuctFittingStyles); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get DuctFittingStyles: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for DuctStyles
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetDuctStyles()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.DuctStyles); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get DuctStyles: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets the profile description manager
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IProfileDescriptionManager GetProfileDescriptionManager()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IProfileDescriptionManager(this._i.ProfileDescriptionManager); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get ProfileDescriptionManager: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for LayeredMaterials
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetLayeredMaterials()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.LayeredMaterials); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get LayeredMaterials: {ex.Message}", ex); }
+        }
+
+    /// <summary>
+    /// Gets an IEntityCollection wrapper for Materials
+    /// </summary>
+    [dr.IsVisibleInDynamoLibrary(true)]
+    public IEntityCollection GetMaterials()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IEntityCollection(this._i.Materials); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get Materials: {ex.Message}", ex); }
+        }
+
+        /// <summary>
+        /// Indicates whether the IProject wrapper is initialized and not disposed
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public bool IsInitialized()
+        {
+            return this._i != null && !_disposed;
+        }
+
+        /// <summary>
         /// Gets the file path of the project
         /// </summary>
         public string FilePath
@@ -235,6 +429,9 @@ namespace DynRenga.RengaAPI
             }
         }
 
+        /// <summary>
+        /// Finalizer: release COM resources if Dispose wasn't called
+        /// </summary>
         ~IProject()
         {
             Dispose();

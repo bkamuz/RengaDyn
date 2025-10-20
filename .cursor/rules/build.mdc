@@ -5,6 +5,8 @@ alwaysApply: true
 ---
 to build project use
 & "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" "src\RengaDynMain.csproj" /p:Configuration=Debug /p:Platform=x64 /verbosity:minimal
+or
+& "C:\Program Files\Microsoft Visual Studio\18\Insiders\MSBuild\Current\Bin\MSBuild.exe" "src\RengaDynMain.csproj" /p:Configuration=Debug /p:Platform=x64 /verbosity:minimal   
 
 Allways Use context7 if you working with renga api
 <https://context7.com/websites/help_rengabim_api>

@@ -106,13 +106,13 @@
     <Compile Include="DynDocument\Operation.cs" />
     <Compile Include="DynDocument\Project\BuildingInfo.cs" />
     <Compile Include="DynDocument\DataExporter.cs" />
-    <Compile Include="DynDocument\DynExport.cs" />
+    <!-- <Compile Include="DynDocument\DynExport.cs" /> -->
     <Compile Include="DynDocument\Project\Drawing.cs" />
     <Compile Include="DynDocument\Project\DrawingCollection.cs" />
     <Compile Include="DynDocument\Project\Entity.cs" />
     <Compile Include="DynDocument\Project\EntityCollection.cs" />
     <Compile Include="DynDocument\LayeredMaterialHelper.cs" />
-    <Compile Include="DynDocument\Project\LandPlotInfo.cs" />
+    <!-- <Compile Include="DynDocument\Project\LandPlotInfo.cs" /> -->
     <Compile Include="DynDocument\Project\PostalAddress.cs" />
     <Compile Include="DynDocument\Project\Project.cs" />
     <Compile Include="DynDocument\Project\ProjectInfo.cs" />
@@ -198,6 +198,8 @@
     <Compile Include="RengaAPI\IEntity.cs" />
     <Compile Include="RengaAPI\IEntityCollection.cs" />
     <Compile Include="RengaAPI\INewEntityArgs.cs" />
+    <Compile Include="RengaAPI\IObjectWithPorts.cs" />
+    <Compile Include="RengaAPI\IPort.cs" />
     <Compile Include="RengaAPI\IProject.cs" />
     <Compile Include="RengaAPI\ILevel.cs" />
     <Compile Include="RengaAPI\ILevelObject.cs" />

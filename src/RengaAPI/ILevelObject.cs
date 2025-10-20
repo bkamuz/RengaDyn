@@ -13,33 +13,22 @@ namespace DynRenga.RengaAPI
     /// </summary>
     public class ILevelObject : IDisposable
     {
-        private Renga.ILevelObject _i;
+        /// <summary>
+        /// Internal COM object reference - using dynamic to avoid casting issues
+        /// </summary>
+        public dynamic _i;
         private bool _disposed = false;
 
         /// <summary>
-        /// Internal COM object reference
+        /// Internal COM object reference - using dynamic to avoid casting issues
         /// </summary>
-        public Renga.ILevelObject _i_Internal => _i;
+        public dynamic _i_Internal => _i;
 
         /// <summary>
         /// Constructor from COM object
         /// </summary>
-        /// <param name="levelObject">COM object implementing ILevelObject</param>
+        /// <param name="levelObject">COM object implementing level object functionality</param>
         public ILevelObject(object levelObject)
-        {
-            if (levelObject == null)
-                throw new ArgumentNullException(nameof(levelObject), "LevelObject cannot be null");
-            
-            _i = levelObject as Renga.ILevelObject;
-            if (_i == null)
-                throw new ArgumentException("Object does not implement ILevelObject interface", nameof(levelObject));
-        }
-
-        /// <summary>
-        /// Constructor from existing ILevelObject
-        /// </summary>
-        /// <param name="levelObject">Existing ILevelObject instance</param>
-        public ILevelObject(Renga.ILevelObject levelObject)
         {
             if (levelObject == null)
                 throw new ArgumentNullException(nameof(levelObject), "LevelObject cannot be null");

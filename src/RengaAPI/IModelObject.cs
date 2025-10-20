@@ -333,6 +333,9 @@ namespace DynRenga.RengaAPI
                     case "IColumnStyleManager":
                         return new IColumnStyleManager(comObject as Renga.IColumnStyleManager);
                     
+                    case "IObjectWithPorts":
+                        return new IObjectWithPorts(comObject);
+                    
                     case "IFloorParams":
                         return new IFloorParams(comObject);
                     
@@ -417,6 +420,30 @@ namespace DynRenga.RengaAPI
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Failed to get quantities: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the IObjectWithPorts interface if the object supports ports
+        /// </summary>
+        /// <returns>IObjectWithPorts instance or null if not supported</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public IObjectWithPorts GetObjectWithPorts()
+        {
+            if (this._i == null) 
+                throw new InvalidOperationException("ModelObject interface is not initialized.");
+            
+            try
+            {
+                var objectWithPorts = this._i.GetInterfaceByName("IObjectWithPorts");
+                if (objectWithPorts == null)
+                    return null;
+                
+                return new IObjectWithPorts(objectWithPorts);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to get IObjectWithPorts interface: {ex.Message}", ex);
             }
         }
 

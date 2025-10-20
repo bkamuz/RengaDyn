@@ -250,6 +250,8 @@ namespace DynRenga.RengaAPI
                         return new IColumnStyle(comInterface);
                     case "IColumnStyleManager":
                         return new IColumnStyleManager(comInterface);
+                    case "IObjectWithPorts":
+                        return new IObjectWithPorts(comInterface);
                     default:
                         // For unknown interfaces, return the raw COM object
                         return comInterface;
