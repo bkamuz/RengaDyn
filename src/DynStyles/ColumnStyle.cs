@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,37 +9,44 @@ using dr = Autodesk.DesignScript.Runtime;
 using dg = Autodesk.DesignScript.Geometry;
 using Renga;
 using DynRenga.DynGeometry;
+using DynRenga.Core;
 
 namespace DynRenga.DynStyles
 {
     /// <summary>
-    /// Класс для работы с интерфейсом Renga.IColumnStyle, одиночным стилем колонны
+    /// Рефакторенный класс для работы с интерфейсом Renga.IColumnStyle
+    /// Наследует от BaseRengaStyle для устранения дублирования кода
     /// </summary>
-    public class ColumnStyle
+    public class ColumnStyle : BaseRengaStyle<Renga.IColumnStyle>
     {
-        public Renga.IColumnStyle _i;
         /// <summary>
-        /// Инициализация класса через интерфейс Renga.IBeamStyle
+        /// Инициализация интерфейса Renga.IColumnStyle из com-объекта
         /// </summary>
-        /// <param name="ColumnStyle_object"></param>
-        internal ColumnStyle(object ColumnStyle_object)
-        {
-            this._i = ColumnStyle_object as Renga.IColumnStyle;
-        }
+        /// <param name="columnStyleObject">COM-объект стиля колонны</param>
+        internal ColumnStyle(object columnStyleObject) : base(columnStyleObject) { }
+        
         /// <summary>
-        /// Получение целочисленного идентификатора стиля
+        /// Прямой конструктор с типизированным интерфейсом
         /// </summary>
-        /// <returns></returns>
-        public int Id => this._i.Id;
+        /// <param name="columnStyle">Интерфейс стиля колонны</param>
+        internal ColumnStyle(Renga.IColumnStyle columnStyle) : base(columnStyle) { }
+        
         /// <summary>
-        /// Получение наименования стиля
+        /// Получение целочисленного идентификатора стиля колонны
         /// </summary>
-        /// <returns></returns>
-        public string Name => this._i.Name;
+        /// <returns>ID стиля</returns>
+        public override int Id => _i.Id;
+        
         /// <summary>
-        /// Получение интерфейса Renga.IProfile
+        /// Получение наименования стиля колонны
         /// </summary>
-        /// <returns></returns>
-        public Profile Profile => new Profile(this._i.Profile);
+        /// <returns>Название стиля</returns>
+        public override string Name => _i.Name;
+        
+        /// <summary>
+        /// Получение профиля колонны
+        /// </summary>
+        /// <returns>Объект профиля колонны</returns>
+        public Profile Profile => new Profile(_i.Profile);
     }
 }

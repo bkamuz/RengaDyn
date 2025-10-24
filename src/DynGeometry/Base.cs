@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,218 +8,238 @@ using System.Text;
 using dr = Autodesk.DesignScript.Runtime;
 using dg = Autodesk.DesignScript.Geometry;
 using Renga;
+using DynRenga.Core;
 
 namespace DynRenga.DynGeometry
 {
+    /// <summary>
+    /// Рефакторенный класс Base - теперь использует GeometryFactory для устранения дублирования кода
+    /// Сохраняет обратную совместимость со старыми методами
+    /// </summary>
     [dr.IsVisibleInDynamoLibrary(false)]
     public class Base
     {
         private Base() { }
+        
+        // ========== НОВЫЕ РЕКОМЕНДУЕМЫЕ МЕТОДЫ (используют GeometryFactory) ==========
+        
         /// <summary>
-        /// Точка в 3D с координатами float
+        /// Создание 2D точки с координатами double (рекомендуемый метод)
         /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <param name="Z"></param>
-        /// <returns>Объект - FloatPoint3D</returns>
-        public static object SetFloatPoint3D (float X, float Y, float Z)
+        /// <param name="x">Координата X</param>
+        /// <param name="y">Координата Y</param>
+        /// <returns>Объект Point2D</returns>
+        public static Point2D CreatePoint2D(double x, double y)
         {
-            Renga.FloatPoint3D point3d = new Renga.FloatPoint3D();
-            point3d.X = X; point3d.Y = Y; point3d.Z = Z;
-            return point3d;
+            return GeometryFactory.CreatePoint2D<Point2D>(x, y);
         }
+        
         /// <summary>
-        /// Получение координат из объекта в 2D по типу
+        /// Создание 2D точки с координатами float (рекомендуемый метод)
         /// </summary>
-        /// <param name="com_Base2DGeometry">COM-объект геометрии (двухмерный объект)</param>
-        /// <param name="ObjType">0 = FloatPoint2D, 1 = Point2D, 2 = Vector2D</param>
-        /// <returns></returns>
+        /// <param name="x">Координата X</param>
+        /// <param name="y">Координата Y</param>
+        /// <returns>Объект FloatPoint2D</returns>
+        public static FloatPoint2D CreateFloatPoint2D(float x, float y)
+        {
+            return GeometryFactory.CreatePoint2D<FloatPoint2D>(x, y);
+        }
+        
+        /// <summary>
+        /// Создание 3D точки с координатами double (рекомендуемый метод)
+        /// </summary>
+        /// <param name="x">Координата X</param>
+        /// <param name="y">Координата Y</param>
+        /// <param name="z">Координата Z</param>
+        /// <returns>Объект Point3D</returns>
+        public static Point3D CreatePoint3D(double x, double y, double z)
+        {
+            return GeometryFactory.CreatePoint3D<Point3D>(x, y, z);
+        }
+        
+        /// <summary>
+        /// Создание 3D точки с координатами float (рекомендуемый метод)
+        /// </summary>
+        /// <param name="x">Координата X</param>
+        /// <param name="y">Координата Y</param>
+        /// <param name="z">Координата Z</param>
+        /// <returns>Объект FloatPoint3D</returns>
+        public static FloatPoint3D CreateFloatPoint3D(float x, float y, float z)
+        {
+            return GeometryFactory.CreatePoint3D<FloatPoint3D>(x, y, z);
+        }
+        
+        /// <summary>
+        /// Универсальное извлечение координат из 2D геометрических объектов (рекомендуемый метод)
+        /// </summary>
+        /// <param name="geometry2D">2D геометрический объект</param>
+        /// <returns>Словарь с координатами X и Y</returns>
         [dr.MultiReturn(new[] { "X", "Y" })]
-        public static Dictionary <string, object> GetCoords_2D (object com_Base2DGeometry, int ObjType)
+        public static Dictionary<string, object> ExtractCoords2D(object geometry2D)
         {
-            switch (ObjType)
-            {
-                case 0:
-                    {
-                        FloatPoint2D pnt = (FloatPoint2D)com_Base2DGeometry;
-                        return new Dictionary<string, object>
-                        {
-                            {"X",pnt.X }, {"Y",pnt.Y}
-                        };
-                    }
-                case 1:
-                    {
-                        Point2D pnt = (Point2D)com_Base2DGeometry;
-                        return new Dictionary<string, object>
-                        {
-                            {"X",pnt.X }, {"Y",pnt.Y}
-                        };
-                    }
-                case 2:
-                    {
-                        Vector2D vct = (Vector2D)com_Base2DGeometry;
-                        return new Dictionary<string, object>
-                        {
-                            {"X",vct.X }, {"Y",vct.Y}
-                        };
-                    }
-            }
-            return null;
+            return GeometryFactory.ExtractCoordinates2D(geometry2D);
         }
+        
         /// <summary>
-        /// Получение координат из объекта в 3D по типу
+        /// Универсальное извлечение координат из 3D геометрических объектов (рекомендуемый метод)
         /// </summary>
-        /// <param name="com_Base3DGeometry">COM-объект геометрии (трехмерный объект)</param>
-        /// <param name="ObjType">0 = FloatPoint3D, 1 = Point3D, 2 = Vector3D, 3 = FloatVector3D</param>
-        /// <returns></returns>
+        /// <param name="geometry3D">3D геометрический объект</param>
+        /// <returns>Словарь с координатами X, Y и Z</returns>
+        [dr.MultiReturn(new[] { "X", "Y", "Z" })]
+        public static Dictionary<string, object> ExtractCoords3D(object geometry3D)
+        {
+            return GeometryFactory.ExtractCoordinates3D(geometry3D);
+        }
+        
+        /// <summary>
+        /// Создание треугольника триангуляции (рекомендуемый метод)
+        /// </summary>
+        /// <param name="v0">Индекс первой вершины</param>
+        /// <param name="v1">Индекс второй вершины</param>
+        /// <param name="v2">Индекс третьей вершины</param>
+        /// <returns>Объект Triangle</returns>
+        public static Triangle CreateTriangle(int v0, int v1, int v2)
+        {
+            return GeometryFactory.CreateTriangle(v0, v1, v2);
+        }
+        
+        /// <summary>
+        /// Извлечение индексов из треугольника (рекомендуемый метод)
+        /// </summary>
+        /// <param name="triangle">Треугольник триангуляции</param>
+        /// <returns>Словарь с индексами вершин</returns>
+        [dr.MultiReturn(new[] { "V0", "V1", "V2" })]
+        public static Dictionary<string, object> ExtractTriangleInfo(Triangle triangle)
+        {
+            return GeometryFactory.ExtractTriangleIndices(triangle);
+        }
+        
+        // ========== УСТАРЕВШИЕ МЕТОДЫ (для обратной совместимости) ==========
+        
+        /// <summary>
+        /// (Устаревший) Точка в 3D с координатами float. Используйте CreateFloatPoint3D
+        /// </summary>
+        [Obsolete("Используйте CreateFloatPoint3D или GeometryFactory.CreatePoint3D<FloatPoint3D>")]
+        public static object SetFloatPoint3D(float X, float Y, float Z)
+        {
+            return CreateFloatPoint3D(X, Y, Z);
+        }
+        
+        /// <summary>
+        /// (Устаревший) Получение координат из 2D объекта по типу. Используйте ExtractCoords2D
+        /// </summary>
+        [Obsolete("Используйте ExtractCoords2D или GeometryFactory.ExtractCoordinates2D")]
+        [dr.MultiReturn(new[] { "X", "Y" })]
+        public static Dictionary<string, object> GetCoords_2D(object com_Base2DGeometry, int ObjType)
+        {
+            try
+            {
+                return GeometryFactory.ExtractCoordinates2D(com_Base2DGeometry);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// (Устаревший) Получение координат из 3D объекта по типу. Используйте ExtractCoords3D
+        /// </summary>
+        [Obsolete("Используйте ExtractCoords3D или GeometryFactory.ExtractCoordinates3D")]
         [dr.MultiReturn(new[] { "X", "Y", "Z" })]
         public static Dictionary<string, object> GetCoords_3D(object com_Base3DGeometry, int ObjType)
         {
-            switch (ObjType)
+            try
             {
-                case 0:
-                    {
-                        FloatPoint3D pnt = (FloatPoint3D)com_Base3DGeometry;
-                        return new Dictionary<string, object>
-                        {
-                            {"X",pnt.X }, {"Y",pnt.Y},{"Z", pnt.Z }
-                        };
-                    }
-                case 1:
-                    {
-                        Point3D pnt = (Point3D)com_Base3DGeometry;
-                        return new Dictionary<string, object>
-                        {
-                            {"X",pnt.X }, {"Y",pnt.Y},{"Z", pnt.Z }
-                        };
-                    }
-                case 2:
-                    {
-                        Vector3D vct = (Vector3D)com_Base3DGeometry;
-                        return new Dictionary<string, object>
-                        {
-                            {"X",vct.X }, {"Y",vct.Y},{"Z", vct.Z }
-                        };
-                    }
-                case 3:
-                    {
-                        FloatVector3D vct = (FloatVector3D)com_Base3DGeometry;
-                        return new Dictionary<string, object>
-                        {
-                            {"X",vct.X }, {"Y",vct.Y},{"Z", vct.Z }
-                        };
-                    }
+                return GeometryFactory.ExtractCoordinates3D(com_Base3DGeometry);
             }
-            return null;
+            catch
+            {
+                return null;
+            }
         }
+        
         /// <summary>
-        /// Точка в 3D с координатами double
+        /// (Устаревший) Точка в 3D с координатами double. Используйте CreatePoint3D
         /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <param name="Z"></param>
-        /// <returns>Объект - Point3D</returns>
+        [Obsolete("Используйте CreatePoint3D или GeometryFactory.CreatePoint3D<Point3D>")]
         public static object SetPoint3D(double X, double Y, double Z)
         {
-            Renga.Point3D point3d = new Renga.Point3D();
-            point3d.X = X; point3d.Y = Y; point3d.Z = Z;
-            return point3d;
+            return CreatePoint3D(X, Y, Z);
         }
+        
         /// <summary>
-        /// Точка в 2D с координатами float
+        /// (Устаревший) Точка в 2D с координатами float. Используйте CreateFloatPoint2D
         /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <returns>Объект - FloatPoint2D</returns>
+        [Obsolete("Используйте CreateFloatPoint2D или GeometryFactory.CreatePoint2D<FloatPoint2D>")]
         public static object SetFloatPoint2D(float X, float Y)
         {
-            Renga.FloatPoint2D point2d = new Renga.FloatPoint2D();
-            point2d.X = X; point2d.Y = Y;
-            return point2d;
+            return CreateFloatPoint2D(X, Y);
         }
+        
         /// <summary>
-        /// Точка в 2D с координатами double
+        /// (Устаревший) Точка в 2D с координатами double. Используйте CreatePoint2D
         /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <returns>Объект - Point2D</returns>
+        [Obsolete("Используйте CreatePoint2D или GeometryFactory.CreatePoint2D<Point2D>")]
         public static object SetPoint2D(double X, double Y)
         {
-            Renga.Point2D point2d = new Renga.Point2D();
-            point2d.X = X; point2d.Y = Y;
-            return point2d;
+            return CreatePoint2D(X, Y);
         }
+        
         /// <summary>
-        /// Вектор в 3D с координатами float
+        /// (Устаревший) Вектор в 3D с координатами float
         /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <param name="Z"></param>
-        /// <returns>Объект - FloatVector3D</returns>
+        [Obsolete("Используйте GeometryFactory.CreateVector3D<FloatVector3D>")]
         public static object SetFloatVector3D(float X, float Y, float Z)
         {
-            Renga.FloatVector3D Vector3d = new Renga.FloatVector3D();
-            Vector3d.X = X; Vector3d.Y = Y; Vector3d.Z = Z;
-            return Vector3d;
+            return GeometryFactory.CreateVector3D<FloatVector3D>(X, Y, Z);
         }
+        
         /// <summary>
-        /// Вектор в 2D с координатами double
+        /// (Устаревший) Вектор в 2D с координатами double
         /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <returns>Объект - Vector2D</returns>
+        [Obsolete("Используйте GeometryFactory.CreateVector2D<Vector2D>")]
         public static object SetVector2D(double X, double Y)
         {
-            Renga.Vector2D Vector2d = new Renga.Vector2D();
-            Vector2d.X = X; Vector2d.Y = Y;
-            return Vector2d;
+            return GeometryFactory.CreateVector2D<Vector2D>(X, Y);
         }
+        
         /// <summary>
-        /// Вектор в 3D с координатами double
+        /// (Устаревший) Вектор в 3D с координатами double
         /// </summary>
-        /// <param name="X"></param>
-        /// <param name="Y"></param>
-        /// <param name="Z"></param>
-        /// <returns>Объект - Vector3D</returns>
+        [Obsolete("Используйте GeometryFactory.CreateVector3D<Vector3D>")]
         public static object SetVector3D(double X, double Y, double Z)
         {
-            Renga.Vector3D Vector3d = new Renga.Vector3D();
-            Vector3d.X = X; Vector3d.Y = Y; Vector3d.Z = Z;
-            return Vector3d;
+            return GeometryFactory.CreateVector3D<Vector3D>(X, Y, Z);
         }
+        
         /// <summary>
-        /// Треугольник триангуляции с индексами номеров точек - вершин граней
+        /// (Устаревший) Треугольник триангуляции. Используйте CreateTriangle
         /// </summary>
-        /// <param name="V0">Индекс точки первой грани</param>
-        /// <param name="V1">Индекс точки второй грани</param>
-        /// <param name="V2">Индекс точки третьей грани</param>
-        /// <returns>Объект - Triangle</returns>
+        [Obsolete("Используйте CreateTriangle или GeometryFactory.CreateTriangle")]
         public static object SetTriangle(int V0, int V1, int V2)
         {
-            Renga.Triangle Triangle = new Renga.Triangle();
-            Triangle.V0 = Convert.ToUInt32(V0);
-            Triangle.V1 = Convert.ToUInt32(V1);
-            Triangle.V2 = Convert.ToUInt32(V2);
-            return Triangle;
-
+            return CreateTriangle(V0, V1, V2);
         }
+        
         /// <summary>
-        /// Получение индексов объекта-Triangle
+        /// (Устаревший) Получение индексов треугольника. Используйте ExtractTriangleInfo
         /// </summary>
-        /// <param name="com_Triangle">COM - объект(Triangle)</param>
-        /// <returns></returns>
+        [Obsolete("Используйте ExtractTriangleInfo или GeometryFactory.ExtractTriangleIndices")]
         [dr.MultiReturn(new[] { "V0", "V1", "V2" })]
-        public static Dictionary<string,object> GetTriangleInfo (object com_Triangle)
+        public static Dictionary<string, object> GetTriangleInfo(object com_Triangle)
         {
-            Triangle trg = (Triangle)com_Triangle;
+            if (com_Triangle is Triangle triangle)
+            {
+                return GeometryFactory.ExtractTriangleIndices(triangle);
+            }
+            
             return new Dictionary<string, object>
             {
-                {"V0", Convert.ToInt32(trg.V0) },
-                {"V1", Convert.ToInt32(trg.V1) },
-                {"V2", Convert.ToInt32(trg.V2) }
+                { "V0", -1 },
+                { "V1", -1 },
+                { "V2", -1 }
             };
         }
-
-
     }
 }

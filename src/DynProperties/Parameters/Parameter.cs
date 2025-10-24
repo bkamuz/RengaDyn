@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,201 +8,280 @@ using System.Text;
 using dr = Autodesk.DesignScript.Runtime;
 using dg = Autodesk.DesignScript.Geometry;
 using Renga;
+using DynRenga.Core;
 
 namespace DynRenga.DynProperties.Parameters
 {
     /// <summary>
-    /// Класс для работы с одиночным параметром, интерфейсом Renga.IParameter
+    /// Рефакторенный класс для работы с одиночным параметром Renga.IParameter
+    /// Наследует от BaseRengaParameter для устранения дублирования кода
     /// </summary>
-    public class Parameter
+    public class Parameter : BaseRengaParameter<Renga.IParameter, ParameterValueType>
     {
-        public Renga.IParameter _i;
         /// <summary>
         /// Инициация класса из интерфейса Renga.IParameter
         /// </summary>
-        /// <_i name="Parameter_obj_com"></_i>
-        internal Parameter (object Parameter_obj_com)
-        {
-            this._i = Parameter_obj_com as Renga.IParameter;
-        }
+        /// <param name="parameterObject">COM-объект параметра</param>
+        internal Parameter(object parameterObject) : base(parameterObject) { }
+        
+        /// <summary>
+        /// Прямой конструктор с типизированным интерфейсом
+        /// </summary>
+        /// <param name="parameter">Интерфейс параметра</param>
+        internal Parameter(Renga.IParameter parameter) : base(parameter) { }
+        
         /// <summary>
         /// Проверка, есть ли какое-либо значение у параметра
         /// </summary>
-        /// <returns></returns>
-        public bool HasValue => this._i.HasValue;
-        //getting data
+        /// <returns>true, если параметр имеет значение</returns>
+        public override bool HasValue => _i.HasValue;
+        
         /// <summary>
-        /// Получает булево значение параметра
+        /// Тип значения параметра
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Тип значения параметра</returns>
+        public override ParameterValueType ValueType => _i.ValueType;
+        // ========== РЕАЛИЗАЦИЯ АБСТРАКТНЫХ МЕТОДОВ ==========
+        
+        /// <summary>
+        /// Внутренняя реализация получения булева значения
+        /// </summary>
+        /// <returns>Булево значение параметра</returns>
+        protected override bool GetBoolValueInternal()
+        {
+            return _i.GetBoolValue();
+        }
+        
+        /// <summary>
+        /// Внутренняя реализация получения целочисленного значения
+        /// </summary>
+        /// <returns>Целочисленное значение параметра</returns>
+        protected override int GetIntValueInternal()
+        {
+            return _i.GetIntValue();
+        }
+        
+        /// <summary>
+        /// Внутренняя реализация получения дробного значения
+        /// </summary>
+        /// <returns>Дробное значение параметра</returns>
+        protected override double GetDoubleValueInternal()
+        {
+            return _i.GetDoubleValue();
+        }
+        
+        /// <summary>
+        /// Внутренняя реализация получения строкового значения
+        /// </summary>
+        /// <returns>Строковое значение параметра</returns>
+        protected override string GetStringValueInternal()
+        {
+            return _i.GetStringValue();
+        }
+        
+        /// <summary>
+        /// Внутренняя реализация установки булева значения
+        /// </summary>
+        /// <param name="value">Булево значение</param>
+        protected override void SetBoolValueInternal(bool value)
+        {
+            _i.SetBoolValue(value);
+        }
+        
+        /// <summary>
+        /// Внутренняя реализация установки целочисленного значения
+        /// </summary>
+        /// <param name="value">Целочисленное значение</param>
+        protected override void SetIntValueInternal(int value)
+        {
+            _i.SetIntValue(value);
+        }
+        
+        /// <summary>
+        /// Внутренняя реализация установки дробного значения
+        /// </summary>
+        /// <param name="value">Дробное значение</param>
+        protected override void SetDoubleValueInternal(double value)
+        {
+            _i.SetDoubleValue(value);
+        }
+        
+        /// <summary>
+        /// Внутренняя реализация установки строкового значения
+        /// </summary>
+        /// <param name="value">Строковое значение</param>
+        protected override void SetStringValueInternal(string value)
+        {
+            _i.SetStringValue(value);
+        }
+        
+        // ========== ПУБЛИЧНЫЕ МЕТОДЫ ==========
+        
+        /// <summary>
+        /// Получение булева значения параметра с безопасной обработкой
+        /// </summary>
+        /// <returns>Булево значение или false по умолчанию</returns>
         public bool GetBoolValue()
         {
-            if (this._i.HasValue) return this._i.GetBoolValue();
-            else return false;
+            return GetBoolValueSafe();
         }
+        
         /// <summary>
-        /// Получает хначение параметра в виде целого числа
+        /// Получение целочисленного значения параметра с безопасной обработкой
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Целочисленное значение или -1 по умолчанию</returns>
         public int GetIntValue()
         {
-            if (this._i.HasValue) return this._i.GetIntValue();
-            else return -1;
+            return GetIntValueSafe();
         }
+        
         /// <summary>
-        /// Получает значение параметра в виде дробного числа
+        /// Получение дробного значения параметра с безопасной обработкой
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Дробное значение или -1.0 по умолчанию</returns>
         public double GetDoubleValue()
         {
-            if (this._i.HasValue) return this._i.GetDoubleValue();
-            else return -1d;
+            return GetDoubleValueSafe();
         }
+        
         /// <summary>
-        /// Получает значение параметра в виде строки
+        /// Получение строкового значения параметра с безопасной обработкой
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Строковое значение или null по умолчанию</returns>
         public string GetStringValue()
         {
-            if (this._i.HasValue) return this._i.GetStringValue();
-            else return null;
+            return GetStringValueSafe();
         }
-        //setting data
+        
         /// <summary>
-        /// Устаналивает значение параметра в виде булева значения
+        /// Установка булева значения параметра
         /// </summary>
-        /// <_i name="value_bool"></_i>
-        public void SetBoolValue(bool value_bool)
+        /// <param name="value">Булево значение</param>
+        public void SetBoolValue(bool value)
         {
-            this._i.SetBoolValue(value_bool);
+            SetBoolValueInternal(value);
         }
+        
         /// <summary>
-        /// Устаналивает значение параметра в виде целочисленного числа
+        /// Установка целочисленного значения параметра
         /// </summary>
-        /// <_i name="value_int"></_i>
-        public void SetIntValue (int value_int)
+        /// <param name="value">Целочисленное значение</param>
+        public void SetIntValue(int value)
         {
-            this._i.SetIntValue(value_int);
+            SetIntValueInternal(value);
         }
+        
         /// <summary>
-        /// Устаналивает значение параметра в виде числа double
+        /// Установка дробного значения параметра
         /// </summary>
-        /// <_i name="value_double"></_i>
-        public void SetDoubleValue (double value_double)
+        /// <param name="value">Дробное значение</param>
+        public void SetDoubleValue(double value)
         {
-            this._i.SetDoubleValue(value_double);
+            SetDoubleValueInternal(value);
         }
+        
         /// <summary>
-        /// Устаналивает строкое значение параметра по входной строке
+        /// Установка строкового значения параметра
         /// </summary>
-        /// <_i name="value_string"></_i>
-        public void SetStringValue (string value_string)
+        /// <param name="value">Строковое значение</param>
+        public void SetStringValue(string value)
         {
-            this._i.SetStringValue(value_string);
+            SetStringValueInternal(value);
         }
-        //properties
+        
+        // ========== СВОЙСТВА ==========
+        
         /// <summary>
         /// Получение Guid-идентификатора параметра
         /// </summary>
-        /// <returns></returns>
-        public Guid Id => this._i.Id;
+        /// <returns>GUID параметра</returns>
+        public Guid Id => _i.Id;
+        
         /// <summary>
-        /// Получение интерфейса Renga.IParameterDefinition
+        /// Получение определения параметра
         /// </summary>
-        /// <returns></returns>
-        public ParameterDefinition Definition => new ParameterDefinition(this._i.Definition);
+        /// <returns>Объект ParameterDefinition</returns>
+        public ParameterDefinition Definition => new ParameterDefinition(_i.Definition);
+        // ========== УНИВЕРСАЛЬНЫЕ МЕТОДЫ ==========
+        
         /// <summary>
-        /// Получение численного значения типа параметра Renga.ParameterValueType
+        /// Универсальная установка значения по типу параметра
         /// </summary>
-        /// <returns></returns>
-        public object ValueType => this._i.ValueType;
-        //My
-        /// <summary>
-        /// Присвоение параметру значению по его типу (значение типа)
-        /// </summary>
-        /// <_i name="assigned_value">Значение для присваивания</_i>
-        /// <returns></returns>
-        public void SetValue(object assigned_value)
+        /// <param name="value">Значение для установки</param>
+        public override void SetValue(object value)
         {
-            switch (this._i.ValueType)
+            switch (ValueType)
             {
                 case ParameterValueType.ParameterValueType_Bool:
-                    {
-                        this._i.SetBoolValue(Convert.ToBoolean(assigned_value));
-                        break;
-                    }
+                    SetBoolValueInternal(Convert.ToBoolean(value));
+                    break;
                 case ParameterValueType.ParameterValueType_Int:
-                    {
-                        this._i.SetIntValue(Convert.ToInt32(assigned_value));
-                        break;
-                    }
+                    SetIntValueInternal(Convert.ToInt32(value));
+                    break;
                 case ParameterValueType.ParameterValueType_Double:
-                    {
-                        this._i.SetDoubleValue(Convert.ToDouble(assigned_value));
-                        break;
-                    }
+                    SetDoubleValueInternal(Convert.ToDouble(value));
+                    break;
                 case ParameterValueType.ParameterValueType_String:
-                    {
-                        this._i.SetStringValue(Convert.ToString(assigned_value));
-                        break;
-                    }
+                    SetStringValueInternal(Convert.ToString(value));
+                    break;
+                default:
+                    throw new ArgumentException($"Неподдерживаемый тип параметра: {ValueType}");
             }
         }
+        
         /// <summary>
-        /// Получение значения параметра того типа, в зависимости от значения 
-        /// ValueType (ParameterValueType) параметра
+        /// Универсальное получение значения по типу параметра
         /// </summary>
-        /// <returns>Значение параметра</returns>
-        public object GetValue()
+        /// <returns>Значение параметра соответствующего типа или null</returns>
+        public override object GetValue()
         {
-            switch (this._i.ValueType)
+            if (!HasValue) return null;
+            
+            return ValueType switch
             {
-                case ParameterValueType.ParameterValueType_Bool:
-                    {
-                        return this._i.GetBoolValue();
-                    }
-                case ParameterValueType.ParameterValueType_Int:
-                    {
-                        return this._i.GetIntValue();
-                    }
-                case ParameterValueType.ParameterValueType_Double:
-                    {
-                        return this._i.GetDoubleValue();
-                    }
-                case ParameterValueType.ParameterValueType_String:
-                    {
-                        return this._i.GetStringValue();
-                    }
-            }
-            return null;
+                ParameterValueType.ParameterValueType_Bool => GetBoolValueSafe(),
+                ParameterValueType.ParameterValueType_Int => GetIntValueSafe(),
+                ParameterValueType.ParameterValueType_Double => GetDoubleValueSafe(),
+                ParameterValueType.ParameterValueType_String => GetStringValueSafe(),
+                _ => null
+            };
         }
+        
         /// <summary>
-        /// Получение типа параметра (формат строка, число и пр) Renga.ParameterValueType
+        /// Получение строкового представления типа параметра
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Строковое представление типа</returns>
         public string GetValueTypeAsString()
         {
-            IEnumerable<KeyValuePair<string, object>> data = ParameterValueTypes().
-                Where(a => (Renga.ParameterValueType)a.Value == this._i.ValueType);
-            if (data.Any()) return data.First().Key;
-            else return null;
+            return GetValueTypeAsString(GetParameterValueTypes());
         }
+        
         /// <summary>
-        /// Значения Renga.ParameterValueType для типов значений параметров (свойств объектов)
+        /// Получение всех доступных типов значений параметров
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Словарь типов значений параметров</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static Dictionary<string, object> GetParameterValueTypes()
+        {
+            return new Dictionary<string, object>
+            {
+                { "ParameterValueType_Undefined", Renga.ParameterValueType.ParameterValueType_Undefined },
+                { "ParameterValueType_Bool", Renga.ParameterValueType.ParameterValueType_Bool },
+                { "ParameterValueType_Int", Renga.ParameterValueType.ParameterValueType_Int },
+                { "ParameterValueType_Double", Renga.ParameterValueType.ParameterValueType_Double },
+                { "ParameterValueType_String", Renga.ParameterValueType.ParameterValueType_String }
+            };
+        }
+        
+        /// <summary>
+        /// (Устаревший) Получение типов значений параметров. Используйте GetParameterValueTypes
+        /// </summary>
+        [Obsolete("Используйте GetParameterValueTypes")]
         [dr.MultiReturn(new[] { "ParameterValueType_Undefined", "ParameterValueType_Bool",
             "ParameterValueType_Int","ParameterValueType_Double","ParameterValueType_String"})]
         public static Dictionary<string, object> ParameterValueTypes()
         {
-            return new Dictionary<string, object>
-                {
-                    {"ParameterValueType_Undefined", Renga.ParameterType.ParameterType_Undefined },
-                    {"ParameterValueType_Bool", Renga.ParameterType.ParameterType_Bool },
-                    {"ParameterValueType_Int", Renga.ParameterType.ParameterType_Int },
-                    {"ParameterValueType_Double", Renga.ParameterType.ParameterType_Double },
-                    {"ParameterValueType_String", Renga.ParameterType.ParameterType_String }
-                };
+            return GetParameterValueTypes();
         }
     }
 }
