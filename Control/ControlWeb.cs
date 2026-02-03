@@ -40,7 +40,7 @@ namespace Aw.Plugin.Control
     private ControlWeb(RoomPerimeterManager manager)
         {
             _manager = manager;
-            StartURL = @"file:///" + Path.GetDirectoryName(Path.GetFullPath(Assembly.GetExecutingAssembly().Location)).Replace(@"\\", @"/") + "/UI/html/control.html";
+            StartURL = @"file:///" + Path.GetDirectoryName(Path.GetFullPath(Assembly.GetExecutingAssembly().Location)).Replace("\\", "/") + "/UI/html/control.html";
 
             InitializeComponent();
             var cfg = Aw.Common.Configuration<dynamic>.Instance; // lightweight
