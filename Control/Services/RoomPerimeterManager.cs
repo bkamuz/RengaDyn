@@ -867,83 +867,85 @@ namespace Aw.Plugin.Control
 
             var op1 = _app.Project.CreateOperationWithUndo(model.Id);
             op1.Start();
-            for (int r = 0; r < grid.Rows; r++)
+            try
             {
-                for (int c = 0; c < grid.Columns; c++)
+                for (int r = 0; r < grid.Rows; r++)
                 {
-                    double x = insetBounds.MinX + c * (floorW + grid.Gap);
-                    double y = insetBounds.MinY + r * (floorH + grid.Gap);
-                    List<List<(double x, double y)>> clippedParts;
-                    if (!doRotate)
+                    for (int c = 0; c < grid.Columns; c++)
                     {
-                        if (hasLightsForMask)
+                        double x = insetBounds.MinX + c * (floorW + grid.Gap);
+                        double y = insetBounds.MinY + r * (floorH + grid.Gap);
+                        List<List<(double x, double y)>> clippedParts;
+                        if (!doRotate)
                         {
-                            double x2 = x + floorW;
-                            double y2 = y + floorH;
-                            bool any = false;
-                            foreach (var L in lightsGlobal)
+                            if (hasLightsForMask)
                             {
-                                if (L.x >= x && L.x <= x2 && L.y >= y && L.y <= y2) { any = true; break; }
+                                double x2 = x + floorW;
+                                double y2 = y + floorH;
+                                bool any = false;
+                                foreach (var L in lightsGlobal)
+                                {
+                                    if (L.x >= x && L.x <= x2 && L.y >= y && L.y <= y2) { any = true; break; }
+                                }
+                                if (!any) continue;
                             }
-                            if (!any) continue;
+                            clippedParts = IntersectRectWithPolygon(x, y, floorW, floorH, insetPoly);
                         }
-                        clippedParts = IntersectRectWithPolygon(x, y, floorW, floorH, insetPoly);
-                    }
-                    else
-                    {
-                        double baseLX = localMinX + c * (floorW + grid.Gap);
-                        double baseLY = localMinY + r * (floorH + grid.Gap);
-                        if (hasLightsForMask)
+                        else
                         {
-                            double lx2 = baseLX + floorW;
-                            double ly2 = baseLY + floorH;
-                            bool any = false;
-                            foreach (var L in lightsLocal)
+                            double baseLX = localMinX + c * (floorW + grid.Gap);
+                            double baseLY = localMinY + r * (floorH + grid.Gap);
+                            if (hasLightsForMask)
                             {
-                                if (L.x >= baseLX && L.x <= lx2 && L.y >= baseLY && L.y <= ly2) { any = true; break; }
+                                double lx2 = baseLX + floorW;
+                                double ly2 = baseLY + floorH;
+                                bool any = false;
+                                foreach (var L in lightsLocal)
+                                {
+                                    if (L.x >= baseLX && L.x <= lx2 && L.y >= baseLY && L.y <= ly2) { any = true; break; }
+                                }
+                                if (!any) continue;
                             }
-                            if (!any) continue;
+                            var rectLocal = new List<(double x, double y)>
+                            {
+                                (baseLX, baseLY),
+                                (baseLX + floorW, baseLY),
+                                (baseLX + floorW, baseLY + floorH),
+                                (baseLX, baseLY + floorH)
+                            };
+                            var rectGlobal = new List<(double x, double y)>();
+                            foreach (var lp in rectLocal)
+                            {
+                                double gx = cxGlobal + lp.x * cosA - lp.y * sinA;
+                                double gy = cyGlobal + lp.x * sinA + lp.y * cosA;
+                                rectGlobal.Add((gx, gy));
+                            }
+                            rectGlobal.Add(rectGlobal[0]);
+                            clippedParts = IntersectPolygonWithPolygon(rectGlobal, insetPoly);
                         }
-                        var rectLocal = new List<(double x, double y)>
-                        {
-                            (baseLX, baseLY),
-                            (baseLX + floorW, baseLY),
-                            (baseLX + floorW, baseLY + floorH),
-                            (baseLX, baseLY + floorH)
-                        };
-                        var rectGlobal = new List<(double x, double y)>();
-                        foreach (var lp in rectLocal)
-                        {
-                            double gx = cxGlobal + lp.x * cosA - lp.y * sinA;
-                            double gy = cyGlobal + lp.x * sinA + lp.y * cosA;
-                            rectGlobal.Add((gx, gy));
-                        }
-                        rectGlobal.Add(rectGlobal[0]);
-                        clippedParts = IntersectPolygonWithPolygon(rectGlobal, insetPoly);
-                    }
 
-                    if (clippedParts.Count == 0) continue;
-                    foreach (var part in clippedParts)
-                    {
-                        var tiles = ApplyColumnAvoidanceToPolygon(part, columns, grid.WallGap, openingThickness, openingVerticalOffset, openingRounding);
-                        foreach (var tile in tiles)
+                        if (clippedParts.Count == 0) continue;
+                        foreach (var part in clippedParts)
                         {
-                            var floorData = PolygonToFloor(tile.Outline, grid);
-                            if (floorData == null) continue;
-                            var id = CreateFloorObjectInternal(model, floorData);
-                            if (id > 0)
+                            var tiles = ApplyColumnAvoidanceToPolygon(part, columns, grid.WallGap, openingThickness, openingVerticalOffset, openingRounding);
+                            foreach (var tile in tiles)
                             {
-                                created++;
-                                _batchCreatedFloorIds.Add(id);
-                                if (tile.OpeningSpecs != null && tile.OpeningSpecs.Count > 0)
-                                    pendingOpenings.Add((id, new List<OpeningSpec>(tile.OpeningSpecs)));
+                                var floorData = PolygonToFloor(tile.Outline, grid);
+                                if (floorData == null) continue;
+                                var id = CreateFloorObjectInternal(model, floorData);
+                                if (id > 0)
+                                {
+                                    created++;
+                                    _batchCreatedFloorIds.Add(id);
+                                    if (tile.OpeningSpecs != null && tile.OpeningSpecs.Count > 0)
+                                        pendingOpenings.Add((id, new List<OpeningSpec>(tile.OpeningSpecs)));
+                                }
                             }
                         }
                     }
                 }
+                op1.Apply();
             }
-
-            try { op1.Apply(); }
             catch
             {
                 try { op1.Rollback(); } catch { }
