@@ -53,8 +53,8 @@ namespace Aw.Plugin.Control
                 Logger.Warn(ex, "Control plugin manager stop failed");
             }
 
-            var form = ControlWeb.Instance != null ? ControlWeb.GetInstance() : null;
-            if (form != null)
+            var form = ControlWeb.Instance;
+            if (form != null && !form.IsDisposed)
             {
                 form.WindowState = FormWindowState.Normal;
                 form.Close();
