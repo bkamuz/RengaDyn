@@ -707,6 +707,8 @@ namespace Aw.Plugin.Control
         public int CreateFloorsFromPerimeter(RoomPerimeterData roomPerimeter, FloorGridParameters grid)
         {
             if (_app?.Project?.Model == null) throw new InvalidOperationException("Проект не открыт");
+            if (grid.Rows < 1) grid.Rows = 1;
+            if (grid.Columns < 1) grid.Columns = 1;
             var model = _app.Project.Model;
             var created = 0;
             _batchCreatedFloorIds.Clear();
