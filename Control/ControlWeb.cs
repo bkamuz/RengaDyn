@@ -290,8 +290,8 @@ namespace Aw.Plugin.Control
                 if (perims.Count == 0) return 0;
                 var grid = new FloorGridParameters
                 {
-                    Rows = p.rows,
-                    Columns = p.cols,
+                    Rows = Math.Max(1, p.rows),
+                    Columns = Math.Max(1, p.cols),
                     // Manager expects millimeters for polygon-related values
                     Gap = Math.Max(0.0, p.gap),
                     AlignTolerance = Math.Max(0.0, p.alignTol),
