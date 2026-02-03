@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +16,7 @@ namespace DynRenga.DynProperties.Quantities
     /// </summary>
     public class QuantityContainer
     {
+        /// <summary>Внутренний COM-объект Renga.IQuantityContainer</summary>
         public Renga.IQuantityContainer _i;
         /// <summary>
         /// Получение набора расчетных свойств из интерфейса Renga
@@ -94,60 +95,58 @@ namespace DynRenga.DynProperties.Quantities
                 "NetFootprintArea", "NetFloorArea", "NetSideArea", "NetPerimeter", "NetWallArea", "NetCeilingArea",
                 "InnerSurfaceArea", "InnerSurfaceInternalArea", "InnerSurfaceExternalArea", "GlazingArea",
                 "TotalSurfaceArea", "GrossArea", "GrossPerimeter", "GrossFloorArea", "GrossVolume", "NumberOfRiser",
-                "NumberOfTreads", "RiserHeight", "TreadLength", "TotalRebarLength", "TotalRebarMass", "RelativeObjectBottomElevation",
+                "NumberOfTreads", "TotalRebarLength", "TotalRebarMass", "RelativeObjectBottomElevation",
                 "RelativeObjectTopElevation", "RelativeObjectBaselineBottomElevation", "RelativeObjectBaselineTopElevation", "SlopeAngle" })]
         public static Dictionary<string, Guid> QuantityIdentifiers_Objects()
         {
             return new Dictionary<string, Guid>
                 {
-                    {"NominalThickness",Renga.QuantityIds.NominalThickness},
-                    {"NominalLength",Renga.QuantityIds.NominalLength},
-                    {"NominalWidth",Renga.QuantityIds.NominalWidth},
-                    {"NominalHeight",Renga.QuantityIds.NominalHeight},
-                    {"Perimeter",Renga.QuantityIds.Perimeter},
-                    {"OverallWidth",Renga.QuantityIds.OverallWidth},
-                    {"OverallHeight",Renga.QuantityIds.OverallHeight},
-                    {"OverallDepth",Renga.QuantityIds.OverallDepth},
-                    {"OverallLength",Renga.QuantityIds.OverallLength},
-                    {"Volume",Renga.QuantityIds.Volume},
-                    {"NetVolume",Renga.QuantityIds.NetVolume},
-                    {"NetMass",Renga.QuantityIds.NetMass},
-                    {"OuterSurfaceArea",Renga.QuantityIds.OuterSurfaceArea},
-                    {"CrossSectionOverallWidth",Renga.QuantityIds.CrossSectionOverallWidth},
-                    {"CrossSectionOverallHeight",Renga.QuantityIds.CrossSectionOverallHeight},
-                    {"NetCrossSectionArea",Renga.QuantityIds.NetCrossSectionArea},
-                    {"GrossCrossSectionArea",Renga.QuantityIds.GrossCrossSectionArea},
-                    {"GrossWallArea",Renga.QuantityIds.GrossWallArea},
-                    {"GrossCeilingArea",Renga.QuantityIds.GrossCeilingArea},
-                    {"Area",Renga.QuantityIds.Area},
-                    {"NominalArea",Renga.QuantityIds.NominalArea},
-                    {"NetArea",Renga.QuantityIds.NetArea},
-                    {"NetFootprintArea",Renga.QuantityIds.NetFootprintArea},
-                    {"NetFloorArea",Renga.QuantityIds.NetFloorArea},
-                    {"NetSideArea",Renga.QuantityIds.NetSideArea},
-                    {"NetPerimeter",Renga.QuantityIds.NetPerimeter},
-                    {"NetWallArea",Renga.QuantityIds.NetWallArea},
-                    {"NetCeilingArea",Renga.QuantityIds.NetCeilingArea},
-                    {"InnerSurfaceArea",Renga.QuantityIds.InnerSurfaceArea},
-                    {"InnerSurfaceInternalArea",Renga.QuantityIds.InnerSurfaceInternalArea},
-                    {"InnerSurfaceExternalArea",Renga.QuantityIds.InnerSurfaceExternalArea},
-                    {"GlazingArea",Renga.QuantityIds.GlazingArea},
-                    {"TotalSurfaceArea",Renga.QuantityIds.TotalSurfaceArea},
-                    {"GrossArea",Renga.QuantityIds.GrossArea},
-                    {"GrossPerimeter",Renga.QuantityIds.GrossPerimeter},
-                    {"GrossFloorArea",Renga.QuantityIds.GrossFloorArea},
-                    {"GrossVolume",Renga.QuantityIds.GrossVolume},
-                    {"NumberOfRiser",Renga.QuantityIds.NumberOfRiser},
-                    {"NumberOfTreads",Renga.QuantityIds.NumberOfTreads},
-                    {"RiserHeight",Renga.QuantityIds.RiserHeight},
-                    {"TreadLength",Renga.QuantityIds.TreadLength},
-                    {"TotalRebarLength",Renga.QuantityIds.TotalRebarLength},
-                    {"TotalRebarMass",Renga.QuantityIds.TotalRebarMass},
-                    {"RelativeObjectBottomElevation",Renga.QuantityIds.RelativeObjectBottomElevation},
-                    {"RelativeObjectTopElevation",Renga.QuantityIds.RelativeObjectTopElevation},
-                    {"RelativeObjectBaselineBottomElevation",Renga.QuantityIds.RelativeObjectBaselineBottomElevation},
-                    {"RelativeObjectBaselineTopElevation",Renga.QuantityIds.RelativeObjectBaselineTopElevation},
-                    {"SlopeAngle",Renga.QuantityIds.SlopeAngle}
+                    {"NominalThickness",Renga.Quantities.NominalThickness},
+                    {"NominalLength",Renga.Quantities.NominalLength},
+                    {"NominalWidth",Renga.Quantities.NominalWidth},
+                    {"NominalHeight",Renga.Quantities.NominalHeight},
+                    {"Perimeter",Renga.Quantities.Perimeter},
+                    {"OverallWidth",Renga.Quantities.OverallWidth},
+                    {"OverallHeight",Renga.Quantities.OverallHeight},
+                    {"OverallDepth",Renga.Quantities.OverallDepth},
+                    {"OverallLength",Renga.Quantities.OverallLength},
+                    {"Volume",Renga.Quantities.Volume},
+                    {"NetVolume",Renga.Quantities.NetVolume},
+                    {"NetMass",Renga.Quantities.NetMass},
+                    {"OuterSurfaceArea",Renga.Quantities.OuterSurfaceArea},
+                    {"CrossSectionOverallWidth",Renga.Quantities.CrossSectionOverallWidth},
+                    {"CrossSectionOverallHeight",Renga.Quantities.CrossSectionOverallHeight},
+                    {"NetCrossSectionArea",Renga.Quantities.NetCrossSectionArea},
+                    {"GrossCrossSectionArea",Renga.Quantities.GrossCrossSectionArea},
+                    {"GrossWallArea",Renga.Quantities.GrossWallArea},
+                    {"GrossCeilingArea",Renga.Quantities.GrossCeilingArea},
+                    {"Area",Renga.Quantities.Area},
+                    {"NominalArea",Renga.Quantities.NominalArea},
+                    {"NetArea",Renga.Quantities.NetArea},
+                    {"NetFootprintArea",Renga.Quantities.NetFootprintArea},
+                    {"NetFloorArea",Renga.Quantities.NetFloorArea},
+                    {"NetSideArea",Renga.Quantities.NetSideArea},
+                    {"NetPerimeter",Renga.Quantities.NetPerimeter},
+                    {"NetWallArea",Renga.Quantities.NetWallArea},
+                    {"NetCeilingArea",Renga.Quantities.NetCeilingArea},
+                    {"InnerSurfaceArea",Renga.Quantities.InnerSurfaceArea},
+                    {"InnerSurfaceInternalArea",Renga.Quantities.InnerSurfaceInternalArea},
+                    {"InnerSurfaceExternalArea",Renga.Quantities.InnerSurfaceExternalArea},
+                    {"GlazingArea",Renga.Quantities.GlazingArea},
+                    {"TotalSurfaceArea",Renga.Quantities.TotalSurfaceArea},
+                    {"GrossArea",Renga.Quantities.GrossArea},
+                    {"GrossPerimeter",Renga.Quantities.GrossPerimeter},
+                    {"GrossFloorArea",Renga.Quantities.GrossFloorArea},
+                    {"GrossVolume",Renga.Quantities.GrossVolume},
+                    {"NumberOfRiser",Renga.Quantities.NumberOfRiser},
+                    {"NumberOfTreads",Renga.Quantities.NumberOfTreads},
+                    {"TotalRebarLength",Renga.Quantities.TotalRebarLength},
+                    {"TotalRebarMass",Renga.Quantities.TotalRebarMass},
+                    {"RelativeObjectBottomElevation",Renga.Quantities.RelativeObjectBottomElevation},
+                    {"RelativeObjectTopElevation",Renga.Quantities.RelativeObjectTopElevation},
+                    {"RelativeObjectBaselineBottomElevation",Renga.Quantities.RelativeObjectBaselineBottomElevation},
+                    {"RelativeObjectBaselineTopElevation",Renga.Quantities.RelativeObjectBaselineTopElevation},
+                    {"SlopeAngle",Renga.Quantities.SlopeAngle}
                 };
         }
 

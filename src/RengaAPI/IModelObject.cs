@@ -285,8 +285,18 @@ namespace DynRenga.RengaAPI
             
             try
             {
-                var comObject = this._i.GetInterfaceByName(interfaceName);
-                
+                object comObject = null;
+                try
+                {
+                    comObject = this._i.GetInterfaceByName(interfaceName);
+                }
+                catch (InvalidCastException) when (interfaceName == "IRichTextDocument")
+                {
+                    // Drawing text objects (e.g. "Текст чертежа") may expose IRichTextDocument only via IEntity, not IModelObject.
+                    var entity = this._i.GetInterfaceByName("IEntity") as Renga.IEntity;
+                    if (entity != null)
+                        comObject = entity.GetInterfaceByName("IRichTextDocument");
+                }
                 if (comObject == null)
                     return null;
                 
@@ -339,20 +349,22 @@ namespace DynRenga.RengaAPI
                     case "IFloorParams":
                         return new IFloorParams(comObject);
                     
-                    // Add more interface mappings as needed
-                    // case "IObjectWithMaterial":
-                    //     return new IObjectWithMaterial(comObject);
-                    // case "IObjectWithLayeredMaterial":
-                    //     return new IObjectWithLayeredMaterial(comObject);
-                    // case "IObjectWithLink":
-                    //     return new IObjectWithLink(comObject);
-                    // case "ITextObject":
-                    //     return new ITextObject(comObject);
+                    case "ITextObject":
+                        return new ITextObject(comObject);
+                    
+                    case "IRichTextDocument":
+                        return new IRichTextDocument(comObject);
                     
                     default:
                         // For unknown interfaces, return the raw COM object
                         return comObject;
                 }
+            }
+            catch (InvalidCastException ex)
+            {
+                throw new InvalidOperationException(
+                    $"Failed to get interface by name '{interfaceName}': {ex.Message}. " +
+                    "The model object may not support this interface (e.g. IRichTextDocument only on drawing/text objects).", ex);
             }
             catch (Exception ex)
             {

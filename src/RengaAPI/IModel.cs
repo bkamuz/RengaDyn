@@ -85,6 +85,39 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
+        /// Constructor - Creates IModel from Drawing (drawing model).
+        /// Use this to create drawing objects (DrawingText, DrawingImage, DrawingReferenceDrawing) on the sheet.
+        /// The drawing entity exposes IModel as an additional interface per Renga API.
+        /// </summary>
+        /// <param name="drawing">Drawing instance (e.g. from Project.Drawings2)</param>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public IModel(Drawing drawing)
+        {
+            if (drawing == null)
+                throw new ArgumentNullException(nameof(drawing), "Drawing cannot be null.");
+            
+            if (drawing._i == null)
+                throw new InvalidOperationException("Drawing interface is not initialized.");
+            
+            // IModel can be obtained as additional interface from IEntity when entity is a Drawing (Drawings2)
+            var drawingModel = drawing._i as Renga.IModel;
+            if (drawingModel == null)
+            {
+                var entity = drawing._i as Renga.IEntity;
+                if (entity != null)
+                {
+                    var modelObj = entity.GetInterfaceByName("IModel");
+                    drawingModel = modelObj as Renga.IModel;
+                }
+            }
+            
+            if (drawingModel == null)
+                throw new InvalidOperationException("Drawing does not support IModel. Ensure the entity is from Project.Drawings2.");
+            
+            this._i = drawingModel;
+        }
+
+        /// <summary>
         /// Constructor - Creates IModel from Project
         /// </summary>
         /// <param name="project">Project instance</param>
@@ -144,16 +177,20 @@ namespace DynRenga.RengaAPI
 
         /// <summary>
         /// Creates a new model object using direct COM interface manipulation
-        /// This method bypasses wrapper layers to ensure proper TypeId synchronization
+        /// This method bypasses wrapper layers to ensure proper TypeId synchronization.
+        /// For 2D placement based objects (e.g. DrawingText) use placement2D or placement2DStruct.
+        /// For 3D/level based objects (e.g. ModelText) use placement3D and hostObjectId.
         /// </summary>
         /// <param name="typeId">The object type ID (required)</param>
-        /// <param name="hostObjectId">The host object ID (optional, -1 to skip)</param>
+        /// <param name="hostObjectId">The host object ID (optional, -1 to skip; for ModelText use level ID)</param>
         /// <param name="categoryId">The category ID (optional, -1 to skip)</param>
-        /// <param name="placement3D">The 3D placement (optional, null to skip)</param>
+        /// <param name="placement3D">The 3D placement (optional, null to skip; for building model objects)</param>
+        /// <param name="placement2D">The 2D placement wrapper (optional; for drawing model objects e.g. DrawingText)</param>
+        /// <param name="placement2DStruct">The 2D placement struct from Placement2D.CreateStruct (optional; use when no wrapper)</param>
         /// <returns>Dictionary with ModelObject, DebugInfo, and Success status</returns>
         [dr.IsVisibleInDynamoLibrary(true)]
         [dr.MultiReturn(new[] { "ModelObject", "DebugInfo", "Success" })]
-        public Dictionary<string, object> CreateObject(Guid typeId, int hostObjectId = -1, int categoryId = -1, DynRenga.DynGeometry.Placement3D placement3D = null)
+        public Dictionary<string, object> CreateObject(Guid typeId, int hostObjectId = -1, int categoryId = -1, DynRenga.DynGeometry.Placement3D placement3D = null, DynRenga.DynGeometry.Placement2D placement2D = null, Renga.Placement2D? placement2DStruct = null)
         {
             if (this._i == null) 
                 throw new InvalidOperationException("Model interface is not initialized. Please check that Renga is running and a project is loaded.");
@@ -164,6 +201,7 @@ namespace DynRenga.RengaAPI
             debugInfo.AppendLine($"HostObjectId: {hostObjectId}");
             debugInfo.AppendLine($"CategoryId: {categoryId}");
             debugInfo.AppendLine($"Placement3D provided: {placement3D != null}");
+            debugInfo.AppendLine($"Placement2D provided: {placement2D != null || placement2DStruct.HasValue}");
             
             try
             {
@@ -171,9 +209,11 @@ namespace DynRenga.RengaAPI
                 var rengaNewEntityArgs = this._i.CreateNewEntityArgs();
                 debugInfo.AppendLine($"COM INewEntityArgs created: {rengaNewEntityArgs != null}");
                 
-                // Set TypeId directly on COM interface
+                // Set type on COM: TypeId setter may not persist (returns 00000000), so set TypeIdS explicitly so CreateObject sees the type
                 rengaNewEntityArgs.TypeId = typeId;
+                rengaNewEntityArgs.TypeIdS = typeId.ToString("B");
                 debugInfo.AppendLine($"TypeId set directly on COM: {typeId}");
+                debugInfo.AppendLine($"TypeIdS set: {typeId.ToString("B")}");
                 debugInfo.AppendLine($"TypeId after setting: {rengaNewEntityArgs.TypeId}");
                 debugInfo.AppendLine($"TypeIdS after setting: {rengaNewEntityArgs.TypeIdS}");
                 
@@ -190,7 +230,33 @@ namespace DynRenga.RengaAPI
                     debugInfo.AppendLine($"CategoryId set: {categoryId}");
                 }
                 
-                // Set placement if provided
+                // Set 2D placement if provided (for drawing model objects: DrawingText, DrawingImage, etc.)
+                if (placement2D != null)
+                {
+                    try
+                    {
+                        rengaNewEntityArgs.Placement2D = placement2D.ToRengaPlacement2D();
+                        debugInfo.AppendLine("Placement2D set from wrapper successfully");
+                    }
+                    catch (Exception placementEx)
+                    {
+                        debugInfo.AppendLine($"⚠️ Warning: Could not set Placement2D: {placementEx.Message}");
+                    }
+                }
+                else if (placement2DStruct.HasValue)
+                {
+                    try
+                    {
+                        rengaNewEntityArgs.Placement2D = placement2DStruct.Value;
+                        debugInfo.AppendLine("Placement2D set from struct successfully");
+                    }
+                    catch (Exception placementEx)
+                    {
+                        debugInfo.AppendLine($"⚠️ Warning: Could not set Placement2D: {placementEx.Message}");
+                    }
+                }
+                
+                // Set 3D placement if provided (for building model objects)
                 if (placement3D != null)
                 {
                     try
@@ -219,10 +285,49 @@ namespace DynRenga.RengaAPI
                     }
                 }
                 
-                // Create the model object directly
-                debugInfo.AppendLine("🚀 Attempting direct COM object creation...");
+                // Create within an operation (Renga API: StartOperation -> CreateObject -> Apply)
+                debugInfo.AppendLine("🚀 Starting operation and creating object...");
+                Renga.IOperation rengaOperation = null;
+                try
+                {
+                    rengaOperation = this._i.CreateOperation();
+                    if (rengaOperation != null)
+                    {
+                        rengaOperation.Start();
+                        debugInfo.AppendLine("Operation started.");
+                    }
+                }
+                catch (Exception opEx)
+                {
+                    debugInfo.AppendLine($"⚠️ Could not start operation: {opEx.Message}");
+                }
+
                 var rengaModelObject = this._i.CreateObject(rengaNewEntityArgs);
                 debugInfo.AppendLine($"✅ Direct COM object creation successful: {rengaModelObject != null}");
+
+                if (rengaOperation != null)
+                {
+                    try
+                    {
+                        rengaOperation.Apply();
+                        debugInfo.AppendLine("Operation applied.");
+                    }
+                    catch (Exception applyEx)
+                    {
+                        debugInfo.AppendLine($"⚠️ Operation.Apply failed: {applyEx.Message}");
+                    }
+                }
+                
+                if (rengaModelObject == null)
+                {
+                    debugInfo.AppendLine("❌ CreateObject returned null (check TypeId/TypeIdS and that model is drawing model for DrawingText).");
+                    return new Dictionary<string, object>
+                    {
+                        ["ModelObject"] = null,
+                        ["DebugInfo"] = debugInfo.ToString(),
+                        ["Success"] = false
+                    };
+                }
                 
                 // Wrap the result
                 var modelObject = new IModelObject(rengaModelObject);
@@ -269,6 +374,45 @@ namespace DynRenga.RengaAPI
             {
                 throw new InvalidOperationException($"Failed to create operation: {ex.Message}", ex);
             }
+        }
+
+        /// <summary>
+        /// Creates a ModelText object in the building model (use with IModel from Application/Project).
+        /// Text content is set after creation via ITextObject on the returned ModelObject.
+        /// </summary>
+        /// <param name="placement3D">3D placement of the text</param>
+        /// <param name="levelId">Level ID (host object); use -1 for current level</param>
+        /// <returns>Dictionary with ModelObject, DebugInfo, Success</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "ModelObject", "DebugInfo", "Success" })]
+        public Dictionary<string, object> CreateModelText(DynRenga.DynGeometry.Placement3D placement3D, int levelId = -1)
+        {
+            return CreateObject(Renga.EntityTypes.ModelText, levelId, -1, placement3D, null, null);
+        }
+
+        /// <summary>
+        /// Creates a DrawingText object in the drawing model (use with IModel from Drawing.GetModel() or IModel(drawing)).
+        /// Text content is set after creation via ITextObject on the returned ModelObject.
+        /// </summary>
+        /// <param name="placement2DStruct">2D placement from Placement2D.CreateStruct(originX, originY) in meters</param>
+        /// <returns>Dictionary with ModelObject, DebugInfo, Success</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "ModelObject", "DebugInfo", "Success" })]
+        public Dictionary<string, object> CreateDrawingText(Renga.Placement2D placement2DStruct)
+        {
+            return CreateObject(Renga.EntityTypes.DrawingText, -1, -1, null, null, placement2DStruct);
+        }
+
+        /// <summary>
+        /// Creates a DrawingText object in the drawing model using a Placement2D wrapper.
+        /// </summary>
+        /// <param name="placement2D">2D placement wrapper (e.g. from GetProfilePlacement)</param>
+        /// <returns>Dictionary with ModelObject, DebugInfo, Success</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "ModelObject", "DebugInfo", "Success" })]
+        public Dictionary<string, object> CreateDrawingText(DynRenga.DynGeometry.Placement2D placement2D)
+        {
+            return CreateObject(Renga.EntityTypes.DrawingText, -1, -1, null, placement2D, null);
         }
 
         /// <summary>
@@ -561,6 +705,19 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
+        /// Returns the drawing model (IModel) for a drawing from the project's Drawings2.
+        /// Use for CreateDrawingText, GetObjects, etc. Appears in IModel category.
+        /// </summary>
+        /// <param name="project">IProject (e.g. from Application.Project)</param>
+        /// <param name="drawingIndex">Zero-based index in Drawings2 (0 = first drawing)</param>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static IModel GetDrawingModel(IProject project, int drawingIndex = 0)
+        {
+            if (project == null) throw new ArgumentNullException(nameof(project));
+            return project.GetDrawingModel(drawingIndex);
+        }
+
+        /// <summary>
         /// Gets supported object types that can be created
         /// </summary>
         /// <returns>List of supported object type names</returns>
@@ -572,22 +729,45 @@ namespace DynRenga.RengaAPI
                 "AssemblyInstance",
                 "Column",
                 "Door",
+                "DrawingText",
                 "Element",
                 "Floor",
                 "Hatch",
                 "Hole",
                 "IsolatedFoundation",
                 "Level",
+                "ModelText",
                 "Opening",
                 "Plate",
                 "Railing",
                 "Ramp",
                 "Room",
                 "Stairway",
-                "TextObject",
                 "Wall",
                 "WallFoundation",
                 "Window"
+            };
+        }
+
+        /// <summary>
+        /// Returns model object type GUIDs by name (for use with CreateObject).
+        /// ModelText: building model. DrawingText: drawing model (use IModel from Drawing).
+        /// </summary>
+        /// <returns>Dictionary of type name to Guid</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        [dr.MultiReturn(new[] { "ModelText", "DrawingText", "Wall", "Floor", "Level", "Opening", "Window", "Door" })]
+        public static Dictionary<string, Guid> GetModelObjectTypeIds()
+        {
+            return new Dictionary<string, Guid>
+            {
+                ["ModelText"] = Renga.EntityTypes.ModelText,
+                ["DrawingText"] = Renga.EntityTypes.DrawingText,
+                ["Wall"] = Renga.EntityTypes.Wall,
+                ["Floor"] = Renga.EntityTypes.Floor,
+                ["Level"] = Renga.EntityTypes.Level,
+                ["Opening"] = Renga.EntityTypes.Opening,
+                ["Window"] = Renga.EntityTypes.Window,
+                ["Door"] = Renga.EntityTypes.Door
             };
         }
 

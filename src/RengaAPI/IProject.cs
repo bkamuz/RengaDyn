@@ -121,23 +121,224 @@ namespace DynRenga.RengaAPI
         }
 
     /// <summary>
-    /// Gets an IEntityCollection wrapper for Drawings
+    /// Gets a DrawingCollection for Drawings (Renga returns IDrawingCollection, not IEntityCollection).
+    /// Use .Drawings() on the result to get List of Drawing. Returns empty collection when Drawings is null or unavailable.
     /// </summary>
     [dr.IsVisibleInDynamoLibrary(true)]
-    public IEntityCollection GetDrawings()
+    public DynRenga.DynDocument.Project.DrawingCollection GetDrawings()
         {
             if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
-            try { return new IEntityCollection(this._i.Drawings); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get Drawings: {ex.Message}", ex); }
+            try { return new DynRenga.DynDocument.Project.DrawingCollection(this._i.Drawings); }
+            catch { return new DynRenga.DynDocument.Project.DrawingCollection(null); }
         }
 
     /// <summary>
-    /// Gets an IEntityCollection wrapper for Drawings2 (alternative drawings collection)
+    /// Gets a DrawingCollection for Drawings2 (Renga returns IDrawingCollection, not IEntityCollection).
+    /// Use .Drawings() on the result to get List of Drawing. Use for IModel(drawing) / CreateDrawingText.
+    /// Returns empty collection when Drawings2 is null or unavailable.
     /// </summary>
     [dr.IsVisibleInDynamoLibrary(true)]
-    public IEntityCollection GetDrawings2()
+    public DynRenga.DynDocument.Project.DrawingCollection GetDrawings2()
         {
             if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
-            try { return new IEntityCollection(this._i.Drawings2); } catch (Exception ex) { throw new InvalidOperationException($"Failed to get Drawings2: {ex.Message}", ex); }
+            try
+            {
+                return new DynRenga.DynDocument.Project.DrawingCollection(this._i.Drawings2);
+            }
+            catch
+            {
+                return new DynRenga.DynDocument.Project.DrawingCollection(null);
+            }
+        }
+
+        /// <summary>
+        /// Gets RengaAPI IDrawingCollection for Drawings (full API: Count, Get(index), GetAllDrawings()).
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public IDrawingCollection GetDrawingCollection()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IDrawingCollection(this._i.Drawings); }
+            catch { return new IDrawingCollection(null); }
+        }
+
+        /// <summary>
+        /// Gets RengaAPI IDrawingCollection for Drawings2 (full API; use for IDrawing.GetModel()).
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public IDrawingCollection GetDrawingCollection2()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            try { return new IDrawingCollection(this._i.Drawings2); }
+            catch { return new IDrawingCollection(null); }
+        }
+
+        /// <summary>
+        /// Gets the Drawings collection (DrawingCollection). Use with IProject from Application.Project.
+        /// Call .Drawings() on the result to get List of Drawing. Compatible with DrawingCollection.Drawings node.
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public DynRenga.DynDocument.Project.DrawingCollection Drawings
+        {
+            get
+            {
+                if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+                try { return new DynRenga.DynDocument.Project.DrawingCollection(this._i.Drawings); }
+                catch { return new DynRenga.DynDocument.Project.DrawingCollection(null); }
+            }
+        }
+
+        /// <summary>
+        /// Gets the Drawings2 collection (DrawingCollection). Use with IProject from Application.Project.
+        /// Call .Drawings() on the result to get List of Drawing. Use for IModel(drawing) / CreateDrawingText.
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public DynRenga.DynDocument.Project.DrawingCollection Drawings2
+        {
+            get
+            {
+                if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+                try { return new DynRenga.DynDocument.Project.DrawingCollection(this._i.Drawings2); }
+                catch { return new DynRenga.DynDocument.Project.DrawingCollection(null); }
+            }
+        }
+
+        /// <summary>
+        /// Returns list of Drawing only from Drawings2. Use this when you need Drawing.GetModel() (IModel).
+        /// Only entities from Drawings2 support IModel in Renga API. If the list is empty, add drawing sheets via Drawings2 in Renga.
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public List<DynRenga.DynDocument.Project.Drawing> GetDrawings2List()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            var list = new List<DynRenga.DynDocument.Project.Drawing>();
+            try
+            {
+                object raw2 = null;
+                try { raw2 = this._i.Drawings2; } catch { }
+                var dcoll = raw2 as Renga.IDrawingCollection;
+                if (dcoll != null && dcoll.Count > 0)
+                {
+                    for (int i = 0; i < dcoll.Count; i++)
+                    {
+                        var item = dcoll.Get(i);
+                        list.Add(new DynRenga.DynDocument.Project.Drawing(item));
+                    }
+                    return list;
+                }
+                var ecoll = raw2 as Renga.IEntityCollection;
+                if (ecoll != null && ecoll.Count > 0)
+                {
+                    for (int i = 0; i < ecoll.Count; i++)
+                    {
+                        var item = ecoll.GetByIndex(i);
+                        list.Add(new DynRenga.DynDocument.Project.Drawing(item));
+                    }
+                }
+            }
+            catch { }
+            return list;
+        }
+
+        /// <summary>
+        /// Returns list of Drawing from Drawings2, or from Drawings if Drawings2 is empty.
+        /// For Drawing.GetModel() (IModel) use GetDrawings2List() instead — only Drawings2 supports IModel.
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public List<DynRenga.DynDocument.Project.Drawing> GetDrawingList()
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            var list = new List<DynRenga.DynDocument.Project.Drawing>();
+            try
+            {
+                object raw2 = null, raw1 = null;
+                try { raw2 = this._i.Drawings2; } catch { }
+                try { raw1 = this._i.Drawings; } catch { }
+                var dcoll = raw2 as Renga.IDrawingCollection;
+                if (dcoll != null && dcoll.Count > 0)
+                {
+                    for (int i = 0; i < dcoll.Count; i++)
+                        list.Add(new DynRenga.DynDocument.Project.Drawing(dcoll.Get(i)));
+                    return list;
+                }
+                dcoll = raw1 as Renga.IDrawingCollection;
+                if (dcoll != null && dcoll.Count > 0)
+                {
+                    for (int i = 0; i < dcoll.Count; i++)
+                        list.Add(new DynRenga.DynDocument.Project.Drawing(dcoll.Get(i)));
+                    return list;
+                }
+                var ecoll = raw2 as Renga.IEntityCollection;
+                if (ecoll != null && ecoll.Count > 0)
+                {
+                    for (int i = 0; i < ecoll.Count; i++)
+                        list.Add(new DynRenga.DynDocument.Project.Drawing(ecoll.GetByIndex(i)));
+                    return list;
+                }
+                ecoll = raw1 as Renga.IEntityCollection;
+                if (ecoll != null && ecoll.Count > 0)
+                {
+                    for (int i = 0; i < ecoll.Count; i++)
+                        list.Add(new DynRenga.DynDocument.Project.Drawing(ecoll.GetByIndex(i)));
+                }
+            }
+            catch { }
+            return list;
+        }
+
+        /// <summary>
+        /// Returns the drawing model (IModel) for the first drawing in Drawings2.
+        /// Use for CreateDrawingText, GetObjects, etc. Throws if Drawings2 is empty.
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public DynRenga.RengaAPI.IModel GetFirstDrawingModel()
+        {
+            return GetDrawingModel(0);
+        }
+
+        /// <summary>
+        /// Returns the drawing model (IModel) for the drawing at the given index in Drawings2.
+        /// Index 0 = first drawing. Use for CreateDrawingText, GetObjects, etc.
+        /// Gets IModel directly from the entity (bypasses Drawing wrapper when Drawings2 is IEntityCollection).
+        /// </summary>
+        /// <param name="index">Zero-based index in Drawings2 (0 = first drawing)</param>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public DynRenga.RengaAPI.IModel GetDrawingModel(int index)
+        {
+            if (this._i == null) throw new InvalidOperationException("Project interface is not initialized.");
+            object raw2 = null;
+            try { raw2 = this._i.Drawings2; } catch { }
+            if (raw2 == null)
+                throw new InvalidOperationException("Project Drawings2 is null. Ensure a project with drawings is open in Renga.");
+            var dcoll = raw2 as Renga.IDrawingCollection;
+            if (dcoll != null && index >= 0 && index < dcoll.Count)
+            {
+                var drawingObj = dcoll.Get(index);
+                var entity = drawingObj as Renga.IEntity;
+                if (entity != null)
+                {
+                    var modelObj = entity.GetInterfaceByName("IModel");
+                    var rengaModel = modelObj as Renga.IModel;
+                    if (rengaModel != null)
+                        return new DynRenga.RengaAPI.IModel(rengaModel);
+                }
+                var drawing = new DynRenga.DynDocument.Project.Drawing(drawingObj);
+                if (drawing._i != null)
+                    return drawing.GetModel();
+            }
+            var ecoll = raw2 as Renga.IEntityCollection;
+            if (ecoll != null && index >= 0 && index < ecoll.Count)
+            {
+                var entity = ecoll.GetByIndex(index) as Renga.IEntity;
+                if (entity != null)
+                {
+                    var modelObj = entity.GetInterfaceByName("IModel");
+                    var rengaModel = modelObj as Renga.IModel;
+                    if (rengaModel != null)
+                        return new DynRenga.RengaAPI.IModel(rengaModel);
+                }
+            }
+            throw new ArgumentOutOfRangeException(nameof(index), index, "No drawing at this index or drawing does not support IModel. Ensure Drawings2 has drawings in Renga.");
         }
 
     /// <summary>

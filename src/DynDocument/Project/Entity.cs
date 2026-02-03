@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -76,13 +76,12 @@ namespace DynRenga.DynDocument.Project
         /// Типы Entity
         /// </summary>
         /// <returns></returns>
-        [dr.MultiReturn(new[] { "Root", "Building", "Layer", "MaterialLayer",
-        "Project", "Schedule", "Sheet", "Site", "Table"})]
+        [dr.MultiReturn(new[] { "Building", "Layer", "MaterialLayer",
+        "Project", "Schedule", "Drawing", "Site", "Table"})]
         public static Dictionary<string, Guid> TypeIds()
         {
             return new Dictionary<string, Guid>()
             {
-                {"Root", Renga.EntityTypes.Root },
                 {"Building", Renga.EntityTypes.Building },
                 {"Layer", Renga.EntityTypes.Layer },
                 {"MaterialLayer", Renga.EntityTypes.MaterialLayer },
@@ -100,8 +99,8 @@ namespace DynRenga.DynDocument.Project
         public string GetTypeAsString()
         {
             Guid type = this._i.TypeId;
-            string type_s = TypeIds().Where(a => a.Value == type).First().Key;
-            return type_s;
+            var pair = TypeIds().FirstOrDefault(a => a.Value == type);
+            return pair.Key ?? type.ToString();
         }
     }
 }

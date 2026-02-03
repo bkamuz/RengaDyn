@@ -185,9 +185,39 @@ namespace DynRenga.RengaAPI
             {
                 return this._i.GetInterfaceByName(interfaceName);
             }
+            catch (InvalidCastException ex)
+            {
+                throw new InvalidOperationException(
+                    $"Failed to get interface by name '{interfaceName}': {ex.Message}. " +
+                    "The entity may not support this interface (e.g. IRichTextDocument is only available on drawing/text-related entities). " +
+                    "Use TryGetInterfaceByName to probe for support without throwing.", ex);
+            }
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Failed to get interface by name '{interfaceName}': {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Tries to get an interface by name. Returns null if the entity does not support the interface (no exception).
+        /// Use this to safely probe for interfaces such as IRichTextDocument that only certain entity types support.
+        /// </summary>
+        /// <param name="interfaceName">The name of the requested interface</param>
+        /// <returns>Requested interface as object, or null if not supported</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public object TryGetInterfaceByName(string interfaceName)
+        {
+            if (this._i == null)
+                return null;
+            if (string.IsNullOrEmpty(interfaceName))
+                return null;
+            try
+            {
+                return this._i.GetInterfaceByName(interfaceName);
+            }
+            catch
+            {
+                return null;
             }
         }
 
@@ -219,13 +249,13 @@ namespace DynRenga.RengaAPI
                     case "IParameterContainer":
                         return new DynRenga.DynProperties.Parameters.ParameterContainer(comInterface);
                     case "IModel":
-                        return new IModel(new IApplication(comInterface));
+                        return new IModel((Renga.IModel)comInterface);
                     case "IModelObject":
-                        return new IModelObject(comInterface);
+                        return new IModelObject((Renga.IModelObject)comInterface);
                     case "IModelObjectCollection":
-                        return new IModelObjectCollection(comInterface);
+                        return new IModelObjectCollection((Renga.IModelObjectCollection)comInterface);
                     case "IModelView":
-                        return new IModelView(comInterface);
+                        return new IModelView((Renga.IModelView)comInterface);
                     case "IBaseline2DObject":
                         return new IBaseline2DObject(comInterface);
                     case "ICurve2D":
@@ -256,6 +286,13 @@ namespace DynRenga.RengaAPI
                         // For unknown interfaces, return the raw COM object
                         return comInterface;
                 }
+            }
+            catch (InvalidCastException ex)
+            {
+                throw new InvalidOperationException(
+                    $"Failed to get typed interface by name '{interfaceName}': {ex.Message}. " +
+                    "The entity may not support this interface (e.g. IRichTextDocument only on drawing/text entities). " +
+                    "Use TryGetInterfaceByName to probe without throwing.", ex);
             }
             catch (Exception ex)
             {

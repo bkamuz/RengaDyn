@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -97,6 +97,25 @@ namespace DynRenga.DynGeometry
         public Renga.Placement2D ToRengaPlacement2D()
         {
             return this._i.Placement;
+        }
+
+        /// <summary>
+        /// Creates Renga.Placement2D struct from origin coordinates (e.g. for DrawingText placement).
+        /// Coordinates are in meters; internally converted to mm for Renga.
+        /// Default axes: X = (1, 0), Y = (0, 1).
+        /// </summary>
+        /// <param name="originX">Origin X in meters</param>
+        /// <param name="originY">Origin Y in meters</param>
+        /// <returns>Renga.Placement2D struct for use with INewEntityArgs or IModel.CreateObject</returns>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public static Renga.Placement2D CreateStruct(double originX, double originY)
+        {
+            const double metersToMm = 1000.0;
+            return new Renga.Placement2D
+            {
+                Origin = new Renga.Point2D { X = originX * metersToMm, Y = originY * metersToMm },
+                xAxis = new Renga.Vector2D { X = 1.0, Y = 0.0 }
+            };
         }
 
     }

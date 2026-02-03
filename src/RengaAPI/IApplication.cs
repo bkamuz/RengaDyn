@@ -934,7 +934,7 @@ namespace DynRenga.RengaAPI
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Return empty list on error
             }

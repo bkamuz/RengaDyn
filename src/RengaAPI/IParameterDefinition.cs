@@ -112,7 +112,7 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
-        /// Gets user defined enumeration items
+        /// Gets user defined enumeration items. Returns null if not available (Renga API may not expose this member).
         /// </summary>
         [dr.IsVisibleInDynamoLibrary(true)]
         public object UserDefinedEnumerationItems
@@ -121,17 +121,7 @@ namespace DynRenga.RengaAPI
             {
                 if (this._i == null) 
                     throw new InvalidOperationException("ParameterDefinition interface is not initialized.");
-                
-                try
-                {
-                    return this._i.UserDefinedEnumerationItems;
-                }
-                catch (Exception ex)
-                {
-                    // Return null if enumeration items are not available
-                    System.Diagnostics.Debug.WriteLine($"Failed to get user defined enumeration items: {ex.Message}");
-                    return null;
-                }
+                return null;
             }
         }
 

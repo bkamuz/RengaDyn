@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
   <ItemGroup>
@@ -33,6 +33,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>bin\Debug\RengaDynMain.xml</DocumentationFile>
     <StartAction>Program</StartAction>
@@ -47,6 +48,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>bin\Debug\RengaDynMain.xml</DocumentationFile>
     <StartAction>Program</StartAction>
@@ -60,6 +62,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
     <DocumentationFile>bin\Release\RengaDynMain.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
@@ -69,6 +72,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>bin\Release\RengaDynMain.xml</DocumentationFile>
   </PropertyGroup>
@@ -201,6 +205,8 @@
     <Compile Include="RengaAPI\IObjectWithPorts.cs" />
     <Compile Include="RengaAPI\IPort.cs" />
     <Compile Include="RengaAPI\IProject.cs" />
+    <Compile Include="RengaAPI\IDrawing.cs" />
+    <Compile Include="RengaAPI\IDrawingCollection.cs" />
     <Compile Include="RengaAPI\ILevel.cs" />
     <Compile Include="RengaAPI\ILevelObject.cs" />
     <Compile Include="RengaAPI\IParameter.cs" />
@@ -224,6 +230,10 @@
   <Compile Include="RengaAPI\IColumnStyle.cs" />
   <Compile Include="RengaAPI\IColumnStyleManager.cs" />
   <Compile Include="RengaAPI\IFloorParams.cs" />
+  <Compile Include="RengaAPI\ITextObject.cs" />
+  <Compile Include="RengaAPI\IRichTextDocument.cs" />
+  <Compile Include="RengaAPI\IRichTextParagraph.cs" />
+  <Compile Include="RengaAPI\RichTextToken.cs" />
   <Compile Include="RengaAPI\ILayeredMaterial.cs" />
   <Compile Include="RengaAPI\ILayeredMaterialManager.cs" />
     <Compile Include="RengaAPI\Constants\Constants.cs" />
@@ -241,7 +251,7 @@
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
   <ItemGroup>
@@ -257,8 +267,10 @@
     <PostBuildEvent>::copy /Y "$(TargetDir)RengaDynMain.dll" "C:\DynamoCoreRuntime_4.0.0.2330_20250822T0415\packages\RengaDyn\bin\RengaDynMain.dll"
 ::copy /Y "$(TargetDir)RengaDynMain.xml" "C:\DynamoCoreRuntime_4.0.0.2330_20250822T0415\packages\RengaDyn\bin\RengaDynMain.xml"
 ::copy /Y "$(TargetDir)Renga.NET.PluginUtility.dll" "C:\DynamoCoreRuntime_4.0.0.2330_20250822T0415\packages\RengaDyn\bin\Renga.NET.PluginUtility.dll"
+::if exist "$(TargetDir)Interop.Renga.dll" copy /Y "$(TargetDir)Interop.Renga.dll" "C:\DynamoCoreRuntime_4.0.0.2330_20250822T0415\packages\RengaDyn\bin\Interop.Renga.dll"
 ::copy /Y "$(TargetDir)RengaDynMain.dll" "C:\Users\Georg\AppData\Roaming\Autodesk\C3D 2022\Dynamo\2.12\packages\RengaDyn\bin\RengaDynMain.dll"
 ::copy /Y "$(TargetDir)RengaDynMain.xml" "C:\Users\Georg\AppData\Roaming\Autodesk\C3D 2022\Dynamo\2.12\packages\RengaDyn\bin\RengaDynMain.xml"
-::copy /Y "$(TargetDir)Renga.NET.PluginUtility.dll" "C:\Users\Georg\AppData\Roaming\Autodesk\C3D 2022\Dynamo\2.12\packages\RengaDyn\bin\Renga.NET.PluginUtility.dll"</PostBuildEvent>
+::copy /Y "$(TargetDir)Renga.NET.PluginUtility.dll" "C:\Users\Georg\AppData\Roaming\Autodesk\C3D 2022\Dynamo\2.12\packages\RengaDyn\bin\Renga.NET.PluginUtility.dll"
+::if exist "$(TargetDir)Interop.Renga.dll" copy /Y "$(TargetDir)Interop.Renga.dll" "C:\Users\Georg\AppData\Roaming\Autodesk\C3D 2022\Dynamo\2.12\packages\RengaDyn\bin\Interop.Renga.dll"</PostBuildEvent>
   </PropertyGroup>
 </Project>

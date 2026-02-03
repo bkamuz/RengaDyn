@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -412,7 +412,7 @@ namespace DynRenga.DynDocument
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Return empty list on error
             }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,6 +31,8 @@ namespace DynRenga.DynDocument.Project
         /// <returns></returns>
         public List<Drawing> Drawings()
         {
+            if (this._i == null)
+                return new List<Drawing>();
             List<Drawing> os = new List<Drawing>();
             for (int i = 0; i < this._i.Count; i++)
             {

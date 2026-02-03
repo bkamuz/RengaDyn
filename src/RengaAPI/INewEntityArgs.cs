@@ -282,6 +282,66 @@ namespace DynRenga.RengaAPI
         }
 
         /// <summary>
+        /// Gets or sets the 2D placement of the object being created.
+        /// Applies to 2D placement based objects (e.g. DrawingText, DrawingImage, DrawingReferenceDrawing).
+        /// </summary>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public Renga.Placement2D Placement2D
+        {
+            get
+            {
+                if (this._i == null)
+                    throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+                
+                try
+                {
+                    return this._i.Placement2D;
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException($"Failed to get 2D placement: {ex.Message}", ex);
+                }
+            }
+            set
+            {
+                if (this._i == null)
+                    throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+                
+                try
+                {
+                    this._i.Placement2D = value;
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException($"Failed to set 2D placement: {ex.Message}", ex);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the 2D placement from a DynRenga.DynGeometry.Placement2D wrapper
+        /// </summary>
+        /// <param name="placement2D">DynRenga.DynGeometry.Placement2D wrapper object</param>
+        [dr.IsVisibleInDynamoLibrary(true)]
+        public void SetPlacement2D(DynRenga.DynGeometry.Placement2D placement2D)
+        {
+            if (this._i == null)
+                throw new InvalidOperationException("NewEntityArgs interface is not initialized.");
+            
+            if (placement2D == null)
+                throw new ArgumentNullException(nameof(placement2D), "Placement2D cannot be null.");
+            
+            try
+            {
+                this._i.Placement2D = placement2D.ToRengaPlacement2D();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Failed to set 2D placement from wrapper: {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
         /// Gets comprehensive new entity arguments information
         /// </summary>
         /// <returns>Dictionary containing all argument properties</returns>

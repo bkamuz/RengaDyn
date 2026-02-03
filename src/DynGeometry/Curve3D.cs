@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +16,7 @@ namespace DynRenga.DynGeometry
     /// </summary>
     public class Curve3D
     {
+        /// <summary>Внутренний COM-объект Renga.ICurve3D</summary>
         public Renga.ICurve3D _i;
         /// <summary>
         /// Инициация класса из интерфейса Renga.ICurve3D
@@ -510,7 +511,7 @@ namespace DynRenga.DynGeometry
                 // Fallback to safe conversion
                 return this.ToDynamoPolyCurveSafe();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Fallback to safe conversion
                 return this.ToDynamoPolyCurveSafe();

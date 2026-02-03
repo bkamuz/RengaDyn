@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +17,7 @@ namespace DynRenga.DynGeometry
     /// </summary>
     public class Curve2D
     {
+        /// <summary>Внутренний COM-объект Renga.ICurve2D</summary>
         public Renga.ICurve2D _i;
         /// <summary>
         /// Инициация класса из интерфейса Renga.ICurve2D
@@ -388,7 +389,7 @@ namespace DynRenga.DynGeometry
                 
                 return dg.PolyCurve.ByPoints(points);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Возвращаем null с информацией об ошибке
                 return null;
@@ -1295,6 +1296,7 @@ namespace DynRenga.DynGeometry
         /// Конвертация Dynamo PolyCurve в Renga кривую
         /// </summary>
         /// <param name="dynamoPolyCurve">Dynamo PolyCurve</param>
+        /// <param name="debugInfo">Debug output string (ref)</param>
         /// <returns>Renga кривая или null</returns>
         private static object ConvertDynamoPolyCurveToRenga(dg.PolyCurve dynamoPolyCurve, ref string debugInfo)
         {
@@ -1424,6 +1426,7 @@ namespace DynRenga.DynGeometry
         /// </summary>
         /// <param name="dynamoCurve">Dynamo кривая</param>
         /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <param name="debugInfo">Debug output string (ref)</param>
         /// <returns>Renga ICurve2D или null</returns>
         private static Renga.ICurve2D ConvertDynamoCurveToRengaWithMath(dg.Curve dynamoCurve, Renga.IMath mathInterface, ref string debugInfo)
         {
@@ -1467,6 +1470,7 @@ namespace DynRenga.DynGeometry
         /// </summary>
         /// <param name="dynamoPolyCurve">Dynamo PolyCurve</param>
         /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <param name="debugInfo">Debug output string (ref)</param>
         /// <returns>Renga ICurve2D или null</returns>
         private static Renga.ICurve2D ConvertDynamoPolyCurveToRengaWithMath(dg.PolyCurve dynamoPolyCurve, Renga.IMath mathInterface, ref string debugInfo)
         {
@@ -1686,7 +1690,7 @@ namespace DynRenga.DynGeometry
                         {
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -1704,7 +1708,7 @@ namespace DynRenga.DynGeometry
                 
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -1715,6 +1719,7 @@ namespace DynRenga.DynGeometry
         /// </summary>
         /// <param name="dynamoLine">Dynamo Line</param>
         /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <param name="debugInfo">Debug output string (ref)</param>
         /// <returns>Renga ICurve2D или null</returns>
         private static Renga.ICurve2D ConvertDynamoLineToRengaWithMath(dg.Line dynamoLine, Renga.IMath mathInterface, ref string debugInfo)
         {
@@ -1759,6 +1764,7 @@ namespace DynRenga.DynGeometry
         /// </summary>
         /// <param name="dynamoArc">Dynamo Arc</param>
         /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <param name="debugInfo">Debug output string (ref)</param>
         /// <returns>Renga ICurve2D или null</returns>
         private static Renga.ICurve2D ConvertDynamoArcToRengaWithMath(dg.Arc dynamoArc, Renga.IMath mathInterface, ref string debugInfo)
         {
@@ -1830,6 +1836,7 @@ namespace DynRenga.DynGeometry
         /// </summary>
         /// <param name="dynamoCurve">Dynamo кривая</param>
         /// <param name="mathInterface">Renga IMath интерфейс</param>
+        /// <param name="debugInfo">Debug output string (ref)</param>
         /// <returns>Renga ICurve2D или null</returns>
         private static Renga.ICurve2D ConvertDynamoCurveToLineApproximationWithMath(dg.Curve dynamoCurve, Renga.IMath mathInterface, ref string debugInfo)
         {
